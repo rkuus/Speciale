@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class jointController : MonoBehaviour
 {
-
+    public float jointRotation = 0.0f;
     public float speed = 100.0f;
     private ArticulationBody articulation;
     // Start is called before the first frame update
@@ -16,11 +16,11 @@ public class jointController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float translation = Input.GetAxis("Vertical");
+        //float translation = Input.GetAxis("Vertical");
         //ArticulationReducedSpace newVelocity = new ArticulationReducedSpace(translation);
-        if (translation != 0.0f)
+        if (jointRotation != 0.0f)
         {
-            float rotationChange = (float)translation * speed * Time.fixedDeltaTime;
+            float rotationChange = (float)jointRotation * speed * Time.fixedDeltaTime;
             float rotationGoal = CurrentPrimaryAxisRotation() + rotationChange;
             RotateTo(rotationGoal);
         }
