@@ -22,7 +22,7 @@ public class UR5Controller : MonoBehaviour {
 	void LateUpdate () {
         for ( int i = 0; i < 6; i ++) {
             Vector3 currentRotation = jointList[i].transform.localEulerAngles;
-            Debug.Log(currentRotation);
+            //Debug.Log(currentRotation);
             currentRotation.z = jointValues[i];
             jointList[i].transform.localEulerAngles = currentRotation;
         }
@@ -69,5 +69,9 @@ public class UR5Controller : MonoBehaviour {
                 jointList[5] = RobotChildren[i].gameObject;
             }
         }
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision");
     }
 }
