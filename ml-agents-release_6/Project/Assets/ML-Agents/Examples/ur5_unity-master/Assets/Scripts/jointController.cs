@@ -46,7 +46,7 @@ public class jointController : MonoBehaviour
     public float CurrentPrimaryAxisRotation()
     {
         float currentRotationRads = articulation.jointPosition[0];
-        float currentRotation = Mathf.Rad2Deg * currentRotationRads;
+        float currentRotation = Mathf.Rad2Deg * currentRotationRads; //Mathf.Rad2Deg * currentRotationRads;
         return currentRotation;
     }
 
