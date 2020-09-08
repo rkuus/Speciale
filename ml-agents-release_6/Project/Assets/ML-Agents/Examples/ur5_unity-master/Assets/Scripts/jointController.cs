@@ -57,6 +57,10 @@ public class jointController : MonoBehaviour
         return currentRotation;
     }
 
+    public float getCurrentSpeed()
+    {
+        return articulation.angularVelocity.y;
+    }
     void RotateTo(float primaryAxisRotation)
     {
         var drive = articulation.xDrive;
@@ -68,11 +72,6 @@ public class jointController : MonoBehaviour
     {
         collisionCheck++;
     }
-
-    //private void OnCollisionStay(Collision collision)
-    //{
-    //    collisionCheck = true;
-    //}
 
     private void OnCollisionExit(Collision collision)
     {
