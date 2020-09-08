@@ -68,7 +68,7 @@ public class urController : MonoBehaviour
 
     public bool setRotations(float[] rotations)
     {
-        Debug.Log(rotations.Length + " " + urJoints.Length);
+        //Debug.Log(rotations.Length + " " + urJoints.Length);
         if (rotations.Length != urJoints.Length)
             return false;
         
@@ -116,7 +116,7 @@ public class urController : MonoBehaviour
         }
     }
 
-    private bool collisionCheck()
+    public bool collisionCheck()
     {
         for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
         {

@@ -20,7 +20,7 @@ public class KuusAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        float[] defaultRotations = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+        float[] defaultRotations = { 0.0f, -90.0f, 0.0f, -90.0f, 0.0f, 0.0f};
         robotController.forceARotation(defaultRotations);
         targetBall.updateTargetPos();
         lastDifference = tcp.transform.position - targetBall.transform.position;
@@ -30,21 +30,25 @@ public class KuusAgent : Agent
     {
         // UR configuration
         sensor.AddObservation(robotController.getRotations());
+        //Debug.Log(robotController.getRotations()[0]);
         // UR joint velocities
         sensor.AddObservation(robotController.getVelocities());
         // End-effector position - target position
+        sensor.AddObservation(tcp.transform.position / 10.0f);
+        sensor.AddObservation(targetBall.transform.position / 10.0f);
         currentDifference = tcp.transform.position - targetBall.transform.position;
-        sensor.AddObservation(currentDifference);
+        sensor.AddObservation(currentDifference / 10.0f);
+        //Debug.Log(currentDifference);
     }
 
     public override void OnActionReceived(float[] vectorAction)
     {
-        Debug.Log(vectorAction);
+        //Debug.Log(vectorAction);
         robotController.setRotations(vectorAction);
 
         float magnitudeCurrent = Vector3.Magnitude(currentDifference);
-        float distance = Vector3.Magnitude(lastDifference) - magnitudeCurrent;
-        if (magnitudeCurrent < 1)
+        
+        if (magnitudeCurrent < 0.5f)
         {
             SetReward(1f);
             EndEpisode();
@@ -53,13 +57,18 @@ public class KuusAgent : Agent
         float curReward = 0.0f;
 
         // Distance reward/cost
-        curReward += 0.01f * distance;
+        float distance = Vector3.Magnitude(lastDifference) - magnitudeCurrent;
 
+        curReward += 0.1f * distance;
+        //Debug.Log("Distance reward:" + (0.1f * distance));
         // time cost
         curReward -= 0.001f;
 
-        lastDifference = currentDifference;
+        if (robotController.collisionCheck())
+            curReward -= 0.1f;
 
+        lastDifference = currentDifference;
+        //Debug.Log("Total reward:" + curReward);
         SetReward(curReward);
     }
     // Update is called once per frame
