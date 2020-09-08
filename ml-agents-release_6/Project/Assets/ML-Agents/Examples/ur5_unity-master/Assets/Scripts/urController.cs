@@ -17,15 +17,15 @@ public class urController : MonoBehaviour
     void Update()
     {
         float translation = Input.GetAxis("Vertical");
-        for (int jointIndex = 0; jointIndex < urJoints.Length;jointIndex++)
-        {
-            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            joint.jointRotation = translation;
-            //Debug.Log(joint.CurrentPrimaryAxisRotation()/180.0f); 
-        }
+        float[] newRotation = { translation, translation, translation, translation, translation, translation };
+        moveRobot(newRotation);
         if (Input.GetKeyDown(KeyCode.Space))
+        {
             forceARotation(startingRotations);
+        }
 
+        if (collisionCheck())
+            Debug.Log("Collision!");
     }
 
     public float[] getRotations()
@@ -53,6 +53,20 @@ public class urController : MonoBehaviour
         return true;
     }
 
+    public bool moveRobot(float[] input)
+    {
+        if (input.Length != urJoints.Length)
+            return false;
+
+        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
+        {
+            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+            joint.jointRotation = Mathf.Clamp(input[jointIndex],-1.0f,1.0f);
+        }
+
+        return true;
+    }
+
     public void forceARotation(float[] rotations)
     {
         if (urJoints.Length == startingRotations.Length)
@@ -74,4 +88,14 @@ public class urController : MonoBehaviour
         }
     }
 
+    private bool collisionCheck()
+    {
+        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
+        {
+            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+            if (joint.inCollision)
+                return true;
+        }
+        return false;
+    }
 }

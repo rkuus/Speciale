@@ -6,6 +6,8 @@ public class jointController : MonoBehaviour
 {
     public float jointRotation = 0.0f;
     public float speed = 100.0f;
+    public bool inCollision = false;
+    private int collisionCheck = 0;
     private ArticulationBody articulation;
     // Start is called before the first frame update
     void Start()
@@ -24,7 +26,12 @@ public class jointController : MonoBehaviour
             float rotationGoal = CurrentPrimaryAxisRotation() + rotationChange;
             RotateTo(rotationGoal);
         }
-        
+
+        if (collisionCheck > 0)
+            inCollision = true;
+        else
+            inCollision = false;
+
     }
 
     public void ForceToRotation(float rotation)
@@ -55,5 +62,20 @@ public class jointController : MonoBehaviour
         var drive = articulation.xDrive;
         drive.target = primaryAxisRotation;
         articulation.xDrive = drive;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        collisionCheck++;
+    }
+
+    //private void OnCollisionStay(Collision collision)
+    //{
+    //    collisionCheck = true;
+    //}
+
+    private void OnCollisionExit(Collision collision)
+    {
+        collisionCheck--;
     }
 }
