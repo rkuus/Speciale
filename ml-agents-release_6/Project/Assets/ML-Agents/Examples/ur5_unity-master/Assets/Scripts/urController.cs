@@ -11,6 +11,8 @@ public class urController : MonoBehaviour
     public tcpHandler tcp;
     public targetHandler target;
 
+    public bool collisionFlag = false;
+
     //private Vector3 lastDifference;
     //private Vector3 currentDifference;
     //private float lastDistance = 0.0f;
@@ -24,14 +26,6 @@ public class urController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //currentDifference = tcp.transform.position - target.transform.position;
-        ////float magnitudeCurrent = Vector3.Magnitude(currentDifference);
-        //float distance = Vector3.Magnitude(currentDifference);
-        //lastDifference = currentDifference;
-        //Debug.Log("Dist:"+(lastDistance - distance));
-        //lastDistance = distance;
-        ////Debug.Log("Cur:"+ currentDifference);
-        ////Debug.Log("Last:"+ lastDifference);
         //float translation = Input.GetAxis("Vertical");
         //float[] newRotation = { translation, translation, translation, translation, translation, translation };
         //moveRobot(newRotation);
@@ -42,6 +36,12 @@ public class urController : MonoBehaviour
 
         //if (collisionCheck())
         //    Debug.Log("Collision!");
+
+        //Debug.Log(Vector3.Magnitude(target.targetPos - tcp.TCPpos));
+        //Debug.Log(target.targetPos - tcp.TCPpos);
+
+        if (collisionCheck())
+            collisionFlag = true;
     }
 
     public float[] getRotations()
@@ -50,7 +50,7 @@ public class urController : MonoBehaviour
         for (int jointIndex = 0; jointIndex < urJoints.Length;jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            rotations[jointIndex] = joint.CurrentPrimaryAxisRotation()/180.0f; 
+            rotations[jointIndex] = (joint.CurrentPrimaryAxisRotation() - startingRotations[jointIndex]) / 180.0f; 
         }
         return rotations;
     }
@@ -116,13 +116,15 @@ public class urController : MonoBehaviour
         }
     }
 
-    public bool collisionCheck()
+    private bool collisionCheck()
     {
         for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
             if (joint.inCollision)
+            {
                 return true;
+            }             
         }
         return false;
     }

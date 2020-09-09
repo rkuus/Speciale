@@ -5,25 +5,38 @@ using UnityEngine;
 public class targetHandler : MonoBehaviour
 {
     public float innerDiameter = 5.0f;
-    public float outerDiameter = 8.0f;
+    public float outerDiameter = 9.0f;
+
+    public Vector3 targetPos;
     // Start is called before the first frame update
     void Start()
     {
-        
+        targetPos = transform.localPosition * 5;
     }
 
     // Update is called once per frame
     void Update()
     {
+        targetPos = transform.localPosition * 5;
+
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    updateTargetPos();
+        //}
 
     }
 
     public void updateTargetPos()
     {
+        Vector3 newPos;
         do
         {
-            transform.position = Random.onUnitSphere * (Random.value * (outerDiameter-innerDiameter) + innerDiameter);
-            transform.position += new Vector3(0,1,0);
-        } while (transform.position.y < 1);
+            newPos = Random.onUnitSphere * (Random.value * (outerDiameter-innerDiameter) + innerDiameter);
+            newPos += new Vector3(0,2,0);
+        } while (newPos.y < 2 || Mathf.Abs(newPos.z) < 2.5f || Mathf.Abs(newPos.x) < 2.5f);
+
+        transform.localPosition = newPos / 5;
+        //Debug.Log("local:" + transform.localPosition * 5);
+        //Debug.Log("global:"+ transform.position);
     }
 }

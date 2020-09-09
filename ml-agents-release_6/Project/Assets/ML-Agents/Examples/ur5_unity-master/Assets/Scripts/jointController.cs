@@ -9,6 +9,7 @@ public class jointController : MonoBehaviour
     public bool inCollision = false;
     private int collisionCheck = 0;
     private ArticulationBody articulation;
+
     // Start is called before the first frame update
     void Start()
     {
