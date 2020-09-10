@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71911a45187f6642b15c32c27034d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 300
+  speed: 500
   urJoints:
   - {fileID: 4477464526731871826}
   - {fileID: 5050861347707728097}
@@ -1125,8 +1125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6e0318fd053ec47a6e58a285c03c57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerDiameter: 4
-  outerDiameter: 9
+  innerDiameter: 3
+  outerDiameter: 7
   targetPos: {x: 0, y: 0, z: 0}
 --- !u!135 &5746290338465283152
 SphereCollider:
@@ -1187,7 +1187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 17
+    VectorObservationSize: 23
     NumStackedVectorObservations: 4
     VectorActionSize: 06000000
     VectorActionDescriptions: []
@@ -1229,7 +1229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 2
   TakeActionsBetweenDecisions: 0
 --- !u!1 &5746290339479494421
 GameObject:
