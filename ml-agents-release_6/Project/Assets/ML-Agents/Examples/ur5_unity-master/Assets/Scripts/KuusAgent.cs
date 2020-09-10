@@ -36,16 +36,16 @@ public class KuusAgent : Agent
         // UR joint velocities
         sensor.AddObservation(robotController.getVelocities()); // 6
         // End-effector position - target position
-        sensor.AddObservation(tcp.TCPpos / 10.0f);              // 3
-        sensor.AddObservation(targetBall.targetPos / 10.0f);    // 3
+        sensor.AddObservation(tcp.TCPpos / 20.0f);              // 3
+        sensor.AddObservation(targetBall.targetPos / 20.0f);    // 3
         // Corridinate difference between the tcp and target
         currentDifference = tcp.TCPpos - targetBall.targetPos;
-        sensor.AddObservation(currentDifference / 10.0f);       // 3
+        sensor.AddObservation(currentDifference / 20.0f);       // 3
         // Distance to target
         curDistance = Vector3.Magnitude(currentDifference);
         sensor.AddObservation(curDistance/20.0f);               // 1
         // Rotation of TCP
-        sensor.AddObservation(tcp.transform.rotation.normalized);// 4
+        //sensor.AddObservation(tcp.transform.rotation.normalized);// 4
         // Angle to target
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
         sensor.AddObservation(curAngle / 180.0f);               // 1
