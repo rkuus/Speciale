@@ -13,6 +13,7 @@ public class KuusAgent : Agent
     private float lastDifference = 20.0f;
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
+    private float curAngleForward = 180.0f;
     private float closestEncounter = 999.9f;
     private Vector3 currentDifference;
     // Start is called before the first frame update
@@ -33,25 +34,31 @@ public class KuusAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         // UR configuration
-        sensor.AddObservation(robotController.getRotations());  // 6
+        sensor.AddObservation(robotController.getRotations());                          // 6
         //Debug.Log(robotController.getRotations()[0]);
         // UR joint velocities
-        sensor.AddObservation(robotController.getVelocities()); // 6
+        sensor.AddObservation(robotController.getVelocities());                         // 6
         // End-effector position - target position
-        sensor.AddObservation(tcp.TCPpos / 20.0f);              // 3
-        sensor.AddObservation(targetBall.targetPos / 20.0f);    // 3
+        sensor.AddObservation(tcp.TCPpos / 20.0f);                                      // 3
+        sensor.AddObservation(targetBall.targetPos / 20.0f);                            // 3
         // Corridinate difference between the tcp and target
         currentDifference = tcp.TCPpos - targetBall.targetPos;
-        sensor.AddObservation(currentDifference / 20.0f);       // 3
+        sensor.AddObservation(currentDifference / 20.0f);                               // 3
         // Distance to target
         curDistance = Vector3.Magnitude(currentDifference);
-        sensor.AddObservation(curDistance/20.0f);               // 1
+        sensor.AddObservation(curDistance/20.0f);                                       // 1
         // Rotation of TCP
-        //sensor.AddObservation(tcp.transform.rotation.normalized);// 4
+        //sensor.AddObservation(tcp.transform.rotation.normalized);                     // 4
         // Angle to target
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
-        sensor.AddObservation(curAngle / 180.0f);               // 1
-        
+        sensor.AddObservation(curAngle / 180.0f);                                       // 1
+
+        // Rotation forward from target
+        sensor.AddObservation(targetBall.targetForward);                                // 3
+        // Rotation between target and tcp forward rotation.
+        sensor.AddObservation((targetBall.targetForward - tcp.TCPforward)/20.0f);       // 3 
+        curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
+        sensor.AddObservation(curAngleForward / 180.0f);                                // 1
         //Debug.Log(currentDifference);
     }
 
@@ -60,7 +67,7 @@ public class KuusAgent : Agent
         //Debug.Log(vectorAction);
         robotController.setRotations(vectorAction);
 
-        if (curDistance < 0.70f && curAngle < 20.0f && !robotController.collisionFlag)
+        if (curDistance < 0.70f && curAngle < 20.0f && !robotController.collisionFlag && curAngleForward < 20.0f)
         {
             SetReward(1f);
             EndEpisode();
@@ -73,7 +80,8 @@ public class KuusAgent : Agent
 
         if (distanceDif > 0 && distanceDif < closestEncounter)
         {         
-            curReward += 0.0001f / curAngle;
+            curReward += 0.0005f / (curAngle + curAngleForward);
+            //curReward += 0.0001f / curAngleForward;
             closestEncounter = distanceDif;
         }
 

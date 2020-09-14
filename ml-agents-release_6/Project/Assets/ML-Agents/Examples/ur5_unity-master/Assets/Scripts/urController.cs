@@ -37,7 +37,7 @@ public class urController : MonoBehaviour
         //if (collisionCheck())
         //    Debug.Log("Collision!");
 
-        //Debug.Log(Vector3.Magnitude(target.targetPos - tcp.TCPpos));
+        //Debug.Log("Angle:" + Vector3.Angle(tcp.TCPforward, target.targetForward));
         //Debug.Log(target.targetPos - tcp.TCPpos);
 
         if (collisionCheck())
