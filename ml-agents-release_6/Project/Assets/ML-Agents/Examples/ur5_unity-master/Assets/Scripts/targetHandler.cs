@@ -7,26 +7,27 @@ public class targetHandler : MonoBehaviour
     public float innerDiameter = 1.0f;
     public float outerDiameter = 5.0f;
 
+    public GameObject grip;
+
     public Vector3 targetPos;
     public Vector3 targetForward;
+    public Vector3 gripPlace;
+
     // Start is called before the first frame update
     void Start()
     {
         targetPos = transform.localPosition * 5;
         targetForward = transform.forward;
+        gripPlace = targetPos - 0.75f * targetForward;
     }
 
     // Update is called once per frame
     void Update()
     {
-        targetPos = transform.localPosition * 5;
-        targetForward = transform.forward;
-
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
         //    updateTargetPos();
         //}
-
     }
 
     public void updateTargetPos()
@@ -40,8 +41,17 @@ public class targetHandler : MonoBehaviour
 
         transform.localPosition = newPos / 5;
 
-        transform.rotation = Random.rotation;
-        //Debug.Log("local:" + transform.localPosition * 5);
-        //Debug.Log("global:"+ transform.position);
+        do
+        {
+            transform.rotation = Random.rotation;
+            gripPlace = (transform.localPosition * 5) - 0.5f * transform.forward;
+        } while ((Vector3.Magnitude(newPos - new Vector3(0, 5, 0)) - 0.40f) < (Vector3.Magnitude(gripPlace - new Vector3(0, 5, 0))));
+
+        targetPos = transform.localPosition * 5;
+        targetForward = transform.forward;
+        gripPlace = targetPos - 0.75f * targetForward;
+
+        //Debug.Log("center:" + Vector3.Magnitude(newPos - new Vector3(0, 5, 0)));
+        //Debug.Log("grip:" + Vector3.Magnitude(gripPlace - new Vector3(0, 5, 0)));
     }
 }

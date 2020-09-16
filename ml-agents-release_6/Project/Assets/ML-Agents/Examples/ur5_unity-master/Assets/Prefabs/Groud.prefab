@@ -175,9 +175,9 @@ ArticulationBody:
   m_GameObject: {fileID: 1415675791089924330}
   m_Enabled: 1
   m_Mass: 1
-  m_ParentAnchorPosition: {x: 8.2, y: -1.3500004, z: 1.1500002}
+  m_ParentAnchorPosition: {x: 8.185973, y: -1.3500004, z: 1.1500002}
   m_ParentAnchorRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_AnchorPosition: {x: 8.2, y: -1.35, z: 1.15}
+  m_AnchorPosition: {x: 8.185973, y: -1.35, z: 1.15}
   m_AnchorRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   m_ComputeParentAnchor: 1
   m_ArticulationJointType: 2
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71911a45187f6642b15c32c27034d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 500
+  speed: 200
   urJoints:
   - {fileID: 4477464526731871826}
   - {fileID: 5050861347707728097}
@@ -471,6 +471,36 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -958675632385355257, guid: ff2360f031fc7274496c86d70954a11c, type: 3}
+--- !u!1 &2828822310321765031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 211158481104892726}
+  m_Layer: 0
+  m_Name: gripPlace
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &211158481104892726
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2828822310321765031}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5746290338465283155}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3225830000694364761
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,8 +608,8 @@ ArticulationBody:
   m_SwingZ: 2
   m_Twist: 1
   m_XDrive:
-    lowerLimit: -180
-    upperLimit: 180
+    lowerLimit: -270
+    upperLimit: 90
     stiffness: 100000
     damping: 10000
     forceLimit: 3.4028235e+38
@@ -1145,6 +1175,7 @@ Transform:
   - {fileID: 6342944955997088225}
   - {fileID: 8430940048911973279}
   - {fileID: 5220928347426940683}
+  - {fileID: 211158481104892726}
   m_Father: {fileID: 5746290339951997181}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1209,10 +1240,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab6e0318fd053ec47a6e58a285c03c57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerDiameter: 1
-  outerDiameter: 5
+  innerDiameter: 4
+  outerDiameter: 6
+  grip: {fileID: 2828822310321765031}
   targetPos: {x: 0, y: 0, z: 0}
   targetForward: {x: 0, y: 0, z: 0}
+  gripPlace: {x: 0, y: 0, z: 0}
 --- !u!135 &5746290338465283152
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1272,8 +1305,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 30
-    NumStackedVectorObservations: 4
+    VectorObservationSize: 32
+    NumStackedVectorObservations: 1
     VectorActionSize: 06000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
@@ -1314,8 +1347,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 2
-  TakeActionsBetweenDecisions: 0
+  DecisionPeriod: 10
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &5746290339479494421
 GameObject:
   m_ObjectHideFlags: 0
