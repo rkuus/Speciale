@@ -26,13 +26,13 @@ public class urController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //float translation = Input.GetAxis("Vertical");
-        //float[] newRotation = { translation, translation, translation, translation, translation, translation };
-        //moveRobot(newRotation);
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    forceARotation(startingRotations);
-        //}
+        float translation = Input.GetAxis("Vertical");
+        float[] newRotation = { translation, translation, translation, translation, translation, translation };
+        moveRobot(newRotation);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            forceARotation(startingRotations);
+        }
 
         //if (collisionCheck())
         //    Debug.Log("Collision!");
