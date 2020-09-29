@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class urController : MonoBehaviour
 {
-    public float speed;
+    public float[] speed;
     public GameObject[] urJoints;
     public float[] startingRotations;
 
@@ -26,13 +26,13 @@ public class urController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float translation = Input.GetAxis("Vertical");
-        float[] newRotation = { translation, translation, translation, translation, translation, translation };
-        moveRobot(newRotation);
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            forceARotation(startingRotations);
-        }
+        //float translation = Input.GetAxis("Vertical");
+        //float[] newRotation = { translation, translation, translation, translation, translation, translation };
+        //moveRobot(newRotation);
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    forceARotation(startingRotations);
+        //}
 
         //if (collisionCheck())
         //    Debug.Log("Collision!");
@@ -50,7 +50,7 @@ public class urController : MonoBehaviour
         for (int jointIndex = 0; jointIndex < urJoints.Length;jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            rotations[jointIndex] = (joint.CurrentPrimaryAxisRotation() - startingRotations[jointIndex]) / 180.0f; 
+            rotations[jointIndex] = (joint.CurrentPrimaryAxisRotation()) / 360.0f; 
         }
         return rotations;
     }
@@ -107,12 +107,12 @@ public class urController : MonoBehaviour
         }
     }
 
-    public void forceSpeed(float newSpeed)
+    public void forceSpeed(float[] newSpeed)
     {
         for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            joint.speed = newSpeed;
+            joint.speed = newSpeed[jointIndex];
         }
     }
 

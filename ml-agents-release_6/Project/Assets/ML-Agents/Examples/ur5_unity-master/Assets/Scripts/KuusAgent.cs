@@ -10,13 +10,13 @@ public class KuusAgent : Agent
     public urController robotController;
     public tcpHandler tcp;
     public targetHandler targetBall;
+    public VoxelGridCreator voxelGrid;
 
     private float curDistance = 20.0f;
     //private float curAngle = 180.0f;
     private float curAngleForward = 180.0f;
 
     private int decimalPrecision = 2;
-
 
     //private float closestEncounter = 999.9f;
     //private float bestAngle = 180.0f;
@@ -35,8 +35,12 @@ public class KuusAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        float[] defaultRotations = { 0.0f, -90.0f, 0.0f, -90.0f, 0.0f, 0.0f};
-        robotController.forceARotation(defaultRotations);
+        if (Random.value > 0.5f)
+        {
+            float[] defaultRotations = { 0.0f, -90.0f, 0.0f, -90.0f, 0.0f, 0.0f };
+            robotController.forceARotation(defaultRotations);
+        }
+
         targetBall.updateTargetPos();
 
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
@@ -75,6 +79,7 @@ public class KuusAgent : Agent
         sensor.AddObservation(roundV3((targetBall.targetForward - tcp.TCPforward)/20.0f, decimalPrecision));       // 3 
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         sensor.AddObservation(round(curAngleForward / 180.0f, decimalPrecision));                                // 1
+        sensor.AddObservation(voxelGrid.voxelCollisions());
     }
 
     public override void OnActionReceived(float[] vectorAction)
@@ -104,7 +109,7 @@ public class KuusAgent : Agent
         //else
         //    curReward -= 0.0005f;
 
-        curReward += 1.0f * (lastDistance - curDistance);
+        curReward += 2.0f * (lastDistance - curDistance);
 
         //if (curAngleForward < bestAngle)
         //{
@@ -114,14 +119,14 @@ public class KuusAgent : Agent
         //else
         //    curReward -= 0.0001f;
 
-        curReward += 0.01f * (lastAngleForward - curAngleForward);
+        curReward += 0.022f * (lastAngleForward - curAngleForward);
 
         curReward -= 0.001f; // time cost
 
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            curReward -= 0.1f;
+            curReward -= 1.0f;
         }
 
         lastDistance = curDistance;

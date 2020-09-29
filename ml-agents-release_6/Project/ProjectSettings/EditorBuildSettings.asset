@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/ML-Agents/Examples/ur5_unity-master/Assets/ur5control.unity
+  - enabled: 0
+    path: Assets/ML-Agents/Examples/ur5_unity-master/Assets/Scenes/16_robot_env.unity
     guid: 77eca27774daf9542987aa5bdcbd223f
+  - enabled: 1
+    path: Assets/ML-Agents/Examples/ur5_unity-master/Assets/Scenes/16_robots_wGrid.unity
+    guid: c019265d090919647b1d83fcb156edd5
   m_configObjects: {}
