@@ -26,6 +26,8 @@ public class KuusAgent : Agent
     private float lastAngle = 180.0f;
     private float lastAngleForward = 180.0f;
     private float lastDistance = 20.0f;
+
+    private bool completed = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,11 +36,12 @@ public class KuusAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        //if (Random.value > 0.5f)
-        //{
-        float[] defaultRotations = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-        robotController.forceARotation(defaultRotations);
-        //}
+        if (!completed)
+        {
+            float[] defaultRotations = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+            robotController.forceARotation(defaultRotations);
+        }
+        completed = false;
 
         targetBall.updateTargetPos();
 
@@ -95,9 +98,10 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        if (curDistance < 0.05f && !robotController.collisionFlag && curAngleForward < 5.0f && curAngle < 5.0f)
+        if (curDistance < 0.025f && !robotController.collisionFlag && curAngleForward < 10.0f && curAngle < 10.0f)
         {
             AddReward(1.0f);
+            completed = true;
             EndEpisode();
         }
 
@@ -105,11 +109,11 @@ public class KuusAgent : Agent
 
         curReward += 1.0f * (lastDistance - curDistance); // reward for approaching
 
-        curReward += 0.005f * (lastAngleForward - curAngleForward); // reward for correct angle
+        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for correct angle
 
-        curReward += 0.005f * (lastAngle - curAngle);
+        curReward += 0.01f * (lastAngle - curAngle);
 
-        curReward -= 0.001f; // time cost
+        curReward -= 0.00025f; // time cost
 
         if (robotController.collisionFlag) // Collision cost.
         {

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class urController : MonoBehaviour
 {
-    public float[] speed;
     public GameObject[] urJoints;
     public float[] startingRotations;
 
@@ -22,26 +21,30 @@ public class urController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        forceSpeed(speed);
         //lastDifference = tcp.transform.position - target.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //curAngle = Vector3.Angle(tcp.TCPforward, (target.targetPos - tcp.TCPpos));
-        //otherAngle = Vector3.Angle(tcp.TCPpos, target.targetPos);
         //float translation = Input.GetAxis("Vertical");
+
+        //if (translation > 0)
+        //    translation = 1;
+        //if (translation < 0)
+        //    translation = -1;
+
         //float[] newRotation = { translation, translation, translation, translation, translation, translation };
         //moveRobot(newRotation);
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
-        //    Debug.Log("1 vel:"+ getVelocities()[0]);
-        //    Debug.Log("2 vel:" + getVelocities()[1]);
-        //    Debug.Log("3 vel:" + getVelocities()[2]);
-        //    Debug.Log("4 vel:" + getVelocities()[3]);
-        //    Debug.Log("5 vel:" + getVelocities()[4]);
-        //    Debug.Log("6 vel:" + getVelocities()[5]);
+        //    float[] someVels = getVelocities();
+        //    Debug.Log("1 vel:" + someVels[0]);
+        //    Debug.Log("2 vel:" + someVels[1]);
+        //    Debug.Log("3 vel:" + someVels[2]);
+        //    Debug.Log("4 vel:" + someVels[3]);
+        //    Debug.Log("5 vel:" + someVels[4]);
+        //    Debug.Log("6 vel:" + someVels[5]);
         //    //forceARotation(startingRotations);
         //}
 
@@ -69,11 +72,20 @@ public class urController : MonoBehaviour
     public float[] getVelocities()
     {
         float[] velocities = new float[urJoints.Length];
-        
+        Vector3 lastJoint = new Vector3(0, 0, 0);
         for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            velocities[jointIndex] = joint.getCurrentSpeed() / 10.0f;
+            Vector3 curJoint = joint.getCurrentSpeed();
+
+            if (joint.rotAxis[0])
+                velocities[jointIndex] = (curJoint.x- lastJoint.x);
+            if (joint.rotAxis[1])
+                velocities[jointIndex] = (curJoint.y - lastJoint.y);
+            if (joint.rotAxis[2])
+                velocities[jointIndex] = (curJoint.z - lastJoint.z);
+
+            lastJoint = curJoint;
         }
         return velocities;
     }
@@ -116,15 +128,6 @@ public class urController : MonoBehaviour
                 jointController joint = urJoints[jointIndex].GetComponent<jointController>();
                 joint.ForceToRotation(rotations[jointIndex]);
             }
-        }
-    }
-
-    public void forceSpeed(float[] newSpeed)
-    {
-        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
-        {
-            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            joint.speed = newSpeed[jointIndex];
         }
     }
 

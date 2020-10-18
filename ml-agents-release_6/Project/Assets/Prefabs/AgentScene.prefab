@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead9816682dff514aa99c811d23e27da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerDiameter: 0.3
+  innerDiameter: 0.5
   outerDiameter: 1.2
   grip: {fileID: 7822300158551894292}
   ground: {fileID: 6055246758980130878}
@@ -382,9 +382,9 @@ ArticulationBody:
   m_Enabled: 1
   m_Mass: 1
   m_ParentAnchorPosition: {x: 0, y: 0.181, z: 0.095}
-  m_ParentAnchorRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_ParentAnchorRotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   m_AnchorPosition: {x: 0, y: 0.181, z: 0.095}
-  m_AnchorRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AnchorRotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   m_ComputeParentAnchor: 1
   m_ArticulationJointType: 2
   m_LinearX: 2
@@ -449,8 +449,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointRotation: 0
-  speed: 131
+  speed: 56
   inCollision: 0
+  rotAxis: 000001
 --- !u!1 &2058417972904010395
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,8 +700,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointRotation: 0
-  speed: 191
+  speed: 82
   inCollision: 0
+  rotAxis: 000100
 --- !u!1 &3862780664490326053
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,8 +871,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointRotation: 0
-  speed: 131
+  speed: 56
   inCollision: 0
+  rotAxis: 000100
 --- !u!1 &4439629406037784222
 GameObject:
   m_ObjectHideFlags: 0
@@ -1052,9 +1055,9 @@ ArticulationBody:
   m_Enabled: 1
   m_Mass: 1
   m_ParentAnchorPosition: {x: 0, y: 1.365, z: 0.096}
-  m_ParentAnchorRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_ParentAnchorRotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   m_AnchorPosition: {x: 0, y: 1.365, z: 0.096}
-  m_AnchorRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AnchorRotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   m_ComputeParentAnchor: 1
   m_ArticulationJointType: 2
   m_LinearX: 2
@@ -1119,8 +1122,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointRotation: 0
-  speed: 191
+  speed: 82
   inCollision: 0
+  rotAxis: 000001
 --- !u!1 &5680124308321497566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1353,12 +1357,12 @@ MonoBehaviour:
     VectorActionSize: 06000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 5727e40257652a24fa9a5643822cdedd, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent
   TeamId: 0
-  m_UseChildSensors: 1
+  m_UseChildSensors: 0
 --- !u!114 &6055246758980130865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1374,7 +1378,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 10000
+  MaxStep: 20000
   robotController: {fileID: 8319961267691520163}
   tcp: {fileID: 6055246757983171509}
   targetBall: {fileID: 320167846109868005}
@@ -1390,7 +1394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 10
+  DecisionPeriod: 1
   TakeActionsBetweenDecisions: 1
 --- !u!1 &6055246759280354784
 GameObject:
@@ -1735,9 +1739,9 @@ ArticulationBody:
   m_Enabled: 1
   m_Mass: 1
   m_ParentAnchorPosition: {x: 0, y: 1.484, z: 0.231}
-  m_ParentAnchorRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_ParentAnchorRotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   m_AnchorPosition: {x: 0, y: 1.484, z: 0.231}
-  m_AnchorRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AnchorRotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   m_ComputeParentAnchor: 1
   m_ArticulationJointType: 2
   m_LinearX: 2
@@ -1802,8 +1806,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointRotation: 0
-  speed: 191
+  speed: 82
   inCollision: 0
+  rotAxis: 000001
 --- !u!1 &7741426042396842181
 GameObject:
   m_ObjectHideFlags: 0
@@ -1972,8 +1977,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jointRotation: 0
-  speed: 191
+  speed: 82
   inCollision: 0
+  rotAxis: 000001
 --- !u!1 &7822300158551894292
 GameObject:
   m_ObjectHideFlags: 0
@@ -2332,13 +2338,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc46e088dceed44a8d38e9c3b03129f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed:
-  - 131
-  - 131
-  - 191
-  - 191
-  - 191
-  - 191
   urJoints:
   - {fileID: 3862780664490326053}
   - {fileID: 1284657950797847061}

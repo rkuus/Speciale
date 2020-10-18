@@ -39,9 +39,9 @@ public class targetHandler : MonoBehaviour
         Vector3 newPos;
         do
         {
-            newPos = Random.onUnitSphere * (Random.value * (outerDiameter-innerDiameter) + innerDiameter);
-            newPos += new Vector3(0,0.2f,0);
-        } while (newPos.y < 0.2f || Vector3.Magnitude(new Vector3(newPos.x,0,newPos.z)) < 0.09f || Physics.OverlapSphere(newPos + ground.transform.position, 0.2f, ~0, QueryTriggerInteraction.Ignore).Length > 0);
+            newPos = Random.onUnitSphere * (Random.value * (outerDiameter - innerDiameter) + innerDiameter);
+            newPos += new Vector3(0, 0.05f, 0);
+        } while (newPos.y < 0.05f || Vector3.SqrMagnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDiameter || Physics.OverlapSphere(newPos + ground.transform.position, 0.2f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
 
         transform.localPosition = newPos;
 
@@ -49,7 +49,7 @@ public class targetHandler : MonoBehaviour
         {
             transform.rotation = Random.rotation;
             gripPlace = (transform.localPosition) - 0.05f * transform.forward;
-        } while ((Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)) - 0.01f) < (Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0))));
+        } while ((Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)) - 0.025f) < (Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0))));
 
 
 
