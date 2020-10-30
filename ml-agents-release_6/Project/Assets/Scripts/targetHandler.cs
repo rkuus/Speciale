@@ -7,6 +7,8 @@ public class targetHandler : MonoBehaviour
     public float innerDiameter = 0.4f;
     public float outerDiameter = 1.2f;
 
+    public bool fixedY = false;
+
     public GameObject grip;
     public GameObject ground;
 
@@ -41,6 +43,8 @@ public class targetHandler : MonoBehaviour
         {
             newPos = Random.onUnitSphere * (Random.value * (outerDiameter - innerDiameter) + innerDiameter);
             newPos += new Vector3(0, 0.05f, 0);
+            if (fixedY)
+                newPos.y = 0.25f;
         } while (newPos.y < 0.05f || Vector3.SqrMagnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDiameter || Physics.OverlapSphere(newPos + ground.transform.position, 0.2f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
 
         transform.localPosition = newPos;

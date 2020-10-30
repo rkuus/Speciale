@@ -14,8 +14,7 @@ public class tcpHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        articulation = GetComponent<ArticulationBody>();
-        
+        articulation = GetComponent<ArticulationBody>();      
     }
 
     // Update is called once per frame
