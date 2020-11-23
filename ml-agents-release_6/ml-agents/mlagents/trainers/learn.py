@@ -12,14 +12,15 @@ import mlagents_envs
 from mlagents import tf_utils
 from mlagents.trainers.trainer_controller import TrainerController
 from mlagents.trainers.environment_parameter_manager import EnvironmentParameterManager
-from mlagents.trainers.trainer_util import TrainerFactory, handle_existing_directories
+from mlagents.trainers.trainer import TrainerFactory
+from mlagents.trainers.directory_utils import validate_existing_directories
 from mlagents.trainers.stats import (
     TensorboardWriter,
     StatsReporter,
     GaugeWriter,
     ConsoleWriter,
 )
-from mlagents.trainers.cli_utils import parser
+from mlagents.trainers.cli_utils import parser, DetectDefault
 from mlagents_envs.environment import UnityEnvironment
 from mlagents.trainers.settings import RunOptions
 
@@ -75,7 +76,7 @@ def run_training(run_seed: int, options: RunOptions) -> None:
         run_logs_dir = os.path.join(write_path, "run_logs")
         port: Optional[int] = env_settings.base_port
         # Check if directory exists
-        handle_existing_directories(
+        validate_existing_directories(
             write_path,
             checkpoint_settings.resume,
             checkpoint_settings.force,
@@ -125,14 +126,15 @@ def run_training(run_seed: int, options: RunOptions) -> None:
         )
 
         trainer_factory = TrainerFactory(
-            options.behaviors,
-            write_path,
-            not checkpoint_settings.inference,
-            checkpoint_settings.resume,
-            run_seed,
-            env_parameter_manager,
-            maybe_init_path,
-            False,
+            trainer_config=options.behaviors,
+            output_path=write_path,
+            train_model=not checkpoint_settings.inference,
+            load_model=checkpoint_settings.resume,
+            seed=run_seed,
+            param_manager=env_parameter_manager,
+            init_path=maybe_init_path,
+            multi_gpu=False,
+            force_torch="torch" in DetectDefault.non_default_args,
         )
         # Create controller and begin training.
         tc = TrainerController(

@@ -1,5 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class urController : MonoBehaviour
@@ -12,6 +13,8 @@ public class urController : MonoBehaviour
 
     public bool collisionFlag = false;
 
+    private float[] curRotations;
+    private float[] curRotLim;
     //public float curAngle = 0.0f;
     //public float otherAngle = 0.0f;
 
@@ -21,6 +24,8 @@ public class urController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        curRotations = new float[urJoints.Length];
+        curRotLim = new float[urJoints.Length];
         //lastDifference = tcp.transform.position - target.transform.position;
     }
 
@@ -60,13 +65,23 @@ public class urController : MonoBehaviour
 
     public float[] getRotations()
     {
-        float[] rotations = new float[urJoints.Length];
+        
         for (int jointIndex = 0; jointIndex < urJoints.Length;jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            rotations[jointIndex] = (joint.CurrentPrimaryAxisRotation()) / 360.0f; 
+            curRotations[jointIndex] = (joint.CurrentPrimaryAxisRotation()) / 180.0f;
+            if (curRotations[jointIndex] > 1)
+            {
+                curRotations[jointIndex]--;
+                curRotLim[jointIndex] = 1;
+            }
+            else if (curRotations[jointIndex] < -1)
+            {
+                curRotations[jointIndex]++;
+                curRotLim[jointIndex] = -1;
+            }
         }
-        return rotations;
+        return curRotations.Concat(curRotLim).ToArray();
     }
 
     public float[] getVelocities()

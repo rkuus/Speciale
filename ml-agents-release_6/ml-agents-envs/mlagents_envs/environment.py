@@ -56,7 +56,11 @@ class UnityEnvironment(BaseEnv):
     # We follow semantic versioning on the communication version, so existing
     # functionality will work as long the major versions match.
     # This should be changed whenever a change is made to the communication protocol.
-    API_VERSION = "1.0.0"
+    # Revision history:
+    #  * 1.0.0 - initial version
+    #  * 1.1.0 - support concatenated PNGs for compressed observations.
+    #  * 1.2.0 - support compression mapping for stacked compressed observations.
+    API_VERSION = "1.2.0"
 
     # Default port that the editor listens on. If an environment executable
     # isn't specified, this port will be used.
@@ -114,6 +118,8 @@ class UnityEnvironment(BaseEnv):
     def _get_capabilities_proto() -> UnityRLCapabilitiesProto:
         capabilities = UnityRLCapabilitiesProto()
         capabilities.baseRLCapabilities = True
+        capabilities.concatenatedPngObservations = True
+        capabilities.compressedChannelMapping = True
         return capabilities
 
     @staticmethod

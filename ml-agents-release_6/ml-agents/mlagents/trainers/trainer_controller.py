@@ -25,9 +25,11 @@ from mlagents_envs.timers import (
 )
 from mlagents.trainers.trainer import Trainer
 from mlagents.trainers.environment_parameter_manager import EnvironmentParameterManager
-from mlagents.trainers.trainer_util import TrainerFactory
+from mlagents.trainers.trainer import TrainerFactory
 from mlagents.trainers.behavior_id_utils import BehaviorIdentifiers
 from mlagents.trainers.agent_processor import AgentManager
+from mlagents.tf_utils.globals import get_rank
+from mlagents import torch_utils
 
 
 class TrainerController:
@@ -65,28 +67,21 @@ class TrainerController:
         self.kill_trainers = False
         np.random.seed(training_seed)
         tf.set_random_seed(training_seed)
+        if torch_utils.is_available():
+            torch_utils.torch.manual_seed(training_seed)
+        self.rank = get_rank()
 
     @timed
     def _save_models(self):
         """
         Saves current model to checkpoint folder.
         """
+        if self.rank is not None and self.rank != 0:
+            return
+
         for brain_name in self.trainers.keys():
             self.trainers[brain_name].save_model()
         self.logger.info("Saved Model")
-
-    def _save_model_when_interrupted(self):
-        self.logger.info(
-            "Learning was interrupted. Please wait while the graph is generated."
-        )
-        self._save_models()
-
-    def _export_graph(self):
-        """
-        Saves models for all trainers.
-        """
-        for brain_name in self.trainers.keys():
-            self.trainers[brain_name].save_model()
 
     @staticmethod
     def _create_output_path(output_path):
@@ -245,7 +240,7 @@ class TrainerController:
         ) in self.param_manager.get_current_lesson_number().items():
             for trainer in self.trainers.values():
                 trainer.stats_reporter.set_stat(
-                    f"Environment/Lesson/{param_name}", lesson_number
+                    f"Environment/Lesson Number/{param_name}", lesson_number
                 )
 
         for trainer in self.trainers.values():

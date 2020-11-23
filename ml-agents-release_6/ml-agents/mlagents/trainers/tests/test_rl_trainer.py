@@ -1,11 +1,12 @@
+import os
 from unittest import mock
 import pytest
 import mlagents.trainers.tests.mock_brain as mb
-from mlagents.trainers.policy.checkpoint_manager import NNCheckpoint
+from mlagents.trainers.policy.checkpoint_manager import ModelCheckpoint
 from mlagents.trainers.trainer.rl_trainer import RLTrainer
 from mlagents.trainers.tests.test_buffer import construct_fake_buffer
 from mlagents.trainers.agent_processor import AgentManagerQueue
-from mlagents.trainers.settings import TrainerSettings
+from mlagents.trainers.settings import TrainerSettings, FrameworkType
 
 
 # Add concrete implementations of abstract methods
@@ -23,20 +24,34 @@ class FakeTrainer(RLTrainer):
         return self.update_policy
 
     def add_policy(self, mock_behavior_id, mock_policy):
-        self.policies[mock_behavior_id] = mock_policy
+        def checkpoint_path(brain_name, step):
+            return os.path.join(self.model_saver.model_path, f"{brain_name}-{step}")
 
-    def create_policy(self):
+        self.policies[mock_behavior_id] = mock_policy
+        mock_model_saver = mock.Mock()
+        mock_model_saver.model_path = self.artifact_path
+        mock_model_saver.save_checkpoint.side_effect = checkpoint_path
+        self.model_saver = mock_model_saver
+
+    def create_tf_policy(self, parsed_behavior_id, behavior_spec):
+        return mock.Mock()
+
+    def create_torch_policy(self, parsed_behavior_id, behavior_spec):
         return mock.Mock()
 
     def _process_trajectory(self, trajectory):
         super()._process_trajectory(trajectory)
 
 
-def create_rl_trainer():
+def create_rl_trainer(framework=FrameworkType.TENSORFLOW):
     trainer = FakeTrainer(
         "test_trainer",
-        TrainerSettings(max_steps=100, checkpoint_interval=10, summary_freq=20),
+        TrainerSettings(
+            max_steps=100, checkpoint_interval=10, summary_freq=20, framework=framework
+        ),
         True,
+        False,
+        "mock_model_path",
         0,
     )
     trainer.set_is_policy_updating(True)
@@ -67,7 +82,6 @@ def test_clear_update_buffer():
 def test_advance(mocked_clear_update_buffer, mocked_save_model):
     trainer = create_rl_trainer()
     mock_policy = mock.Mock()
-    mock_policy.model_path = "mock_model_path"
     trainer.add_policy("TestBrain", mock_policy)
     trajectory_queue = AgentManagerQueue("testbrain")
     policy_queue = AgentManagerQueue("testbrain")
@@ -108,12 +122,16 @@ def test_advance(mocked_clear_update_buffer, mocked_save_model):
     assert mocked_save_model.call_count == 0
 
 
+@pytest.mark.parametrize(
+    "framework", [FrameworkType.TENSORFLOW, FrameworkType.PYTORCH], ids=["tf", "torch"]
+)
 @mock.patch("mlagents.trainers.trainer.trainer.StatsReporter.write_stats")
-@mock.patch("mlagents.trainers.trainer.rl_trainer.NNCheckpointManager.add_checkpoint")
-def test_summary_checkpoint(mock_add_checkpoint, mock_write_summary):
-    trainer = create_rl_trainer()
+@mock.patch(
+    "mlagents.trainers.trainer.rl_trainer.ModelCheckpointManager.add_checkpoint"
+)
+def test_summary_checkpoint(mock_add_checkpoint, mock_write_summary, framework):
+    trainer = create_rl_trainer(framework)
     mock_policy = mock.Mock()
-    mock_policy.model_path = "mock_model_path"
     trainer.add_policy("TestBrain", mock_policy)
     trajectory_queue = AgentManagerQueue("testbrain")
     policy_queue = AgentManagerQueue("testbrain")
@@ -146,18 +164,17 @@ def test_summary_checkpoint(mock_add_checkpoint, mock_write_summary):
     checkpoint_range = range(
         checkpoint_interval, num_trajectories * time_horizon, checkpoint_interval
     )
-    calls = [
-        mock.call(f"{mock_policy.model_path}/{trainer.brain_name}-{step}", mock.ANY)
-        for step in checkpoint_range
-    ]
-    mock_policy.checkpoint.assert_has_calls(calls, any_order=True)
+    calls = [mock.call(trainer.brain_name, step) for step in checkpoint_range]
+
+    trainer.model_saver.save_checkpoint.assert_has_calls(calls, any_order=True)
+    export_ext = "nn" if trainer.framework == FrameworkType.TENSORFLOW else "onnx"
 
     add_checkpoint_calls = [
         mock.call(
             trainer.brain_name,
-            NNCheckpoint(
+            ModelCheckpoint(
                 step,
-                f"{mock_policy.model_path}/{trainer.brain_name}-{step}.nn",
+                f"{trainer.model_saver.model_path}/{trainer.brain_name}-{step}.{export_ext}",
                 None,
                 mock.ANY,
             ),

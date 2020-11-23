@@ -10,4 +10,10 @@ package communicator_objects;
 message UnityRLCapabilitiesProto {
     // These are the 1.0 capabilities.
     bool baseRLCapabilities = 1;
+
+    // concatenated PNG files for compressed visual observations with >3 channels.
+    bool concatenatedPngObservations = 2;
+
+    // compression mapping for stacking compressed observations.
+    bool compressedChannelMapping = 3;
 }

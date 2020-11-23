@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
@@ -69,44 +69,36 @@ public class aiProjectAgent : Agent
 
         //recurrentValue = vectorAction.Skip(6).ToArray();
 
-        float curReward = -0.002f; // time cost
+        float curReward = -0.0005f; // time cost
 
         if (robotController.collisionFlag)
         {
             robotController.collisionFlag = false;
-            curReward -= 0.1f; // Collision cost
+            curReward -= 0.05f; // Collision cost
 
-            curReward -= 0.1f * lookingCounter;
-            lookingCounter = 0;
         }
         else
         {
             if (explored())
-                curReward += 0.01f;
+                curReward += 0.01f; // 40 possible total 0.125 reward
 
             if (lastestRayCast[1] == 1.0f)
             {
                 lastDistance = curDistance;
                 curDistance = lastestRayCast[0];
-                curReward += 1.0f * (lastDistance - curDistance);
+                curReward += 0.25f * (lastDistance - curDistance); // 0.25 reward
 
                 if (curDistance < 0.20f)
                 {
                     lookingCounter++;
-                    curReward += 0.1f;
-                    if (lookingCounter > 99)
+                    curReward += 0.05f; // 0.25 reward
+                    if (lookingCounter > 19)
                     {
-                        curReward += 1.0f;
+                        curReward += 1.0f; // 0.25 reward
                         AddReward(curReward);
                         EndEpisode();
                     }
                 }
-                else
-                {
-                    curReward -= 0.1f * lookingCounter;
-                    lookingCounter = 0;
-                }
-                    
             }
         }
 

@@ -19,7 +19,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public Camera Camera
         {
-            get { return m_Camera;  }
+            get { return m_Camera; }
             set { m_Camera = value; UpdateSensor(); }
         }
 
@@ -32,7 +32,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public string SensorName
         {
-            get { return m_SensorName;  }
+            get { return m_SensorName; }
             set { m_SensorName = value; }
         }
 
@@ -45,7 +45,7 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int Width
         {
-            get { return m_Width;  }
+            get { return m_Width; }
             set { m_Width = value; }
         }
 
@@ -58,8 +58,8 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public int Height
         {
-            get { return m_Height;  }
-            set { m_Height = value;  }
+            get { return m_Height; }
+            set { m_Height = value; }
         }
 
         [HideInInspector, SerializeField, FormerlySerializedAs("grayscale")]
@@ -71,9 +71,14 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public bool Grayscale
         {
-            get { return m_Grayscale;  }
+            get { return m_Grayscale; }
             set { m_Grayscale = value; }
         }
+
+        [HideInInspector, SerializeField]
+        [Range(1, 50)]
+        [Tooltip("Number of camera frames that will be stacked before being fed to the neural network.")]
+        int m_ObservationStacks = 1;
 
         [HideInInspector, SerializeField, FormerlySerializedAs("compression")]
         SensorCompressionType m_Compression = SensorCompressionType.PNG;
@@ -83,8 +88,18 @@ namespace Unity.MLAgents.Sensors
         /// </summary>
         public SensorCompressionType CompressionType
         {
-            get { return m_Compression;  }
+            get { return m_Compression; }
             set { m_Compression = value; UpdateSensor(); }
+        }
+
+        /// <summary>
+        /// Whether to stack previous observations. Using 1 means no previous observations.
+        /// Note that changing this after the sensor is created has no effect.
+        /// </summary>
+        public int ObservationStacks
+        {
+            get { return m_ObservationStacks; }
+            set { m_ObservationStacks = value; }
         }
 
         /// <summary>
@@ -94,6 +109,11 @@ namespace Unity.MLAgents.Sensors
         public override ISensor CreateSensor()
         {
             m_Sensor = new CameraSensor(m_Camera, m_Width, m_Height, Grayscale, m_SensorName, m_Compression);
+
+            if (ObservationStacks != 1)
+            {
+                return new StackingSensor(m_Sensor, ObservationStacks);
+            }
             return m_Sensor;
         }
 
@@ -103,7 +123,13 @@ namespace Unity.MLAgents.Sensors
         /// <returns>The observation shape of the associated <see cref="CameraSensor"/> object.</returns>
         public override int[] GetObservationShape()
         {
-            return CameraSensor.GenerateShape(m_Width, m_Height, Grayscale);
+            var stacks = ObservationStacks > 1 ? ObservationStacks : 1;
+            var cameraSensorshape = CameraSensor.GenerateShape(m_Width, m_Height, Grayscale);
+            if (stacks > 1)
+            {
+                cameraSensorshape[cameraSensorshape.Length - 1] *= stacks;
+            }
+            return cameraSensorshape;
         }
 
         /// <summary>

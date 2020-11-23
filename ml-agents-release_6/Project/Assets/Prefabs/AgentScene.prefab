@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 320167846109868006}
   - component: {fileID: 320167846109868003}
   - component: {fileID: 320167846109868005}
+  - component: {fileID: 5277635015159015115}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -113,12 +114,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   innerDiameter: 0.5
-  outerDiameter: 1.2
+  outerDiameter: 1.4
+  fixedY: 0
   grip: {fileID: 7822300158551894292}
   ground: {fileID: 6055246758980130878}
   targetPos: {x: 0, y: 0, z: 0}
   targetForward: {x: 0, y: 0, z: 0}
   gripPlace: {x: 0, y: 0, z: 0}
+--- !u!54 &5277635015159015115
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320167846109868004}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &738662775617835985
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,6 +892,56 @@ MonoBehaviour:
   speed: 56
   inCollision: 0
   rotAxis: 000100
+--- !u!1 &4341141407347205117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4623880964674722090}
+  - component: {fileID: 4918012468274005906}
+  m_Layer: 0
+  m_Name: VoxelGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4623880964674722090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4341141407347205117}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6055246758980130879}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4918012468274005906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4341141407347205117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4bcc1dbe0ad5846a535d01d8f77649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  XY_cube: {fileID: 4300200842674337444, guid: e75cddba4c34689449b05d4bc0545095, type: 3}
+  ZY_cube: {fileID: 7899320131501981040, guid: abf1c7c0c611c8f40b4b763617615c91, type: 3}
+  XZ_cube: {fileID: 1892275378726401383, guid: 2e7541b7bc97767458604ea712399355, type: 3}
+  ground: {fileID: 6055246758980130878}
+  scaleCube: 0.2
+  robotRange: 1.8
+  cubeTriggers: []
 --- !u!1 &4439629406037784222
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,6 +1404,7 @@ Transform:
   - {fileID: 1553361952566294286}
   - {fileID: 6055246759280354788}
   - {fileID: 320167846109868000}
+  - {fileID: 4623880964674722090}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1352,17 +1421,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 33
-    NumStackedVectorObservations: 5
+    VectorObservationSize: 84
+    NumStackedVectorObservations: 1
     VectorActionSize: 06000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: 5727e40257652a24fa9a5643822cdedd, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent
   TeamId: 0
   m_UseChildSensors: 0
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
 --- !u!114 &6055246758980130865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1382,6 +1453,7 @@ MonoBehaviour:
   robotController: {fileID: 8319961267691520163}
   tcp: {fileID: 6055246757983171509}
   targetBall: {fileID: 320167846109868005}
+  voxelGrid: {fileID: 4918012468274005906}
 --- !u!114 &6055246758980130864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1394,8 +1466,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 1
-  TakeActionsBetweenDecisions: 1
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 0
 --- !u!1 &6055246759280354784
 GameObject:
   m_ObjectHideFlags: 0

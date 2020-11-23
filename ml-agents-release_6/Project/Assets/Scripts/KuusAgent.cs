@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
@@ -9,7 +9,7 @@ public class KuusAgent : Agent
     public urController robotController;
     public tcpHandler tcp;
     public targetHandler targetBall;
-    //public VoxelGridCreator voxelGrid;
+    public VoxelGridCreator voxelGrid;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -59,7 +59,7 @@ public class KuusAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         // UR configuration
-        sensor.AddObservation(roundList(robotController.getRotations(), decimalPrecision));                // 6
+        sensor.AddObservation(roundList(robotController.getRotations(), decimalPrecision));                // 12
         // UR joint velocities
         sensor.AddObservation(roundList(robotController.getVelocities(), decimalPrecision));               // 6
         // End-effector position - target position
@@ -83,7 +83,8 @@ public class KuusAgent : Agent
         sensor.AddObservation(roundV3((targetBall.targetForward - tcp.TCPforward), decimalPrecision));      // 3 
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         sensor.AddObservation(round(curAngleForward / 180.0f, decimalPrecision));                           // 1
-        //sensor.AddObservation(voxelGrid.voxelCollisions());
+        // Voxel grid
+        sensor.AddObservation(voxelGrid.voxelCollisions());                                                 // 45
         //curAngle = Vector3.Angle(tcp.TCPpos, targetBall.targetPos);
         //sensor.AddObservation(round(curAngle / 180.0f, decimalPrecision));                                  // 1
     }
@@ -113,7 +114,7 @@ public class KuusAgent : Agent
 
         curReward += 0.01f * (lastAngle - curAngle);
 
-        curReward -= 0.00025f; // time cost
+        curReward -= 0.001f; // time cost
 
         if (robotController.collisionFlag) // Collision cost.
         {

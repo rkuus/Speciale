@@ -4,15 +4,19 @@ namespace Unity.MLAgents
 {
     internal class UnityRLCapabilities
     {
-        internal bool m_BaseRLCapabilities;
+        public bool BaseRLCapabilities;
+        public bool ConcatenatedPngObservations;
+        public bool CompressedChannelMapping;
 
         /// <summary>
         /// A class holding the capabilities flags for Reinforcement Learning across C# and the Trainer codebase.  This
         /// struct will be used to inform users if and when they are using C# / Trainer features that are mismatched.
         /// </summary>
-        public UnityRLCapabilities(bool baseRlCapabilities=true)
+        public UnityRLCapabilities(bool baseRlCapabilities = true, bool concatenatedPngObservations = true, bool compressedChannelMapping = true)
         {
-            m_BaseRLCapabilities = baseRlCapabilities;
+            BaseRLCapabilities = baseRlCapabilities;
+            ConcatenatedPngObservations = concatenatedPngObservations;
+            CompressedChannelMapping = compressedChannelMapping;
         }
 
         /// <summary>
@@ -22,7 +26,7 @@ namespace Unity.MLAgents
         /// <returns></returns>
         public bool WarnOnPythonMissingBaseRLCapabilities()
         {
-            if (m_BaseRLCapabilities)
+            if (BaseRLCapabilities)
             {
                 return false;
             }

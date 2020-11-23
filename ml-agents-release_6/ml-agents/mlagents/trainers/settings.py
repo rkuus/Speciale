@@ -2,13 +2,24 @@ import warnings
 
 import attr
 import cattr
-from typing import Dict, Optional, List, Any, DefaultDict, Mapping, Tuple, Union
+from typing import (
+    Dict,
+    Optional,
+    List,
+    Any,
+    DefaultDict,
+    Mapping,
+    Tuple,
+    Union,
+    ClassVar,
+)
 from enum import Enum
 import collections
 import argparse
 import abc
 import numpy as np
 import math
+import copy
 
 from mlagents.trainers.cli_utils import StoreConfigFile, DetectDefault, parser
 from mlagents.trainers.cli_utils import load_config
@@ -46,6 +57,23 @@ def defaultdict_to_dict(d: DefaultDict) -> Dict:
     return {key: cattr.unstructure(val) for key, val in d.items()}
 
 
+def deep_update_dict(d: Dict, update_d: Mapping) -> None:
+    """
+    Similar to dict.update(), but works for nested dicts of dicts as well.
+    """
+    for key, val in update_d.items():
+        if key in d and isinstance(d[key], Mapping) and isinstance(val, Mapping):
+            deep_update_dict(d[key], val)
+        else:
+            d[key] = val
+
+
+class SerializationSettings:
+    convert_to_barracuda = True
+    convert_to_onnx = True
+    onnx_opset = 9
+
+
 @attr.s(auto_attribs=True)
 class ExportableSettings:
     def as_dict(self):
@@ -53,6 +81,7 @@ class ExportableSettings:
 
 
 class EncoderType(Enum):
+    MATCH3 = "match3"
     SIMPLE = "simple"
     NATURE_CNN = "nature_cnn"
     RESNET = "resnet"
@@ -138,12 +167,14 @@ class RewardSignalType(Enum):
     EXTRINSIC: str = "extrinsic"
     GAIL: str = "gail"
     CURIOSITY: str = "curiosity"
+    RND: str = "rnd"
 
     def to_settings(self) -> type:
         _mapping = {
             RewardSignalType.EXTRINSIC: RewardSignalSettings,
             RewardSignalType.GAIL: GAILSettings,
             RewardSignalType.CURIOSITY: CuriositySettings,
+            RewardSignalType.RND: RNDSettings,
         }
         return _mapping[self]
 
@@ -185,6 +216,12 @@ class CuriositySettings(RewardSignalSettings):
     learning_rate: float = 3e-4
 
 
+@attr.s(auto_attribs=True)
+class RNDSettings(RewardSignalSettings):
+    encoding_size: int = 64
+    learning_rate: float = 1e-4
+
+
 # SAMPLERS #############################################################################
 class ParameterRandomizationType(Enum):
     UNIFORM: str = "uniform"
@@ -206,6 +243,12 @@ class ParameterRandomizationType(Enum):
 @attr.s(auto_attribs=True)
 class ParameterRandomizationSettings(abc.ABC):
     seed: int = parser.get_default("seed")
+
+    def __str__(self) -> str:
+        """
+        Helper method to output sampler stats to console.
+        """
+        raise TrainerConfigError(f"__str__ not implemented for type {self.__class__}.")
 
     @staticmethod
     def structure(
@@ -268,6 +311,12 @@ class ParameterRandomizationSettings(abc.ABC):
 class ConstantSettings(ParameterRandomizationSettings):
     value: float = 0.0
 
+    def __str__(self) -> str:
+        """
+        Helper method to output sampler stats to console.
+        """
+        return f"Float: value={self.value}"
+
     def apply(self, key: str, env_channel: EnvironmentParametersChannel) -> None:
         """
         Helper method to send sampler settings over EnvironmentParametersChannel
@@ -282,6 +331,12 @@ class ConstantSettings(ParameterRandomizationSettings):
 class UniformSettings(ParameterRandomizationSettings):
     min_value: float = attr.ib()
     max_value: float = 1.0
+
+    def __str__(self) -> str:
+        """
+        Helper method to output sampler stats to console.
+        """
+        return f"Uniform sampler: min={self.min_value}, max={self.max_value}"
 
     @min_value.default
     def _min_value_default(self):
@@ -311,6 +366,12 @@ class GaussianSettings(ParameterRandomizationSettings):
     mean: float = 1.0
     st_dev: float = 1.0
 
+    def __str__(self) -> str:
+        """
+        Helper method to output sampler stats to console.
+        """
+        return f"Gaussian sampler: mean={self.mean}, stddev={self.st_dev}"
+
     def apply(self, key: str, env_channel: EnvironmentParametersChannel) -> None:
         """
         Helper method to send sampler settings over EnvironmentParametersChannel
@@ -326,6 +387,12 @@ class GaussianSettings(ParameterRandomizationSettings):
 @attr.s(auto_attribs=True)
 class MultiRangeUniformSettings(ParameterRandomizationSettings):
     intervals: List[Tuple[float, float]] = attr.ib()
+
+    def __str__(self) -> str:
+        """
+        Helper method to output sampler stats to console.
+        """
+        return f"MultiRangeUniform sampler: intervals={self.intervals}"
 
     @intervals.default
     def _intervals_default(self):
@@ -368,8 +435,8 @@ class CompletionCriteriaSettings:
         PROGRESS: str = "progress"
         REWARD: str = "reward"
 
+    behavior: str
     measure: MeasureType = attr.ib(default=MeasureType.REWARD)
-    behavior: str = attr.ib(default="")
     min_lesson_length: int = 0
     signal_smoothing: bool = True
     threshold: float = attr.ib(default=0.0)
@@ -525,8 +592,14 @@ class TrainerType(Enum):
         return _mapping[self]
 
 
+class FrameworkType(Enum):
+    TENSORFLOW: str = "tensorflow"
+    PYTORCH: str = "pytorch"
+
+
 @attr.s(auto_attribs=True)
 class TrainerSettings(ExportableSettings):
+    default_override: ClassVar[Optional["TrainerSettings"]] = None
     trainer_type: TrainerType = TrainerType.PPO
     hyperparameters: HyperparamSettings = attr.ib()
 
@@ -547,6 +620,7 @@ class TrainerSettings(ExportableSettings):
     threaded: bool = True
     self_play: Optional[SelfPlaySettings] = None
     behavioral_cloning: Optional[BehavioralCloningSettings] = None
+    framework: FrameworkType = FrameworkType.TENSORFLOW
 
     cattr.register_structure_hook(
         Dict[RewardSignalType, RewardSignalSettings], RewardSignalSettings.structure
@@ -565,8 +639,8 @@ class TrainerSettings(ExportableSettings):
 
     @staticmethod
     def dict_to_defaultdict(d: Dict, t: type) -> DefaultDict:
-        return collections.defaultdict(
-            TrainerSettings, cattr.structure(d, Dict[str, TrainerSettings])
+        return TrainerSettings.DefaultTrainerDict(
+            cattr.structure(d, Dict[str, TrainerSettings])
         )
 
     @staticmethod
@@ -575,10 +649,18 @@ class TrainerSettings(ExportableSettings):
         Helper method to structure a TrainerSettings class. Meant to be registered with
         cattr.register_structure_hook() and called with cattr.structure().
         """
+
         if not isinstance(d, Mapping):
             raise TrainerConfigError(f"Unsupported config {d} for {t.__name__}.")
+
         d_copy: Dict[str, Any] = {}
-        d_copy.update(d)
+
+        # Check if a default_settings was specified. If so, used those as the default
+        # rather than an empty dict.
+        if TrainerSettings.default_override is not None:
+            d_copy.update(cattr.unstructure(TrainerSettings.default_override))
+
+        deep_update_dict(d_copy, d)
 
         for key, val in d_copy.items():
             if attr.has(type(val)):
@@ -599,6 +681,16 @@ class TrainerSettings(ExportableSettings):
             else:
                 d_copy[key] = check_and_structure(key, val, t)
         return t(**d_copy)
+
+    class DefaultTrainerDict(collections.defaultdict):
+        def __init__(self, *args):
+            super().__init__(TrainerSettings, *args)
+
+        def __missing__(self, key: Any) -> "TrainerSettings":
+            if TrainerSettings.default_override is not None:
+                return copy.deepcopy(TrainerSettings.default_override)
+            else:
+                return TrainerSettings()
 
 
 # COMMAND LINE #########################################################################
@@ -640,8 +732,9 @@ class EngineSettings:
 
 @attr.s(auto_attribs=True)
 class RunOptions(ExportableSettings):
+    default_settings: Optional[TrainerSettings] = None
     behaviors: DefaultDict[str, TrainerSettings] = attr.ib(
-        factory=lambda: collections.defaultdict(TrainerSettings)
+        factory=TrainerSettings.DefaultTrainerDict
     )
     env_settings: EnvironmentSettings = attr.ib(factory=EnvironmentSettings)
     engine_settings: EngineSettings = attr.ib(factory=EngineSettings)
@@ -714,8 +807,18 @@ class RunOptions(ExportableSettings):
                     configured_dict["engine_settings"][key] = val
                 else:  # Base options
                     configured_dict[key] = val
-        return RunOptions.from_dict(configured_dict)
+
+        final_runoptions = RunOptions.from_dict(configured_dict)
+        return final_runoptions
 
     @staticmethod
     def from_dict(options_dict: Dict[str, Any]) -> "RunOptions":
+        # If a default settings was specified, set the TrainerSettings class override
+        if (
+            "default_settings" in options_dict.keys()
+            and options_dict["default_settings"] is not None
+        ):
+            TrainerSettings.default_override = cattr.structure(
+                options_dict["default_settings"], TrainerSettings
+            )
         return cattr.structure(options_dict, RunOptions)

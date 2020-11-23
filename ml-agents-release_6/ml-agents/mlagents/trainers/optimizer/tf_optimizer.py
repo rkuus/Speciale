@@ -6,11 +6,11 @@ from mlagents.trainers.buffer import AgentBuffer
 from mlagents.trainers.policy.tf_policy import TFPolicy
 from mlagents.trainers.optimizer import Optimizer
 from mlagents.trainers.trajectory import SplitObservations
-from mlagents.trainers.components.reward_signals.reward_signal_factory import (
+from mlagents.trainers.tf.components.reward_signals.reward_signal_factory import (
     create_reward_signal,
 )
 from mlagents.trainers.settings import TrainerSettings, RewardSignalType
-from mlagents.trainers.components.bc.module import BCModule
+from mlagents.trainers.tf.components.bc.module import BCModule
 
 
 class TFOptimizer(Optimizer):  # pylint: disable=W0223
@@ -140,8 +140,9 @@ class TFOptimizer(Optimizer):  # pylint: disable=W0223
                 self.reward_signals[reward_signal.value].update_dict
             )
 
+    @classmethod
     def create_optimizer_op(
-        self, learning_rate: tf.Tensor, name: str = "Adam"
+        cls, learning_rate: tf.Tensor, name: str = "Adam"
     ) -> tf.train.Optimizer:
         return tf.train.AdamOptimizer(learning_rate=learning_rate, name=name)
 

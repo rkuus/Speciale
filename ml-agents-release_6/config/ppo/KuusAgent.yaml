@@ -2,8 +2,8 @@ behaviors:
   KuusAgent:
     trainer_type: ppo
     hyperparameters:
-      batch_size: 2024
-      buffer_size: 20240
+      batch_size: 4096
+      buffer_size: 40960
       learning_rate: 0.0003
       beta: 0.005
       epsilon: 0.2
@@ -12,9 +12,12 @@ behaviors:
       learning_rate_schedule: linear
     network_settings:
       normalize: false
-      hidden_units: 1024
+      hidden_units: 512
       num_layers: 3
       vis_encode_type: simple
+      memory:
+        sequence_length: 128
+        memory_size: 512
     reward_signals:
       extrinsic:
         gamma: 0.995

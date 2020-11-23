@@ -14,14 +14,14 @@ here = os.path.abspath(os.path.dirname(__file__))
 class VerifyVersionCommand(install):
     """
     Custom command to verify that the git tag is the expected one for the release.
-    Based on https://circleci.com/blog/continuously-deploying-python-packages-to-pypi-with-circleci/
+    Originally based on https://circleci.com/blog/continuously-deploying-python-packages-to-pypi-with-circleci/
     This differs slightly because our tags and versions are different.
     """
 
     description = "verify that the git tag matches our version"
 
     def run(self):
-        tag = os.getenv("CIRCLE_TAG")
+        tag = os.getenv("GITHUB_REF", "NO GITHUB TAG!").replace("refs/tags/", "")
 
         if tag != EXPECTED_TAG:
             info = "Git tag: {} does not match the expected tag of this app: {}".format(
@@ -63,7 +63,7 @@ setup(
         "Pillow>=4.2.1",
         "protobuf>=3.6",
         "pyyaml>=3.1.0",
-        "tensorflow>=1.7,<3.0",
+        "tensorflow>=1.14,<3.0",
         "cattrs>=1.0.0",
         "attrs>=19.3.0",
         'pypiwin32==223;platform_system=="Windows"',
@@ -79,4 +79,5 @@ setup(
         ]
     },
     cmdclass={"verify": VerifyVersionCommand},
+    extras_require={"torch": ["torch>=1.5.0"]},
 )

@@ -274,8 +274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead9816682dff514aa99c811d23e27da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerDiameter: 0.4
-  outerDiameter: 1.2
+  innerDiameter: 0.6
+  outerDiameter: 1.4
   fixedY: 1
   grip: {fileID: 7046761834838801985}
   ground: {fileID: 6435022476123017067}
@@ -1262,11 +1262,13 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
   m_Model: {fileID: 0}
-  m_InferenceDevice: 0
+  m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: ProjectAI
   TeamId: 0
   m_UseChildSensors: 0
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
 --- !u!114 &6435022476123017065
 MonoBehaviour:
   m_ObjectHideFlags: 0
