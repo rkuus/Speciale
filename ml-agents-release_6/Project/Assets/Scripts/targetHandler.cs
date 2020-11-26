@@ -21,7 +21,7 @@ public class targetHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        targetPos = transform.localPosition;
+        targetPos = transform.position - ground.transform.position; // transform.localPosition;
         targetForward = transform.forward;
         gripPlace = targetPos - 0.05f * targetForward;
         innerDSquared = innerDiameter * innerDiameter;
@@ -48,7 +48,7 @@ public class targetHandler : MonoBehaviour
             newPos += new Vector3(0, 0.05f, 0);
             if (fixedY)
                 newPos.y = 0.25f;
-        } while (newPos.z > -0.4f || newPos.y < 0.05f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.25f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
+        } while (newPos.y < 0.05f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.25f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
 
         transform.localPosition = newPos;
 
@@ -60,7 +60,7 @@ public class targetHandler : MonoBehaviour
 
 
 
-        targetPos = transform.localPosition;
+        targetPos = transform.position - ground.transform.position; //transform.localPosition;
         targetForward = transform.forward;
         gripPlace = targetPos - 0.05f * targetForward;
 
