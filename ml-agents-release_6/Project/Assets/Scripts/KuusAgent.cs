@@ -108,13 +108,13 @@ public class KuusAgent : Agent
 
         float curReward = 0.0f;
 
-        curReward += 1.0f * (lastDistance - curDistance); // reward for approaching
+        curReward += 2.0f * (lastDistance - curDistance); // reward for approaching
 
         curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for correct angle
 
         curReward += 0.01f * (lastAngle - curAngle);
 
-        curReward -= 0.001f; // time cost
+        curReward -= 0.00025f; // time cost
 
         if (robotController.collisionFlag) // Collision cost.
         {
