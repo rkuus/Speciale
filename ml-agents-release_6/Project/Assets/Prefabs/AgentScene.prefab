@@ -908,7 +908,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4623880964674722090
 Transform:
   m_ObjectHideFlags: 0
@@ -1405,6 +1405,8 @@ Transform:
   - {fileID: 6055246759280354788}
   - {fileID: 320167846109868000}
   - {fileID: 4623880964674722090}
+  - {fileID: 4473014632149374563}
+  - {fileID: 2983682001560402430}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1421,12 +1423,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 84
+    VectorObservationSize: 219
     NumStackedVectorObservations: 1
     VectorActionSize: 06000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: 94ddff59c30de754097ad205729a8662, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent
@@ -1454,6 +1456,8 @@ MonoBehaviour:
   tcp: {fileID: 6055246757983171509}
   targetBall: {fileID: 320167846109868005}
   voxelGrid: {fileID: 4918012468274005906}
+  firstSensor: {fileID: 4384569463655508145}
+  secondSensor: {fileID: 2351261892863747721}
 --- !u!114 &6055246758980130864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1466,7 +1470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 10
   TakeActionsBetweenDecisions: 0
 --- !u!1 &6055246759280354784
 GameObject:
@@ -1881,6 +1885,53 @@ MonoBehaviour:
   speed: 82
   inCollision: 0
   rotAxis: 000001
+--- !u!1 &6143216650998301568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4473014632149374563}
+  - component: {fileID: 4384569463655508145}
+  m_Layer: 0
+  m_Name: 3D_sensor_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4473014632149374563
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143216650998301568}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2, y: 2, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6055246758980130879}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4384569463655508145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143216650998301568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d87792066aa113448ba318ee4f9a8a72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showRays: 0
+  sphereRadius: 0.15
+  rayDistance: 6
+  rays: 10
 --- !u!1 &7741426042396842181
 GameObject:
   m_ObjectHideFlags: 0
@@ -2427,3 +2478,50 @@ MonoBehaviour:
   tcp: {fileID: 6055246757983171509}
   target: {fileID: 320167846109868005}
   collisionFlag: 0
+--- !u!1 &8692076254931727633
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2983682001560402430}
+  - component: {fileID: 2351261892863747721}
+  m_Layer: 0
+  m_Name: 3D_sensor 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2983682001560402430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8692076254931727633}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6055246758980130879}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &2351261892863747721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8692076254931727633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d87792066aa113448ba318ee4f9a8a72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showRays: 0
+  sphereRadius: 0.15
+  rayDistance: 6
+  rays: 10

@@ -10,6 +10,8 @@ public class KuusAgent : Agent
     public tcpHandler tcp;
     public targetHandler targetBall;
     public VoxelGridCreator voxelGrid;
+    public sensor3D firstSensor;
+    public sensor3D secondSensor;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -84,9 +86,12 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         sensor.AddObservation(round(curAngleForward / 180.0f, decimalPrecision));                           // 1
         // Voxel grid
-        sensor.AddObservation(voxelGrid.voxelCollisions());                                                 // 45
+        //sensor.AddObservation(voxelGrid.voxelCollisions());                                                 // 45
         //curAngle = Vector3.Angle(tcp.TCPpos, targetBall.targetPos);
         //sensor.AddObservation(round(curAngle / 180.0f, decimalPrecision));                                  // 1
+        // 3D sensors
+        sensor.AddObservation(roundList(firstSensor.getSensorData(), decimalPrecision));                    // 90
+        sensor.AddObservation(roundList(secondSensor.getSensorData(), decimalPrecision));                   // 90
     }
 
     public override void OnActionReceived(float[] vectorAction)
