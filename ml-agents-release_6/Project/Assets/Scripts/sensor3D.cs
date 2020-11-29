@@ -18,7 +18,7 @@ public class sensor3D : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(getSensorData().Length);
+
     }
 
     public float[] getSensorData()
