@@ -5,8 +5,8 @@ using UnityEngine;
 public class sensor3D : MonoBehaviour
 {
     public bool showRays = false;
-    public float sphereRadius = 0.1f;
-    public float rayDistance = 5.0f;
+    public float sphereRadius = 0.15f;
+    public float rayDistance = 4.0f;
     //private float halfRayDist = 2.5f;
     public float rays = 10;
 

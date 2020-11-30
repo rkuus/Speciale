@@ -111,7 +111,7 @@ public class KuusAgent : Agent
             EndEpisode();
         }
 
-        float curReward = 0.0f;
+        float curReward = -0.0001f; // Time cost
 
         curReward += 1.0f * (lastDistance - curDistance); // reward for approaching
 
@@ -119,7 +119,7 @@ public class KuusAgent : Agent
 
         curReward += 0.01f * (lastAngle - curAngle);
 
-        curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions Smoothness
+        //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
         if (robotController.collisionFlag) // Collision cost.
         {
