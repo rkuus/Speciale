@@ -98,6 +98,7 @@ Library: lib_burst_generated
 --debug=Full
 --output=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Plugins\lib_burst_generated
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\UnityEngine.UI.dll
+--root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.Barracuda.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.TextMeshPro.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
@@ -106,7 +107,6 @@ Library: lib_burst_generated
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.Burst.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\UnityEngine.Advertisements.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.Analytics.DataPrivacy.dll
---root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.ML-Agents.Extensions.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.ML-Agents.CommunicatorObjects.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\UnityEngine.Monetization.dll
@@ -272,6 +272,7 @@ Library: lib_burst_generated
 --debug=Full
 --output=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Plugins\lib_burst_generated
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\UnityEngine.UI.dll
+--root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.Barracuda.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.TextMeshPro.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
@@ -280,7 +281,6 @@ Library: lib_burst_generated
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.Burst.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\UnityEngine.Advertisements.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.Analytics.DataPrivacy.dll
---root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.ML-Agents.Extensions.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\Unity.ML-Agents.CommunicatorObjects.dll
 --root-assembly=D:\Kandidat-Speciale\Speciale\ml-agents-release_6\Project\Temp\StagingArea\Data\Managed\UnityEngine.Monetization.dll

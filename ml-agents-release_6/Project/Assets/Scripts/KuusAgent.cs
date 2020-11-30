@@ -113,18 +113,18 @@ public class KuusAgent : Agent
 
         float curReward = 0.0f;
 
-        curReward += 2.0f * (lastDistance - curDistance); // reward for approaching
+        curReward += 1.0f * (lastDistance - curDistance); // reward for approaching
 
         curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for correct angle
 
         curReward += 0.01f * (lastAngle - curAngle);
 
-        curReward -= 0.00025f; // time cost
+        curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions Smoothness
 
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            curReward -= 0.1f;
+            curReward -= 0.01f;
         }
 
         lastDistance = curDistance;
@@ -138,7 +138,16 @@ public class KuusAgent : Agent
     {
         
     }
-    
+
+    private static float squaredList(float[] values)
+    {
+        float output = 0.0f;
+        for (int i = 0;i<values.Length;i++)
+        {
+            output += values[i] * values[i];
+        }
+        return output;
+    }
     private static float[] roundList(float[] values, int digits)
     {
         float mult = Mathf.Pow(10.0f, (float)digits);

@@ -6,13 +6,14 @@ public class sensor3D : MonoBehaviour
 {
     public bool showRays = false;
     public float sphereRadius = 0.1f;
-    public float rayDistance = 6.0f;
+    public float rayDistance = 5.0f;
+    //private float halfRayDist = 2.5f;
     public float rays = 10;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        //halfRayDist = 0.5f * rayDistance;
     }
 
     // Update is called once per frame
@@ -25,29 +26,27 @@ public class sensor3D : MonoBehaviour
     {
         // transform.right , -transform.up , transform.forward
         RaycastHit hit;
-        Vector3 directionI = transform.forward, directionJ = transform.forward, moveTo = transform.right;
+        Vector3 directionI, directionJ = transform.forward, moveTo = transform.right;
         float rayInc = 1.571f / rays;
         List<float> output = new List<float>();
-        for (int j = 0;j< rays + 1; j++)
+        for (int j = 0;j < rays - 1; j++)
         {
-            
             directionI = directionJ;
             for (int i = 0; i < rays + 1; i++)
             {
-                
                 Ray ray = new Ray(transform.position, directionI);
-                //coneHits = ConeCastExtension.ConeCastAll(transform.position, 1000.0f, directionI, 4.0f, 30.0f);
 
                 if (Physics.SphereCast(ray, sphereRadius, out hit, rayDistance))
                 {
-                    output.Add(hit.distance / rayDistance);
-                    if (showRays) // hit.collider.ToString() != "Ground (UnityEngine.BoxCollider)" &&
-                        Debug.DrawRay(transform.position, directionI * hit.distance, Color.red);
+                    output.Add((hit.distance + sphereRadius) / rayDistance);
+                    //Debug.Log((hit.distance + sphereRadius - halfRayDist) / halfRayDist);
+                    if (showRays && hit.collider.ToString() != "Ground (UnityEngine.BoxCollider)") // 
+                        Debug.DrawRay(transform.position, directionI * (hit.distance + sphereRadius), Color.red);
                 }
                     
                 else
                 {
-                    output.Add(1.0f);
+                    output.Add(0.0f);
                     if (showRays)
                         Debug.DrawRay(transform.position, directionI * rayDistance, Color.green);
                 }
@@ -60,7 +59,6 @@ public class sensor3D : MonoBehaviour
             directionJ = Vector3.MoveTowards(directionJ, -transform.up, rayInc).normalized;
         }
         
-
         return output.ToArray();
     }
 }

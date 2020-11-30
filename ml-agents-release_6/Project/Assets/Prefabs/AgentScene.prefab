@@ -1423,7 +1423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 219
+    VectorObservationSize: 205
     NumStackedVectorObservations: 1
     VectorActionSize: 06000000
     VectorActionDescriptions: []
@@ -1470,7 +1470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 10
+  DecisionPeriod: 1
   TakeActionsBetweenDecisions: 0
 --- !u!1 &6055246759280354784
 GameObject:
@@ -1909,13 +1909,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6143216650998301568}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2, y: 2, z: -2}
+  m_LocalRotation: {x: 0.08682413, y: 0.0075961305, z: -0.08682413, w: 0.99240386}
+  m_LocalPosition: {x: -1.5, y: 2, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6055246758980130879}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 10, y: 0, z: -10}
 --- !u!114 &4384569463655508145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1930,7 +1930,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showRays: 0
   sphereRadius: 0.15
-  rayDistance: 6
+  rayDistance: 4
   rays: 10
 --- !u!1 &7741426042396842181
 GameObject:
@@ -2502,13 +2502,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8692076254931727633}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 2, y: 2, z: 2}
+  m_LocalRotation: {x: -0.08682413, y: 0.99240386, z: -0.08682413, w: -0.0075961305}
+  m_LocalPosition: {x: 1.5, y: 2, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6055246758980130879}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 10, y: 180, z: -10}
 --- !u!114 &2351261892863747721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2523,5 +2523,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showRays: 0
   sphereRadius: 0.15
-  rayDistance: 6
+  rayDistance: 4
   rays: 10
