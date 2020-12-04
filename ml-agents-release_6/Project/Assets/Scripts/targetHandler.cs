@@ -48,7 +48,7 @@ public class targetHandler : MonoBehaviour
             newPos += new Vector3(0, 0.05f, 0);
             if (fixedY)
                 newPos.y = 0.25f;
-        } while (newPos.y < 0.05f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.25f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
+        } while (newPos.y < 0.05f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.35f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
 
         transform.localPosition = newPos;
 

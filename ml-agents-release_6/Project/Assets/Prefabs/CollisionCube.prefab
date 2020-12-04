@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3684836547088490649}
   - component: {fileID: 7879267882513224131}
-  - component: {fileID: 2107443366803009788}
+  - component: {fileID: 8608996966364446310}
   m_Layer: 0
   m_Name: CollisionCube
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2008129486442533486}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.152747, y: 0.8, z: 0.174577}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -45,7 +45,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2107443366803009788
+--- !u!114 &8608996966364446310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2008129486442533486}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed6f347ecb09f654a9b70265a879e0e7, type: 3}
+  m_Script: {fileID: 11500000, guid: 31428306c08cc2944820959cc0024ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   triggerCounter: 0

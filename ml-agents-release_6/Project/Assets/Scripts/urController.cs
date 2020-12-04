@@ -22,6 +22,9 @@ public class urController : MonoBehaviour
     //private Vector3 currentDifference;
     //private float lastDistance = 0.0f;
     // Start is called before the first frame update
+
+    public float[] allTriggers;
+
     void Start()
     {
         curRotations = new float[urJoints.Length];
@@ -32,32 +35,7 @@ public class urController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //float translation = Input.GetAxis("Vertical");
-
-        //if (translation > 0)
-        //    translation = 1;
-        //if (translation < 0)
-        //    translation = -1;
-
-        //float[] newRotation = { translation, translation, translation, translation, translation, translation };
-        //moveRobot(newRotation);
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    float[] someVels = getVelocities();
-        //    Debug.Log("1 vel:" + someVels[0]);
-        //    Debug.Log("2 vel:" + someVels[1]);
-        //    Debug.Log("3 vel:" + someVels[2]);
-        //    Debug.Log("4 vel:" + someVels[3]);
-        //    Debug.Log("5 vel:" + someVels[4]);
-        //    Debug.Log("6 vel:" + someVels[5]);
-        //    //forceARotation(startingRotations);
-        //}
-
-        //if (collisionCheck())
-        //    Debug.Log("Collision!");
-
-        //Debug.Log("Angle:" + Vector3.Angle(tcp.TCPforward, target.targetForward));
-        //Debug.Log(target.targetPos - tcp.TCPpos);
+        getAllTriggers();
 
         if (collisionCheck())
             collisionFlag = true;
@@ -157,5 +135,22 @@ public class urController : MonoBehaviour
             }             
         }
         return false;
+    }
+    public float[] getAllTriggers()
+    {
+        List<float> output = new List<float>();
+
+        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
+        {
+            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+
+            float[] jointOutputs = joint.getTriggers();
+            for (int i = 0; i < jointOutputs.Length; i++)
+                output.Add(jointOutputs[i]);
+            
+
+        }
+        allTriggers = output.ToArray();
+        return allTriggers;
     }
 }

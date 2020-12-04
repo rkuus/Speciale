@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,16 +9,30 @@ public class jointController : MonoBehaviour
     private float deltaJointRotation = 0.0f;
     public float speed = 100.0f;
     public bool inCollision = false;
+    public bool isTriggered = false;
     //public bool displayVel = false;
     public bool[] rotAxis = new bool[] { false, false, false };
     private int collisionCheck = 0;
+    //private int triggerCheck = 0;
     private ArticulationBody articulation;
+
+    private CapsuleCollider capsule;
+
     private float maxAcceleration;
+
+    private float distance = 0.20f;
+    public GameObject aBox;
+    public GameObject ground;
+
+    private float[] totalOutput = { 0 , 0 , 0 , 0};
+
+    private RaycastHit hit;
 
     // Start is called before the first frame update
     void Start()
     {
         articulation = GetComponent<ArticulationBody>();
+        capsule = GetComponent<CapsuleCollider>();
         maxAcceleration = 8.0f / ((speed * 0.01f) * Mathf.Rad2Deg);
     }
 
@@ -39,13 +53,14 @@ public class jointController : MonoBehaviour
             inCollision = true;
         else
             inCollision = false;
+
         //if (displayVel)
         //{
         //    Debug.Log(maxAcceleration);
         //    Debug.Log(deltaJointRotation);
         //    Debug.Log(articulation.angularVelocity);
         //}
-            
+
     }
 
     public void ForceToRotation(float rotation)
@@ -91,4 +106,75 @@ public class jointController : MonoBehaviour
     {
         collisionCheck--;
     }
+
+    public float[] getTriggers()
+    {
+
+        Vector3 p1 = articulation.worldCenterOfMass + articulation.transform.up * -capsule.height * 0.5f;
+        Vector3 p2 = p1 + articulation.transform.up * capsule.height * 1.1f;
+
+        Vector3 direction = Vector3.RotateTowards(articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
+
+        if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+        {
+            totalOutput[0] = 1 - (hit.distance / distance);
+            //Debug.DrawRay(p1, direction * (hit.distance), Color.red);
+            //Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+        }
+        else
+        {
+            totalOutput[0] = 0;
+            //Debug.DrawRay(p1, direction * (distance), Color.green);
+            //Debug.DrawRay(p2, direction * (distance), Color.green);
+        }
+
+
+        direction = Vector3.RotateTowards(-articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
+
+        if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+        {
+            totalOutput[1] = 1 - (hit.distance / distance);
+            //Debug.DrawRay(p1, direction * (hit.distance), Color.red);
+            //Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+        }
+        else
+        {
+            totalOutput[1] = 0;
+            //Debug.DrawRay(p1, direction * (distance), Color.green);
+            //Debug.DrawRay(p2, direction * (distance), Color.green);
+        }
+
+        direction = Vector3.RotateTowards(-articulation.transform.forward, -articulation.transform.right, 0.78539816339f, 0.0f);
+
+        if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+        {
+            totalOutput[2] = 1 - (hit.distance / distance);
+            //Debug.DrawRay(p1, direction * (hit.distance), Color.red);
+            //Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+        }
+        else
+        {
+            totalOutput[2] = 0;
+            //Debug.DrawRay(p1, direction * (distance), Color.green);
+            //Debug.DrawRay(p2, direction * (distance), Color.green);
+        }
+
+        direction = Vector3.RotateTowards(articulation.transform.forward, -articulation.transform.right, 0.78539816339f, 0.0f);
+
+        if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+        {
+            totalOutput[3] = 1 - (hit.distance / distance);
+            //Debug.DrawRay(p1, direction * (hit.distance), Color.red);
+            //Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+        }
+        else
+        {
+            totalOutput[3] = 0;
+            //Debug.DrawRay(p1, direction * (distance), Color.green);
+            //Debug.DrawRay(p2, direction * (distance), Color.green);
+        }
+
+        return totalOutput;
+    }
+
 }

@@ -12,12 +12,14 @@ public class KuusAgent : Agent
     public VoxelGridCreator voxelGrid;
     public sensor3D firstSensor;
     public sensor3D secondSensor;
+    public DepthMap depthThing;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
     private float curAngleForward = 180.0f;
 
     private int decimalPrecision = 3;
+    private float collisionCost = 0.001f;
 
     //private float closestEncounter = 999.9f;
     //private float bestAngle = 180.0f;
@@ -44,7 +46,7 @@ public class KuusAgent : Agent
             robotController.forceARotation(defaultRotations);
         }
         completed = false;
-
+        collisionCost += 0.0001f;
         targetBall.updateTargetPos();
 
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
@@ -90,8 +92,10 @@ public class KuusAgent : Agent
         //curAngle = Vector3.Angle(tcp.TCPpos, targetBall.targetPos);
         //sensor.AddObservation(round(curAngle / 180.0f, decimalPrecision));                                  // 1
         // 3D sensors
-        sensor.AddObservation(roundList(firstSensor.getSensorData(), decimalPrecision));                    // 90
-        sensor.AddObservation(roundList(secondSensor.getSensorData(), decimalPrecision));                   // 90
+        //sensor.AddObservation(roundList(firstSensor.getSensorData(), decimalPrecision));                    // 90
+        //sensor.AddObservation(roundList(secondSensor.getSensorData(), decimalPrecision));                   // 90
+        //sensor.AddObservation(roundList(depthThing.getRayCasts(), decimalPrecision));
+        sensor.AddObservation(roundList(robotController.getAllTriggers(), decimalPrecision));
     }
 
     public override void OnActionReceived(float[] vectorAction)
@@ -104,27 +108,27 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        if (curDistance < 0.025f && !robotController.collisionFlag && curAngleForward < 10.0f && curAngle < 10.0f)
-        {
-            AddReward(1.0f);
-            completed = true;
-            EndEpisode();
-        }
-
         float curReward = -0.0001f; // Time cost
 
-        curReward += 1.0f * (lastDistance - curDistance); // reward for approaching
+        curReward += 30.0f * (lastDistance - curDistance); // reward for approaching
 
-        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for correct angle
+        curReward += 0.1f * (lastAngleForward - curAngleForward); // reward for correct angle
 
-        curReward += 0.01f * (lastAngle - curAngle);
+        curReward += 0.1f * (lastAngle - curAngle);
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            curReward -= 0.01f;
+            curReward -= collisionCost;
+        }
+        else if (curDistance < 0.10f && curAngleForward < 10.0f && curAngle < 10.0f)
+        {
+            //curReward += 1f;
+            AddReward(curReward);
+            //completed = true;
+            EndEpisode();
         }
 
         lastDistance = curDistance;
