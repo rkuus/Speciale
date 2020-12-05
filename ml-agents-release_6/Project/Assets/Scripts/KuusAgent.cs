@@ -19,7 +19,7 @@ public class KuusAgent : Agent
     private float curAngleForward = 180.0f;
 
     private int decimalPrecision = 3;
-    private float collisionCost = 0.001f;
+    private float collisionCost = 1f;
 
     //private float closestEncounter = 999.9f;
     //private float bestAngle = 180.0f;
@@ -46,7 +46,7 @@ public class KuusAgent : Agent
             robotController.forceARotation(defaultRotations);
         }
         completed = false;
-        collisionCost += 0.01f;
+        //collisionCost += 0.01f;
         targetBall.updateTargetPos();
 
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
@@ -112,9 +112,9 @@ public class KuusAgent : Agent
 
         curReward += 20.0f * (lastDistance - curDistance); // reward for approaching
 
-        curReward += 0.5f * (lastAngleForward - curAngleForward); // reward for correct angle
+        curReward += 0.2f * (lastAngleForward - curAngleForward); // reward for correct angle
 
-        curReward += 0.5f * (lastAngle - curAngle);
+        curReward += 0.2f * (lastAngle - curAngle);
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
