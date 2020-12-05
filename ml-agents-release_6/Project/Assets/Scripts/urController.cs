@@ -48,15 +48,14 @@ public class urController : MonoBehaviour
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
             curRotations[jointIndex] = (joint.CurrentPrimaryAxisRotation()) / 180.0f;
+            curRotLim[jointIndex] = curRotations[jointIndex]/2.0f;
             if (curRotations[jointIndex] > 1)
             {
                 curRotations[jointIndex]--;
-                curRotLim[jointIndex] = 1;
             }
             else if (curRotations[jointIndex] < -1)
             {
                 curRotations[jointIndex]++;
-                curRotLim[jointIndex] = -1;
             }
         }
         return curRotations.Concat(curRotLim).ToArray();

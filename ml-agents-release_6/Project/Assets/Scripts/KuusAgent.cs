@@ -46,7 +46,7 @@ public class KuusAgent : Agent
             robotController.forceARotation(defaultRotations);
         }
         completed = false;
-        collisionCost += 0.0001f;
+        collisionCost += 0.01f;
         targetBall.updateTargetPos();
 
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
@@ -63,7 +63,7 @@ public class KuusAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         // UR configuration
-        sensor.AddObservation(roundList(robotController.getRotations(), decimalPrecision));                // 12
+        sensor.AddObservation(roundList(robotController.getRotations(), decimalPrecision));                // 6
         // UR joint velocities
         sensor.AddObservation(roundList(robotController.getVelocities(), decimalPrecision));               // 6
         // End-effector position - target position
@@ -108,13 +108,13 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = -0.0001f; // Time cost
+        float curReward = -0.001f; // Time cost
 
-        curReward += 30.0f * (lastDistance - curDistance); // reward for approaching
+        curReward += 20.0f * (lastDistance - curDistance); // reward for approaching
 
-        curReward += 0.1f * (lastAngleForward - curAngleForward); // reward for correct angle
+        curReward += 0.5f * (lastAngleForward - curAngleForward); // reward for correct angle
 
-        curReward += 0.1f * (lastAngle - curAngle);
+        curReward += 0.5f * (lastAngle - curAngle);
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 

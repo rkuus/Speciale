@@ -175,6 +175,8 @@ MonoBehaviour:
   rotAxis: 000001
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
+  showRays: 0
+  rayCasting: 01000001010101010100
 --- !u!136 &1306584467418041099
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -444,6 +446,8 @@ MonoBehaviour:
   rotAxis: 000100
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
+  showRays: 0
+  rayCasting: 00010100010101000001
 --- !u!136 &1306584469348390993
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -455,7 +459,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 0
   m_Radius: 0.057002
-  m_Height: 0.15
+  m_Height: 0.005
   m_Direction: 1
   m_Center: {x: -0.0000004991889, y: 1.4765085, z: 0.174048}
 --- !u!1 &1607958046891254549
@@ -932,6 +936,8 @@ MonoBehaviour:
   rotAxis: 000100
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
+  showRays: 0
+  rayCasting: 00000000000000000000
 --- !u!136 &1306584468598645755
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1276,8 +1282,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 63
-    NumStackedVectorObservations: 2
+    VectorObservationSize: 72
+    NumStackedVectorObservations: 1
     VectorActionSize: 06000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
@@ -1324,7 +1330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 1
+  DecisionPeriod: 5
   TakeActionsBetweenDecisions: 0
 --- !u!1 &5055683652222183697
 GameObject:
@@ -1760,6 +1766,8 @@ MonoBehaviour:
   rotAxis: 000001
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
+  showRays: 0
+  rayCasting: 01000001010101010100
 --- !u!136 &1306584469217581090
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1995,6 +2003,8 @@ MonoBehaviour:
   rotAxis: 000001
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
+  showRays: 0
+  rayCasting: 01000001010100010100
 --- !u!136 &1306584469277115952
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2006,7 +2016,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 0
   m_Radius: 0.062723994
-  m_Height: 0.114004016
+  m_Height: 0.01
   m_Direction: 1
   m_Center: {x: 0.0000004991889, y: 1.364533, z: 0.158424}
 --- !u!1 &6697469815870602543
@@ -2658,6 +2668,8 @@ MonoBehaviour:
   rotAxis: 000001
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
+  showRays: 0
+  rayCasting: 00010100010101010001
 --- !u!136 &1306584468744201109
 CapsuleCollider:
   m_ObjectHideFlags: 0
