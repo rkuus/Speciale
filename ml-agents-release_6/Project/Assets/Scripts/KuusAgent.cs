@@ -21,6 +21,8 @@ public class KuusAgent : Agent
     private int decimalPrecision = 3;
     private float collisionCost = 1f;
 
+    private float[] curRotations;
+
     //private float closestEncounter = 999.9f;
     //private float bestAngle = 180.0f;
 
@@ -58,12 +60,15 @@ public class KuusAgent : Agent
 
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
         lastAngle = curAngle;
+        curRotations = robotController.getRotations();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
+
         // UR configuration
-        sensor.AddObservation(roundList(robotController.getRotations(), decimalPrecision));                // 6
+        curRotations = robotController.getRotations();
+        sensor.AddObservation(roundList(curRotations, decimalPrecision));                                  // 12
         // UR joint velocities
         sensor.AddObservation(roundList(robotController.getVelocities(), decimalPrecision));               // 6
         // End-effector position - target position
@@ -108,13 +113,17 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = -0.001f; // Time cost
+        float curReward = -0.01f; // Time cost
 
-        curReward += 20.0f * (lastDistance - curDistance); // reward for approaching
+        curReward += 25.0f * (lastDistance - curDistance); // reward for approaching
 
-        curReward += 0.2f * (lastAngleForward - curAngleForward); // reward for correct angle
+        curReward += 0.25f * (lastAngleForward - curAngleForward); // reward for correct angle
 
-        curReward += 0.2f * (lastAngle - curAngle);
+        curReward += 0.25f * (lastAngle - curAngle);
+
+        for (int i = 6; i < curRotations.Length; i++)
+            if (Mathf.Abs(curRotations[i]) > 0.5f)
+                curReward -= 0.01f;
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
@@ -123,11 +132,11 @@ public class KuusAgent : Agent
             robotController.collisionFlag = false;
             curReward -= collisionCost;
         }
-        else if (curDistance < 0.10f && curAngleForward < 10.0f && curAngle < 10.0f)
+        else if (curDistance < 0.025f && curAngleForward < 10.0f && curAngle < 10.0f)
         {
             //curReward += 1f;
             AddReward(curReward);
-            //completed = true;
+            completed = true;
             EndEpisode();
         }
 
