@@ -19,7 +19,6 @@ public class KuusAgent : Agent
     private float curAngleForward = 180.0f;
 
     private int decimalPrecision = 3;
-    private float collisionCost = 0.5f;
 
     private float[] curRotations;
 
@@ -107,13 +106,26 @@ public class KuusAgent : Agent
     {
         //Debug.Log(vectorAction);
         robotController.setRotations(vectorAction);
+        CalcReward();
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        if (robotController.collisionFlag) // Collision cost.
+        {
+            robotController.collisionFlag = false;
+            AddReward(-0.1f);
+        }
+    }
 
+    private void CalcReward()
+    {
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         curDistance = Vector3.SqrMagnitude(currentDifference);
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = -0.0025f; // Time cost
+        float curReward = 0.0f; // Time cost
 
         curReward += 25.0f * (lastDistance - curDistance); // reward for approaching
 
@@ -127,12 +139,7 @@ public class KuusAgent : Agent
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
-        if (robotController.collisionFlag) // Collision cost.
-        {
-            robotController.collisionFlag = false;
-            curReward -= collisionCost;
-        }
-        else if (curDistance < 0.05f && curAngleForward < 10.0f && curAngle < 10.0f)
+        if (curDistance < 0.05f && curAngleForward < 10.0f && curAngle < 10.0f)
         {
             //curReward += 1f;
             AddReward(curReward);
@@ -145,11 +152,6 @@ public class KuusAgent : Agent
         lastAngle = curAngle;
 
         AddReward(curReward);
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private static float squaredList(float[] values)
