@@ -19,7 +19,7 @@ public class KuusAgent : Agent
     private float curAngleForward = 180.0f;
 
     private int decimalPrecision = 3;
-    private float collisionCost = 1f;
+    private float collisionCost = 0.5f;
 
     private float[] curRotations;
 
@@ -113,7 +113,7 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = -0.01f; // Time cost
+        float curReward = -0.0025f; // Time cost
 
         curReward += 25.0f * (lastDistance - curDistance); // reward for approaching
 
