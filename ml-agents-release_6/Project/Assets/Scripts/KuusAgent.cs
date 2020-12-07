@@ -114,7 +114,7 @@ public class KuusAgent : Agent
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            AddReward(-0.1f);
+            AddReward(-1.0f);
         }
     }
 
@@ -125,7 +125,7 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = 0.0f; // Time cost
+        float curReward = -0.01f; // Time cost
 
         curReward += 25.0f * (lastDistance - curDistance); // reward for approaching
 
@@ -139,9 +139,9 @@ public class KuusAgent : Agent
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
-        if (curDistance < 0.05f && curAngleForward < 10.0f && curAngle < 10.0f)
+        if (curDistance < 0.05f && curAngleForward < 5.0f && curAngle < 5.0f)
         {
-            //curReward += 1f;
+            curReward += 1f;
             AddReward(curReward);
             completed = true;
             EndEpisode();
