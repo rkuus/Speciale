@@ -121,9 +121,9 @@ public class KuusAgent : Agent
 
         curReward += 0.25f * (lastAngle - curAngle);
 
-        for (int i = 6; i < curRotations.Length; i++)
-            if (Mathf.Abs(curRotations[i]) > 0.5f)
-                curReward -= 0.01f;
+        //for (int i = 6; i < curRotations.Length; i++)
+        //    if (Mathf.Abs(curRotations[i]) > 0.5f)
+        //        curReward -= 0.01f;
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
@@ -132,7 +132,7 @@ public class KuusAgent : Agent
             robotController.collisionFlag = false;
             curReward -= collisionCost;
         }
-        else if (curDistance < 0.025f && curAngleForward < 10.0f && curAngle < 10.0f)
+        else if (curDistance < 0.05f && curAngleForward < 10.0f && curAngle < 10.0f)
         {
             //curReward += 1f;
             AddReward(curReward);
