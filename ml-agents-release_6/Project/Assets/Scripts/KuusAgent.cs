@@ -139,7 +139,7 @@ public class KuusAgent : Agent
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
-        if (curDistance < 0.05f && curAngleForward < 5.0f && curAngle < 5.0f)
+        if (curDistance < 0.10f && curAngleForward < 10.0f && curAngle < 10.0f)
         {
             curReward += 1f;
             AddReward(curReward);
