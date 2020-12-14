@@ -134,14 +134,23 @@ public class KuusAgent : Agent
         float curReward = -0.01f; // Time cost
 
         if (curDistance < bestDistance)
+        {
             curReward += 25.0f * (bestDistance - curDistance); // reward for approaching
+            bestDistance = curDistance;
+        }
 
         if (curAngleForward < bestAngleForward)
+        {
             curReward += 0.25f * (bestAngleForward - curAngleForward); // reward for correct angle
-
+            bestAngleForward = curAngleForward;
+        }
+            
         if (curAngle < bestAngle)
+        {
             curReward += 0.25f * (bestAngle - curAngle);
-
+            bestAngle = curAngle;
+        }
+            
         //for (int i = 6; i < curRotations.Length; i++)
         //    if (Mathf.Abs(curRotations[i]) > 0.5f)
         //        curReward -= 0.01f;
@@ -155,10 +164,6 @@ public class KuusAgent : Agent
             completed = true;
             EndEpisode();
         }
-
-        bestDistance = curDistance;
-        bestAngleForward = curAngleForward;
-        bestAngle = curAngle;
 
         AddReward(curReward);
     }
