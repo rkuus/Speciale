@@ -28,9 +28,12 @@ public class KuusAgent : Agent
 
     private Vector3 currentDifference;
 
-    private float lastAngle = 180.0f;
-    private float lastAngleForward = 180.0f;
-    private float lastDistance = 20.0f;
+    //private float lastAngle = 180.0f;
+    //private float lastAngleForward = 180.0f;
+    //private float lastDistance = 20.0f;
+    private float bestAngle = 180.0f;
+    private float bestAngleForward = 180.0f;
+    private float bestDistance = 20.0f;
 
     private bool completed = false;
     // Start is called before the first frame update
@@ -52,13 +55,16 @@ public class KuusAgent : Agent
 
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         curDistance = Vector3.Magnitude(currentDifference);
-        lastDistance = curDistance;
+        //lastDistance = curDistance;
+        bestDistance = curDistance;
         //closestEncounter = curDistance;
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
-        lastAngleForward = curAngleForward;
+        //lastAngleForward = curAngleForward;
+        bestAngleForward = curAngleForward;
 
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
-        lastAngle = curAngle;
+        //lastAngle = curAngle;
+        bestAngle = curAngle;
         curRotations = robotController.getRotations();
     }
 
@@ -105,7 +111,7 @@ public class KuusAgent : Agent
     public override void OnActionReceived(float[] vectorAction)
     {
         //Debug.Log(vectorAction);
-        robotController.setRotations(vectorAction);
+        robotController.setRotations(roundList(vectorAction,1));
         CalcReward();
     }
     // Update is called once per frame
@@ -127,11 +133,14 @@ public class KuusAgent : Agent
 
         float curReward = -0.01f; // Time cost
 
-        curReward += 25.0f * (lastDistance - curDistance); // reward for approaching
+        if (curDistance < bestDistance)
+            curReward += 25.0f * (bestDistance - curDistance); // reward for approaching
 
-        curReward += 0.25f * (lastAngleForward - curAngleForward); // reward for correct angle
+        if (curAngleForward < bestAngleForward)
+            curReward += 0.25f * (bestAngleForward - curAngleForward); // reward for correct angle
 
-        curReward += 0.25f * (lastAngle - curAngle);
+        if (curAngle < bestAngle)
+            curReward += 0.25f * (bestAngle - curAngle);
 
         //for (int i = 6; i < curRotations.Length; i++)
         //    if (Mathf.Abs(curRotations[i]) > 0.5f)
@@ -147,9 +156,9 @@ public class KuusAgent : Agent
             EndEpisode();
         }
 
-        lastDistance = curDistance;
-        lastAngleForward = curAngleForward;
-        lastAngle = curAngle;
+        bestDistance = curDistance;
+        bestAngleForward = curAngleForward;
+        bestAngle = curAngle;
 
         AddReward(curReward);
     }

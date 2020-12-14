@@ -156,6 +156,11 @@ PrefabInstance:
       propertyPath: m_ParentAnchorPosition.z
       value: 0.2909999
       objectReference: {fileID: 0}
+    - target: {fileID: 5055683651914093763, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5055683651914093774, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_RootOrder
@@ -309,6 +314,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ParentAnchorPosition.z
       value: 0.29100013
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055683651914093763, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Model
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5055683651914093774, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
@@ -464,6 +474,11 @@ PrefabInstance:
       propertyPath: m_ParentAnchorPosition.z
       value: 0.2909999
       objectReference: {fileID: 0}
+    - target: {fileID: 5055683651914093763, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5055683651914093774, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_RootOrder
@@ -612,6 +627,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ParentAnchorPosition.z
       value: 0.17399979
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055683651914093763, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Model
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5055683651914093774, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
@@ -891,6 +911,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5055683651914093763, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5055683651914093774, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_RootOrder
@@ -2104,6 +2129,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ParentAnchorPosition.z
       value: 0.2909999
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055683651914093763, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Model
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5055683651914093774, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
