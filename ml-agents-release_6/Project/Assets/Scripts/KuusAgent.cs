@@ -14,6 +14,8 @@ public class KuusAgent : Agent
     public sensor3D secondSensor;
     public DepthMap depthThing;
 
+    public obsScript[] allObs;
+
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
     private float curAngleForward = 180.0f;
@@ -28,12 +30,12 @@ public class KuusAgent : Agent
 
     private Vector3 currentDifference;
 
-    //private float lastAngle = 180.0f;
-    //private float lastAngleForward = 180.0f;
-    //private float lastDistance = 20.0f;
-    private float bestAngle = 180.0f;
-    private float bestAngleForward = 180.0f;
-    private float bestDistance = 20.0f;
+    private float lastAngle = 180.0f;
+    private float lastAngleForward = 180.0f;
+    private float lastDistance = 20.0f;
+    //private float bestAngle = 180.0f;
+    //private float bestAngleForward = 180.0f;
+    //private float bestDistance = 20.0f;
 
     private bool completed = false;
     // Start is called before the first frame update
@@ -51,20 +53,24 @@ public class KuusAgent : Agent
         }
         completed = false;
         //collisionCost += 0.01f;
+
+        for (int i = 0; i < allObs.Length; i++)
+            allObs[i].updateObsPos();
+
         targetBall.updateTargetPos();
 
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         curDistance = Vector3.Magnitude(currentDifference);
         //lastDistance = curDistance;
-        bestDistance = curDistance;
+        lastDistance = curDistance;
         //closestEncounter = curDistance;
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         //lastAngleForward = curAngleForward;
-        bestAngleForward = curAngleForward;
+        lastAngleForward = curAngleForward;
 
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
         //lastAngle = curAngle;
-        bestAngle = curAngle;
+        lastAngle = curAngle;
         curRotations = robotController.getRotations();
     }
 
@@ -120,7 +126,7 @@ public class KuusAgent : Agent
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            AddReward(-1.0f);
+            AddReward(-0.1f);
         }
     }
 
@@ -131,25 +137,14 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = -0.01f; // Time cost
+        float curReward = -0.001f; // Time cost
 
-        if (curDistance < bestDistance)
-        {
-            curReward += 25.0f * (bestDistance - curDistance); // reward for approaching
-            bestDistance = curDistance;
-        }
+        curReward += 5.0f * (lastDistance - curDistance); // reward for approaching
 
-        if (curAngleForward < bestAngleForward)
-        {
-            curReward += 0.25f * (bestAngleForward - curAngleForward); // reward for correct angle
-            bestAngleForward = curAngleForward;
-        }
+        curReward += 0.05f * (lastAngleForward - curAngleForward); // reward for correct angle
             
-        if (curAngle < bestAngle)
-        {
-            curReward += 0.25f * (bestAngle - curAngle);
-            bestAngle = curAngle;
-        }
+        curReward += 0.05f * (lastAngle - curAngle);
+
             
         //for (int i = 6; i < curRotations.Length; i++)
         //    if (Mathf.Abs(curRotations[i]) > 0.5f)
@@ -157,13 +152,17 @@ public class KuusAgent : Agent
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
-        if (curDistance < 0.10f && curAngleForward < 10.0f && curAngle < 10.0f)
+        if (curDistance < 0.15f && curAngleForward < 15.0f && curAngle < 15.0f)
         {
-            curReward += 1f;
+            curReward += 0.5f;
             AddReward(curReward);
             completed = true;
             EndEpisode();
         }
+
+        lastAngle = curAngle;
+        lastAngleForward = curAngleForward;
+        lastDistance = curDistance;
 
         AddReward(curReward);
     }
