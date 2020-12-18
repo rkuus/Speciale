@@ -8,6 +8,7 @@ public class jointController : MonoBehaviour
     private float curJointRotation = 0.0f;
     private float deltaJointRotation = 0.0f;
     public float speed = 100.0f;
+    private float accScale = 8.0f;
     public bool inCollision = false;
     public bool isTriggered = false;
     //public bool displayVel = false;
@@ -34,7 +35,7 @@ public class jointController : MonoBehaviour
     {
         articulation = GetComponent<ArticulationBody>();
         capsule = GetComponent<CapsuleCollider>();
-        maxAcceleration = 8.0f / ((speed * 0.01f) * Mathf.Rad2Deg);
+        maxAcceleration = accScale / ((speed * 0.01f) * Mathf.Rad2Deg);
     }
 
     // Update is called once per frame
@@ -66,12 +67,14 @@ public class jointController : MonoBehaviour
 
     public void updateMaxAccerlation(float newAccer)
     {
-        maxAcceleration = newAccer / ((speed * 0.01f) * Mathf.Rad2Deg);
+        accScale = newAccer;
+        maxAcceleration = accScale / ((speed * 0.01f) * Mathf.Rad2Deg);
     }
 
     public void updateMaxSpeed(float newSpeedScale)
     {
         speed = speed * newSpeedScale;
+        maxAcceleration = accScale / ((speed * 0.01f) * Mathf.Rad2Deg);
     }
     public void ForceToRotation(float rotation)
     {
