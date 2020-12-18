@@ -16,6 +16,11 @@ public class KuusAgent : Agent
 
     public obsScript[] allObs;
 
+    private bool updateAccelerationAndSpeed = true;
+    public float maxJointAccelerationScale = 1.0f; // Normal value is 8
+    private float maxJointAcceleration = 8.0f;
+    public float maxJointSpeedScale = 1.0f; // Normal value is 1
+
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
     private float curAngleForward = 180.0f;
@@ -38,6 +43,7 @@ public class KuusAgent : Agent
     //private float bestDistance = 20.0f;
 
     private bool completed = false;
+    public bool debugMode = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,8 +63,14 @@ public class KuusAgent : Agent
         for (int i = 0; i < allObs.Length; i++)
             allObs[i].updateObsPos();
 
-        targetBall.updateTargetPos();
+        if (updateAccelerationAndSpeed)
+        {
+            updateAccelerationAndSpeed = false;
+            robotController.setMaxSpeed(maxJointSpeedScale);
+            robotController.setMaxJointAccerlation(maxJointAcceleration * maxJointAccelerationScale);
+        }
 
+        targetBall.updateTargetPos();
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         curDistance = Vector3.Magnitude(currentDifference);
         //lastDistance = curDistance;
@@ -117,8 +129,17 @@ public class KuusAgent : Agent
     public override void OnActionReceived(float[] vectorAction)
     {
         //Debug.Log(vectorAction);
-        robotController.setRotations(roundList(vectorAction,1));
         CalcReward();
+
+        float vectorScale = round(Mathf.Clamp(curDistance * 5f,0.1f,1f),2); // (curAngle + curAngleForward) * 0.01f + 
+
+        //if (debugMode)
+        //    Debug.Log(vectorScale);
+
+        for (int i = 0; i < vectorAction.Length; i++)
+            vectorAction[i] = vectorAction[i] * vectorScale;
+
+        robotController.setRotations(roundList(vectorAction, 1));
     }
     // Update is called once per frame
     void Update()
@@ -127,6 +148,8 @@ public class KuusAgent : Agent
         {
             robotController.collisionFlag = false;
             AddReward(-0.5f);
+            if (debugMode)
+                Debug.Log("Collision");
         }
     }
 
@@ -152,7 +175,7 @@ public class KuusAgent : Agent
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
-        if (curDistance < 0.15f && curAngleForward < 15.0f && curAngle < 15.0f)
+        if (curDistance < 0.05f && curAngleForward < 5.0f && curAngle < 5.0f)
         {
             curReward += 0.5f;
             AddReward(curReward);
@@ -163,6 +186,9 @@ public class KuusAgent : Agent
         lastAngle = curAngle;
         lastAngleForward = curAngleForward;
         lastDistance = curDistance;
+
+        if (debugMode)
+            Debug.Log(curReward);
 
         AddReward(curReward);
     }
@@ -197,4 +223,5 @@ public class KuusAgent : Agent
         float mult = Mathf.Pow(10.0f, (float)digits);
         return new Vector3((Mathf.Round(values.x * mult) / mult), (Mathf.Round(values.y * mult) / mult), (Mathf.Round(values.z * mult) / mult));
     }
+
 }

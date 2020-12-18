@@ -64,6 +64,15 @@ public class jointController : MonoBehaviour
 
     }
 
+    public void updateMaxAccerlation(float newAccer)
+    {
+        maxAcceleration = newAccer / ((speed * 0.01f) * Mathf.Rad2Deg);
+    }
+
+    public void updateMaxSpeed(float newSpeedScale)
+    {
+        speed = speed * newSpeedScale;
+    }
     public void ForceToRotation(float rotation)
     {
         // set target

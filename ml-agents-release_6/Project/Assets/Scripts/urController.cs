@@ -51,11 +51,11 @@ public class urController : MonoBehaviour
             curRotLim[jointIndex] = curRotations[jointIndex]/2.0f;
             if (curRotations[jointIndex] > 1)
             {
-                curRotations[jointIndex]--;
+                curRotations[jointIndex] -= 2;
             }
             else if (curRotations[jointIndex] < -1)
             {
-                curRotations[jointIndex]++;
+                curRotations[jointIndex] += 2;
             }
         }
         return curRotations.Concat(curRotLim).ToArray();
@@ -95,6 +95,24 @@ public class urController : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void setMaxJointAccerlation(float newAcc)
+    {
+        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
+        {
+            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+            joint.updateMaxAccerlation(newAcc);
+        }
+    }
+
+    public void setMaxSpeed(float newSpeed)
+    {
+        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
+        {
+            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+            joint.updateMaxSpeed(newSpeed);
+        }
     }
 
     public bool moveRobot(float[] input)
