@@ -1658,8 +1658,8 @@ MonoBehaviour:
   - {fileID: 4777042688949071841}
   - {fileID: 3176981474096530124}
   - {fileID: 8539930538250345829}
-  maxJointAccelerationScale: 0.5
-  maxJointSpeedScale: 0.25
+  maxJointAccelerationScale: 0.25
+  maxJointSpeedScale: 0.5
   debugMode: 0
 --- !u!114 &5055683651914093761
 MonoBehaviour:
