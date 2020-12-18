@@ -1619,7 +1619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BrainParameters:
     VectorObservationSize: 72
-    NumStackedVectorObservations: 1
+    NumStackedVectorObservations: 3
     VectorActionSize: 06000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
@@ -1658,8 +1658,8 @@ MonoBehaviour:
   - {fileID: 4777042688949071841}
   - {fileID: 3176981474096530124}
   - {fileID: 8539930538250345829}
-  maxJointAccelerationScale: 0.25
-  maxJointSpeedScale: 0.25
+  maxJointAccelerationScale: 1
+  maxJointSpeedScale: 1
   debugMode: 0
 --- !u!114 &5055683651914093761
 MonoBehaviour:
@@ -1673,7 +1673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 2
+  DecisionPeriod: 5
   TakeActionsBetweenDecisions: 0
 --- !u!1 &5055683652222183697
 GameObject:

@@ -21,6 +21,18 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
+    private float winDistance = 0.25f;
+    private float winAngle = 25.0f;
+    private float winAngleForward = 25.0f;
+
+    private float decDistance = 0.0001f;
+    private float decAngle = 0.01f;
+    private float decAngleForward = 0.01f;
+
+    private float stopDistance = 0.05f;
+    private float stopAngle = 5.0f;
+    private float stopAngleForward = 5.0f;
+
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
     private float curAngleForward = 180.0f;
@@ -56,6 +68,17 @@ public class KuusAgent : Agent
         {
             float[] defaultRotations = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
             robotController.forceARotation(defaultRotations);
+        }
+        else
+        {
+            if (winDistance > stopDistance)
+                winDistance -= decDistance;
+
+            if (winAngle > stopAngle)
+                winAngle -= decAngle;
+
+            if (winAngleForward > stopAngleForward)
+                winAngleForward -= decAngleForward;
         }
         completed = false;
         //collisionCost += 0.01f;
@@ -131,13 +154,11 @@ public class KuusAgent : Agent
         //Debug.Log(vectorAction);
         CalcReward();
 
-        float vectorScale = round(Mathf.Clamp(curDistance * 5f,0.1f,1f),2); // (curAngle + curAngleForward) * 0.01f + 
+        float vectorScale = round(Mathf.Clamp(curDistance * 8f,0.25f,1f),2); // (curAngle + curAngleForward) * 0.01f +
 
-        //if (debugMode)
-        //    Debug.Log(vectorScale);
-
-        for (int i = 0; i < vectorAction.Length; i++)
-            vectorAction[i] = vectorAction[i] * vectorScale;
+        if (vectorScale != 1.0f)
+            for (int i = 0; i < vectorAction.Length; i++)
+                vectorAction[i] = vectorAction[i] * vectorScale;
 
         robotController.setRotations(roundList(vectorAction, 1));
     }
@@ -160,13 +181,13 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = -0.0002f; // Time cost
+        float curReward = -0.0001f; // Time cost
 
-        curReward += 5.0f * (lastDistance - curDistance); // reward for approaching
-
-        curReward += 0.05f * (lastAngleForward - curAngleForward); // reward for correct angle
+        curReward += 20.0f * (lastDistance - curDistance); // reward for approaching
+        
+        curReward += 0.2f * (lastAngleForward - curAngleForward); // reward for correct angle
             
-        curReward += 0.05f * (lastAngle - curAngle);
+        curReward += 0.2f * (lastAngle - curAngle);
 
             
         //for (int i = 6; i < curRotations.Length; i++)
@@ -175,9 +196,9 @@ public class KuusAgent : Agent
 
         //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
 
-        if (curDistance < 0.05f && curAngleForward < 5.0f && curAngle < 5.0f)
+        if (curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
         {
-            curReward += 0.5f;
+            curReward += 1.0f;
             AddReward(curReward);
             completed = true;
             EndEpisode();
