@@ -30,10 +30,11 @@ public class targetHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            updateTargetPos();
-        }
+
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    updateTargetPos();
+        //}
         //targetPos = transform.localPosition;
         //targetForward = transform.forward;
         //gripPlace = targetPos - 0.10f * targetForward;
@@ -48,7 +49,7 @@ public class targetHandler : MonoBehaviour
             newPos += new Vector3(0, 0.05f, 0);
             if (fixedY)
                 newPos.y = 0.25f;
-        } while (newPos.y < 0.05f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.35f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
+        } while (newPos.y < 0.05f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.40f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
 
         transform.localPosition = newPos;
 

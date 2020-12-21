@@ -9,7 +9,7 @@ public class jointController : MonoBehaviour
     private float deltaJointRotation = 0.0f;
     public float speed = 100.0f;
     private float accScale = 8.0f;
-    public bool inCollision = false;
+    //public bool inCollision = false;
     public bool isTriggered = false;
     //public bool displayVel = false;
     public bool[] rotAxis = new bool[] { false, false, false };
@@ -39,7 +39,7 @@ public class jointController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         deltaJointRotation = Mathf.Clamp(jointRotation - curJointRotation, -1f * maxAcceleration, maxAcceleration);
         curJointRotation += deltaJointRotation;
@@ -51,10 +51,7 @@ public class jointController : MonoBehaviour
             RotateTo(rotationGoal);
         }
 
-        if (collisionCheck > 0)
-            inCollision = true;
-        else
-            inCollision = false;
+        
 
         //if (displayVel)
         //{
@@ -65,6 +62,13 @@ public class jointController : MonoBehaviour
 
     }
 
+    public bool inCollison()
+    {
+        if (collisionCheck > 0)
+            return true;
+        else
+            return false;
+    }
     public void updateMaxAccerlation(float newAccer)
     {
         accScale = newAccer;

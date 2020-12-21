@@ -20,6 +20,11 @@ public class tcpHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    public void updateParams()
+    {
         TCPpos = articulation.worldCenterOfMass - ground.transform.position;
         TCPforward = transform.forward;
     }

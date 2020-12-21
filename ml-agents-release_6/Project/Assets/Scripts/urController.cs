@@ -33,9 +33,9 @@ public class urController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        getAllTriggers();
+        //getAllTriggers();
 
         if (collisionCheck())
             collisionFlag = true;
@@ -146,7 +146,7 @@ public class urController : MonoBehaviour
         for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            if (joint.inCollision)
+            if (joint.inCollison())
             {
                 return true;
             }             
