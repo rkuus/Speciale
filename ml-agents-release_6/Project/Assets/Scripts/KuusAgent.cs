@@ -192,7 +192,7 @@ public class KuusAgent : Agent
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
         float curReward = -0.0001f * _time; // Time cost, -0.0001f
-        Debug.Log(curReward);
+        //Debug.Log(curReward);
         //Debug.Log("Time: " + _time.ToString());
         _time = 0;
         //Debug.Log("Distance: " + lastDistance.ToString() + ' ' + curDistance.ToString());
