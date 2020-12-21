@@ -29,13 +29,13 @@ public class KuusAgent : Agent
     private float decAngle = 0.01f;
     private float decAngleForward = 0.01f;
 
-    private float stopDistance = 0.10f;
-    private float stopAngle = 10.0f;
-    private float stopAngleForward = 10.0f;
+    private float stopDistance = 0.05f;
+    private float stopAngle = 5.0f;
+    private float stopAngleForward = 5.0f;
 
-    private float collisionCost = 0.1f;
-    private float collisionCostInc = 0.01f;
-    private float collisionCostStop = 1.0f;
+    private float collisionCost = 0.01f;
+    private float collisionCostInc = 0.0002f;
+    private float collisionCostStop = 0.1f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -162,11 +162,11 @@ public class KuusAgent : Agent
         //Debug.Log(vectorAction);
         CalcReward();
 
-        float vectorScale = round(Mathf.Clamp(curDistance * 5f,0.2f,1f),2); // (curAngle + curAngleForward) * 0.01f +
+        //float vectorScale = round(Mathf.Clamp(curDistance * 5f,0.2f,1f),2); // (curAngle + curAngleForward) * 0.01f +
 
-        if (vectorScale != 1.0f)
-            for (int i = 0; i < 3; i++)
-                vectorAction[i] = vectorAction[i] * vectorScale;
+        //if (vectorScale != 1.0f)
+        //    for (int i = 0; i < 3; i++)
+        //        vectorAction[i] = vectorAction[i] * vectorScale;
 
         robotController.setRotations(roundList(vectorAction, 1));
     }
@@ -174,13 +174,7 @@ public class KuusAgent : Agent
     void FixedUpdate()
     {
         _time ++;
-        if (robotController.collisionFlag) // Collision cost.
-        {
-            robotController.collisionFlag = false;
-            AddReward(-1f * collisionCost);
-            if (debugMode)
-                Debug.Log("Collision");
-        }
+
     }
 
     private void CalcReward()
@@ -192,6 +186,14 @@ public class KuusAgent : Agent
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
         float curReward = -0.0001f * _time; // Time cost, -0.0001f
+
+        if (robotController.collisionFlag) // Collision cost.
+        {
+            robotController.collisionFlag = false;
+            curReward -= collisionCost * _time;
+            if (debugMode)
+                Debug.Log("Collision");
+        }
         //Debug.Log(curReward);
         //Debug.Log("Time: " + _time.ToString());
         _time = 0;
