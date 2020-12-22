@@ -21,9 +21,9 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
-    private float winDistance = 0.05f;
-    private float winAngle = 10.0f;
-    private float winAngleForward = 10.0f;
+    private float winDistance = 0.15f;
+    private float winAngle = 25.0f;
+    private float winAngleForward = 25.0f;
 
     private float decDistance = 0.001f;
     private float decAngle = 0.1f;
@@ -33,8 +33,8 @@ public class KuusAgent : Agent
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.45f;
-    private float collisionCostInc = 0.001f;
+    private float collisionCost = 0.10f;
+    private float collisionCostInc = 0.01f;
     private float collisionCostStop = 0.5f;
 
     private float curDistance = 20.0f;
@@ -171,15 +171,12 @@ public class KuusAgent : Agent
         //float vectorScale = round(Mathf.Clamp(curDistance * 10f, 0.2f, 1f), 2); // Game 2 uses scaling 5, and only on 3 joints. Game 3 uses no scaling
 
         for (int i = 0; i < 6; i++)
-            vectorAction[i] = vectorAction[i] * vectorAction[6];
-
-        for (int i = 0; i < 6; i++)
             if (Mathf.Abs(vectorAction[i]) < 0.1f)
                 vectorAction[i] = 0.0f;
 
         float[] robotInput = new float[6];
         for (int i = 0; i < 6; i++)
-            robotInput[i] = vectorAction[i];
+            robotInput[i] = vectorAction[i] * vectorAction[6];
 
         robotController.setRotations(robotInput);
     }
