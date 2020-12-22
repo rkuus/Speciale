@@ -21,7 +21,7 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
-    private float winDistance = 0.15f;
+    private float winDistance = 0.25f;
     private float winAngle = 25.0f;
     private float winAngleForward = 25.0f;
 
@@ -169,14 +169,14 @@ public class KuusAgent : Agent
         CalcReward();
 
         //float vectorScale = round(Mathf.Clamp(curDistance * 10f, 0.2f, 1f), 2); // Game 2 uses scaling 5, and only on 3 joints. Game 3 uses no scaling
-
+        float[] robotInput = vectorAction;
         for (int i = 0; i < 6; i++)
-            if (Mathf.Abs(vectorAction[i]) < 0.1f)
-                vectorAction[i] = 0.0f;
+            if (Mathf.Abs(robotInput[i]) < 0.1f)
+                robotInput[i] = 0.0f;
 
-        float[] robotInput = new float[6];
-        for (int i = 0; i < 6; i++)
-            robotInput[i] = vectorAction[i] * vectorAction[6];
+        //
+        //for (int i = 0; i < 6; i++)
+        //    robotInput[i] = vectorAction[i] * vectorAction[6];
 
         robotController.setRotations(robotInput);
     }
@@ -195,7 +195,7 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = 0.0f; //  -0.0001f * _time; // Time cost, -0.0001f
+        float curReward = -0.00025f * _time; // Time cost, -0.0001f
 
         if (!robotController.collisionFlag && curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
         {
@@ -216,22 +216,21 @@ public class KuusAgent : Agent
         //Debug.Log("Time: " + _time.ToString());
         _time = 0;
         //Debug.Log("Distance: " + lastDistance.ToString() + ' ' + curDistance.ToString());
-        curReward += 1.0f * (lastDistance - curDistance); // reward for approaching
+        curReward += 0.5f * (lastDistance - curDistance); // reward for approaching
         //Debug.Log("AngleForward: " + lastAngleForward.ToString() + ' ' + curAngleForward.ToString());
-        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for correct angle
+        curReward += 0.005f * (lastAngleForward - curAngleForward); // reward for correct angle
         //Debug.Log("Angle: " + lastAngle.ToString() + ' ' + curAngle.ToString());
-        curReward += 0.01f * (lastAngle - curAngle);
+        curReward += 0.005f * (lastAngle - curAngle);
 
         for (int i = 6;i<curRotations.Length;i++)
         {
             if (Mathf.Abs(curRotations[i]) >= 1.0f)
             {
-                curReward -= collisionCost * _time;
+                curReward = -1f;
                 if (debugMode)
                     Debug.Log("Joint at limit, end episode");
-                break;
-                //AddReward(curReward);
-                //EndEpisode();
+                AddReward(curReward);
+                EndEpisode();
             }
         }
             
