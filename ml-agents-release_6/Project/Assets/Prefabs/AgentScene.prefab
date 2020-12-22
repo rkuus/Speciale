@@ -1617,7 +1617,7 @@ MonoBehaviour:
   m_BrainParameters:
     VectorObservationSize: 72
     NumStackedVectorObservations: 1
-    VectorActionSize: 06000000
+    VectorActionSize: 07000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
   m_Model: {fileID: 0}
@@ -1656,7 +1656,7 @@ MonoBehaviour:
   - {fileID: 3176981474096530124}
   - {fileID: 8539930538250345829}
   maxJointAccelerationScale: 1
-  maxJointSpeedScale: 0.5
+  maxJointSpeedScale: 1
   debugMode: 0
 --- !u!114 &5055683651914093761
 MonoBehaviour:

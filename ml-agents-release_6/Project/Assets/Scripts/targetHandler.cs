@@ -46,10 +46,10 @@ public class targetHandler : MonoBehaviour
         do
         {
             newPos = Random.onUnitSphere * (Random.value * (outerDiameter - innerDiameter) + innerDiameter);
-            newPos += new Vector3(0, 0.05f, 0);
+            //newPos += new Vector3(0, 0.05f, 0);
             if (fixedY)
                 newPos.y = 0.25f;
-        } while (newPos.y < 0.05f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.40f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
+        } while (newPos.y < 0.1f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.40f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
 
         transform.localPosition = newPos;
 
@@ -68,5 +68,12 @@ public class targetHandler : MonoBehaviour
 
         //Debug.Log("center:" + Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)));
         //Debug.Log("grip:" + Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0)));
+    }
+
+    public void updataTargetParams()
+    {
+        targetPos = transform.position - ground.transform.position; //transform.localPosition;
+        targetForward = transform.forward;
+        gripPlace = targetPos - 0.05f * targetForward;
     }
 }

@@ -16,7 +16,7 @@ public class obsScript : MonoBehaviour
     void Start()
     {
         innerDSquared = innerDiameter * innerDiameter;
-        checkRadius = (GetComponent<SphereCollider>().radius * transform.localScale.x) + 0.05f;
+        checkRadius = (GetComponent<SphereCollider>().radius * transform.localScale.x) + 0.15f;
     }
 
     // Update is called once per frame

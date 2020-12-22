@@ -21,9 +21,9 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
-    private float winDistance = 0.20f;
-    private float winAngle = 20.0f;
-    private float winAngleForward = 20.0f;
+    private float winDistance = 0.05f;
+    private float winAngle = 10.0f;
+    private float winAngleForward = 10.0f;
 
     private float decDistance = 0.001f;
     private float decAngle = 0.1f;
@@ -33,9 +33,9 @@ public class KuusAgent : Agent
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.05f;
+    private float collisionCost = 0.45f;
     private float collisionCostInc = 0.001f;
-    private float collisionCostStop = 0.1f;
+    private float collisionCostStop = 0.5f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -48,6 +48,7 @@ public class KuusAgent : Agent
     //private float closestEncounter = 999.9f;
     //private float bestAngle = 180.0f;
     private Vector3 currentDifference;
+    private Vector3 lastDifference;
 
     private float lastAngle = 180.0f;
     private float lastAngleForward = 180.0f;
@@ -103,6 +104,7 @@ public class KuusAgent : Agent
         targetBall.updateTargetPos();
         tcp.updateParams();
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
+        lastDifference = currentDifference;
         curDistance = Vector3.Magnitude(currentDifference);
         //lastDistance = curDistance;
         lastDistance = curDistance;
@@ -120,17 +122,21 @@ public class KuusAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         tcp.updateParams();
+        targetBall.updataTargetParams();
         // UR configuration
         curRotations = robotController.getRotations();
         sensor.AddObservation(roundList(curRotations, decimalPrecision));                                  // 12
         // UR joint velocities
-        sensor.AddObservation(roundList(robotController.getVelocities(), decimalPrecision));               // 6
+        //sensor.AddObservation(roundList(robotController.getVelocities(), decimalPrecision));               // 6
         // End-effector position - target position
         sensor.AddObservation(roundV3(tcp.TCPpos, decimalPrecision));                                      // 3
         sensor.AddObservation(roundV3(targetBall.gripPlace, decimalPrecision));                            // 3
         // Corridinate difference between the tcp and target
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         sensor.AddObservation(roundV3(currentDifference, decimalPrecision));                               // 3
+        // NEW INPUTS
+        sensor.AddObservation(roundV3(lastDifference, decimalPrecision));
+        sensor.AddObservation(roundV3(lastDifference - currentDifference, decimalPrecision));
         // Distance to target
         curDistance = Vector3.SqrMagnitude(currentDifference);
         sensor.AddObservation(round(curDistance, decimalPrecision));                                       // 1
@@ -162,30 +168,45 @@ public class KuusAgent : Agent
         //Debug.Log(vectorAction);
         CalcReward();
 
-        float vectorScale = round(Mathf.Clamp(curDistance * 10f, 0.2f, 1f), 2); // (curAngle + curAngleForward) * 0.01f +
+        //float vectorScale = round(Mathf.Clamp(curDistance * 10f, 0.2f, 1f), 2); // Game 2 uses scaling 5, and only on 3 joints. Game 3 uses no scaling
 
-        if (vectorScale != 1.0f)
-            for (int i = 0; i < vectorAction.Length; i++)
-                vectorAction[i] = vectorAction[i] * vectorScale;
+        for (int i = 0; i < 6; i++)
+            vectorAction[i] = vectorAction[i] * vectorAction[6];
 
-        robotController.setRotations(roundList(vectorAction, 1));
+        for (int i = 0; i < 6; i++)
+            if (Mathf.Abs(vectorAction[i]) < 0.1f)
+                vectorAction[i] = 0.0f;
+
+        float[] robotInput = new float[6];
+        for (int i = 0; i < 6; i++)
+            robotInput[i] = vectorAction[i];
+
+        robotController.setRotations(robotInput);
     }
     // Update is called once per frame
     void FixedUpdate()
     {
         _time ++;
-
     }
 
     private void CalcReward()
     {
         tcp.updateParams();
+        targetBall.updataTargetParams();
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         curDistance = Vector3.SqrMagnitude(currentDifference);
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = -0.0001f * _time; // Time cost, -0.0001f
+        float curReward = 0.0f; //  -0.0001f * _time; // Time cost, -0.0001f
+
+        if (!robotController.collisionFlag && curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
+        {
+            curReward = 1.0f;
+            AddReward(curReward);
+            completed = true;
+            EndEpisode();
+        }
 
         if (robotController.collisionFlag) // Collision cost.
         {
@@ -208,28 +229,15 @@ public class KuusAgent : Agent
         {
             if (Mathf.Abs(curRotations[i]) >= 1.0f)
             {
-                curReward = -1.0f;
+                curReward -= collisionCost * _time;
                 if (debugMode)
                     Debug.Log("Joint at limit, end episode");
-                AddReward(curReward);
-                EndEpisode();
+                break;
+                //AddReward(curReward);
+                //EndEpisode();
             }
         }
             
-        //for (int i = 6; i < curRotations.Length; i++)
-        //    if (Mathf.Abs(curRotations[i]) > 0.5f)
-        //        curReward -= 0.01f;
-
-        //curReward -= 0.0001f * squaredList(vectorAction); // squared sum of actions, Smoothness
-
-        if (curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
-        {
-            curReward = 1.0f;
-            AddReward(curReward);
-            completed = true;
-            EndEpisode();
-        }
-
         lastAngle = curAngle;
         lastAngleForward = curAngleForward;
         lastDistance = curDistance;
