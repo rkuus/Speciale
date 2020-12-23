@@ -41,7 +41,7 @@ public class KuusAgent : Agent
     private float curAngle = 180.0f;
     private float curAngleForward = 180.0f;
 
-    private int decimalPrecision = 3;
+    private int decimalPrecision = 4;
 
     private float[] curRotations;
 
@@ -168,19 +168,23 @@ public class KuusAgent : Agent
         //Debug.Log(vectorAction);
         CalcReward();
 
-        //float vectorScale = round(Mathf.Clamp(curDistance * 10f, 0.2f, 1f), 2); // Game 2 uses scaling 5, and only on 3 joints. Game 3 uses no scaling
-        float[] robotInput = new float[6];
-        for (int i = 0; i < 6; i++)
-            //if (Mathf.Abs(robotInput[i]) < 0.1f)
-            //    robotInput[i] = 0.0f;
-            //else
-            robotInput[i] = vectorAction[i] * vectorAction[6];
+        float vectorScale = Mathf.Clamp(curDistance * 5f, 0.2f, 1f); // Game 2 uses scaling 5, and only on 3 joints. Game 3 uses no scaling
+
+        if (vectorScale < 1.0f)
+            for (int i = 0; i < vectorAction.Length; i++)
+                vectorAction[i] = vectorAction[i] * vectorScale;
+        //float[] robotInput = new float[6];
+        //for (int i = 0; i < 6; i++)
+        //    //if (Mathf.Abs(robotInput[i]) < 0.1f)
+        //    //    robotInput[i] = 0.0f;
+        //    //else
+        //    robotInput[i] = vectorAction[i] * vectorAction[6];
 
         //
         //for (int i = 0; i < 6; i++)
         //    robotInput[i] = vectorAction[i] * vectorAction[6];
 
-        robotController.setRotations(robotInput);
+        robotController.setRotations(vectorAction);
     }
     // Update is called once per frame
     void FixedUpdate()
