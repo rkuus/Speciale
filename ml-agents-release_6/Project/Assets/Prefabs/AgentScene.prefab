@@ -1643,7 +1643,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 10000
+  MaxStep: 5120
   robotController: {fileID: 7014245470030351442}
   tcp: {fileID: 5055683650916613956}
   targetBall: {fileID: 1607958046891254548}

@@ -223,7 +223,7 @@ public class KuusAgent : Agent
         {
             if (Mathf.Abs(curRotations[i]) >= 0.75f)
             {
-                curReward -= collisionCost * _time;
+                curReward -= 0.005f * _time;
                 break;
             }
         }
