@@ -169,10 +169,12 @@ public class KuusAgent : Agent
         CalcReward();
 
         //float vectorScale = round(Mathf.Clamp(curDistance * 10f, 0.2f, 1f), 2); // Game 2 uses scaling 5, and only on 3 joints. Game 3 uses no scaling
-        float[] robotInput = vectorAction;
+        float[] robotInput = new float[6];
         for (int i = 0; i < 6; i++)
-            if (Mathf.Abs(robotInput[i]) < 0.1f)
-                robotInput[i] = 0.0f;
+            //if (Mathf.Abs(robotInput[i]) < 0.1f)
+            //    robotInput[i] = 0.0f;
+            //else
+            robotInput[i] = vectorAction[i] * vectorAction[6];
 
         //
         //for (int i = 0; i < 6; i++)
@@ -212,15 +214,24 @@ public class KuusAgent : Agent
             if (debugMode)
                 Debug.Log("Collision");
         }
+
+        for (int i = 6; i < curRotations.Length; i++)
+        {
+            if (Mathf.Abs(curRotations[i]) >= 0.75f)
+            {
+                curReward -= collisionCost * _time;
+                break;
+            }
+        }
         //Debug.Log(curReward);
         //Debug.Log("Time: " + _time.ToString());
         _time = 0;
         //Debug.Log("Distance: " + lastDistance.ToString() + ' ' + curDistance.ToString());
-        curReward += 0.5f * (lastDistance - curDistance); // reward for approaching
+        curReward += 1.0f * (lastDistance - curDistance); // reward for approaching
         //Debug.Log("AngleForward: " + lastAngleForward.ToString() + ' ' + curAngleForward.ToString());
-        curReward += 0.005f * (lastAngleForward - curAngleForward); // reward for correct angle
+        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for correct angle
         //Debug.Log("Angle: " + lastAngle.ToString() + ' ' + curAngle.ToString());
-        curReward += 0.005f * (lastAngle - curAngle);
+        curReward += 0.01f * (lastAngle - curAngle);
 
         for (int i = 6;i<curRotations.Length;i++)
         {
