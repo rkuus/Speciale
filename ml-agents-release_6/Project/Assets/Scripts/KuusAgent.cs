@@ -121,6 +121,7 @@ public class KuusAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        
         tcp.updateParams();
         targetBall.updataTargetParams();
         // UR configuration
@@ -198,7 +199,7 @@ public class KuusAgent : Agent
         if (!robotController.collisionFlag && curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
         {
             curReward = 1.0f;
-            AddReward(curReward);
+            SetReward(curReward);
             completed = true;
             EndEpisode();
         }
@@ -236,7 +237,7 @@ public class KuusAgent : Agent
                 //curReward = -1f;
                 if (debugMode)
                     Debug.Log("Joint at limit, end episode");
-                AddReward(curReward);
+                //SetReward(curReward);
                 EndEpisode();
             }
         }
@@ -244,11 +245,11 @@ public class KuusAgent : Agent
         lastAngle = curAngle;
         lastAngleForward = curAngleForward;
         lastDistance = curDistance;
-
+        
         //if (debugMode)
         //    Debug.Log(curReward);
 
-        AddReward(curReward);
+        SetReward(curReward);
     }
 
     private static float squaredList(float[] values)
