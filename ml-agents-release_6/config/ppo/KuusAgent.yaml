@@ -4,15 +4,15 @@ behaviors:
     hyperparameters:
       batch_size: 5120
       buffer_size: 102400
-      learning_rate: 0.00001
+      learning_rate: 0.00003
       beta: 0.01
       epsilon: 0.1
       lambd: 0.95
-      num_epoch: 10
+      num_epoch: 5
       learning_rate_schedule: linear
     network_settings:
       normalize: false
-      hidden_units: 512
+      hidden_units: 256
       num_layers: 3
       vis_encode_type: simple
     reward_signals:

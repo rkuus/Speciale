@@ -2796,10 +2796,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 285396106402174681, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Twist
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1135748517134923094, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Twist
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1306584469277115952, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862795310340453577, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Twist
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5055683651914093774, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
@@ -2860,6 +2875,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AgentScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 5110988759555167569, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Twist
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6109310727615883905, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Twist
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8741199212320642089, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_Twist
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 681bfd00bd4485d4a905e79e24624b26, type: 3}

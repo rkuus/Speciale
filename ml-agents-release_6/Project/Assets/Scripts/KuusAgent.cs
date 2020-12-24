@@ -21,21 +21,21 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
-    private float winDistance = 0.25f;
-    private float winAngle = 25.0f;
-    private float winAngleForward = 25.0f;
+    private float winDistance = 0.05f;
+    private float winAngle = 5.0f;
+    private float winAngleForward = 5.0f;
 
     private float decDistance = 0.001f;
     private float decAngle = 0.1f;
     private float decAngleForward = 0.1f;
 
     private float stopDistance = 0.05f;
-    private float stopAngle = 10.0f;
-    private float stopAngleForward = 10.0f;
+    private float stopAngle = 5.0f;
+    private float stopAngleForward = 5.0f;
 
-    private float collisionCost = 0.10f;
+    private float collisionCost = 0.20f;
     private float collisionCostInc = 0.01f;
-    private float collisionCostStop = 0.5f;
+    private float collisionCostStop = 0.2f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -168,21 +168,13 @@ public class KuusAgent : Agent
         //Debug.Log(vectorAction);
         CalcReward();
 
-        float vectorScale = Mathf.Clamp(curDistance * 5f, 0.2f, 1f); // Game 2 uses scaling 5, and only on 3 joints. Game 3 uses no scaling
+        //float vectorScale = Mathf.Clamp(curDistance * 5f, 0.35f, 1f); // Game 2 uses scaling 5, and only on 3 joints. Game 3 uses no scaling
 
-        if (vectorScale < 1.0f)
-            for (int i = 0; i < vectorAction.Length; i++)
-                vectorAction[i] = vectorAction[i] * vectorScale;
-        //float[] robotInput = new float[6];
-        //for (int i = 0; i < 6; i++)
-        //    //if (Mathf.Abs(robotInput[i]) < 0.1f)
-        //    //    robotInput[i] = 0.0f;
-        //    //else
-        //    robotInput[i] = vectorAction[i] * vectorAction[6];
-
-        //
-        //for (int i = 0; i < 6; i++)
-        //    robotInput[i] = vectorAction[i] * vectorAction[6];
+        //for (int i = 0; i < 3; i++)
+        //    if (Mathf.Abs(vectorAction[i]) < 0.2f)
+        //        vectorAction[i] = 0f;
+            //else
+            //    vectorAction[i] = vectorAction[i] * vectorScale;
 
         robotController.setRotations(vectorAction);
     }
@@ -219,14 +211,14 @@ public class KuusAgent : Agent
                 Debug.Log("Collision");
         }
 
-        for (int i = 6; i < curRotations.Length; i++)
-        {
-            if (Mathf.Abs(curRotations[i]) >= 0.75f)
-            {
-                curReward -= 0.005f * _time;
-                break;
-            }
-        }
+        //for (int i = 6; i < curRotations.Length; i++)
+        //{
+        //    if (Mathf.Abs(curRotations[i]) >= 0.75f)
+        //    {
+        //        curReward -= 0.005f * _time;
+        //        break;
+        //    }
+        //}
         //Debug.Log(curReward);
         //Debug.Log("Time: " + _time.ToString());
         _time = 0;
@@ -241,7 +233,7 @@ public class KuusAgent : Agent
         {
             if (Mathf.Abs(curRotations[i]) >= 1.0f)
             {
-                curReward = -1f;
+                //curReward = -1f;
                 if (debugMode)
                     Debug.Log("Joint at limit, end episode");
                 AddReward(curReward);
