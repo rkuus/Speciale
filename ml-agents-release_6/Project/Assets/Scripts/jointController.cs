@@ -5,8 +5,8 @@ using UnityEngine;
 public class jointController : MonoBehaviour
 {
     public float jointRotation = 0.0f;
-    //private float curJointRotation = 0.0f;
-    //private float deltaJointRotation = 0.0f;
+    private float curJointRotation = 0.0f;
+    private float deltaJointRotation = 0.0f;
     public float speed = 100.0f;
     private float accScale = 8.0f;
     //public bool inCollision = false;
@@ -41,12 +41,12 @@ public class jointController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //deltaJointRotation = Mathf.Clamp(jointRotation - curJointRotation, -1f * maxAcceleration, maxAcceleration);
-        //curJointRotation += deltaJointRotation;
+        deltaJointRotation = Mathf.Clamp(jointRotation - curJointRotation, -1f * maxAcceleration, maxAcceleration);
+        curJointRotation += deltaJointRotation;
 
-        if (jointRotation != 0.0f)
+        if (curJointRotation != 0.0f)
         {
-            float rotationChange = (float)jointRotation * speed * Time.fixedDeltaTime; // Mathf.Clamp((float)jointRotation * speed * Time.fixedDeltaTime,-1f * articulation.maxAngularVelocity, 1f * articulation.maxAngularVelocity);
+            float rotationChange = (float)curJointRotation * speed * Time.fixedDeltaTime; // Mathf.Clamp((float)jointRotation * speed * Time.fixedDeltaTime,-1f * articulation.maxAngularVelocity, 1f * articulation.maxAngularVelocity);
             float rotationGoal = CurrentPrimaryAxisRotation() + rotationChange;
             RotateTo(rotationGoal);
         }

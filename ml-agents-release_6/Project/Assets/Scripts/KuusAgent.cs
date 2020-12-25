@@ -41,7 +41,7 @@ public class KuusAgent : Agent
     private float curAngle = 180.0f;
     private float curAngleForward = 180.0f;
 
-    private int decimalPrecision = 4;
+    //private int decimalPrecision = 4;
 
     private float[] curRotations;
 
@@ -126,33 +126,33 @@ public class KuusAgent : Agent
         targetBall.updataTargetParams();
         // UR configuration
         curRotations = robotController.getRotations();
-        sensor.AddObservation(roundList(curRotations, decimalPrecision));                                  // 12
+        sensor.AddObservation(curRotations);                                  // 12
         // UR joint velocities
         //sensor.AddObservation(roundList(robotController.getVelocities(), decimalPrecision));               // 6
         // End-effector position - target position
-        sensor.AddObservation(roundV3(tcp.TCPpos, decimalPrecision));                                      // 3
-        sensor.AddObservation(roundV3(targetBall.gripPlace, decimalPrecision));                            // 3
+        sensor.AddObservation(tcp.TCPpos);                                      // 3
+        sensor.AddObservation(targetBall.gripPlace);                            // 3
         // Corridinate difference between the tcp and target
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
-        sensor.AddObservation(roundV3(currentDifference, decimalPrecision));                               // 3
+        sensor.AddObservation(currentDifference);                               // 3
         // NEW INPUTS
-        sensor.AddObservation(roundV3(lastDifference, decimalPrecision));
-        sensor.AddObservation(roundV3(lastDifference - currentDifference, decimalPrecision));
+        sensor.AddObservation(lastDifference);
+        sensor.AddObservation(lastDifference - currentDifference);
         // Distance to target
         curDistance = Vector3.SqrMagnitude(currentDifference);
-        sensor.AddObservation(round(curDistance, decimalPrecision));                                       // 1
+        sensor.AddObservation(curDistance);                                       // 1
         // Rotation of TCP
         //sensor.AddObservation(tcp.transform.rotation.normalized);                                        // 4
         // Angle to target
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
-        sensor.AddObservation(round(curAngle / 180.0f, decimalPrecision));                                // 1
-        sensor.AddObservation(roundV3(tcp.TCPforward, decimalPrecision));
+        sensor.AddObservation(curAngle / 180.0f);                                // 1
+        sensor.AddObservation(tcp.TCPforward);
         // Rotation forward from target
-        sensor.AddObservation(roundV3(targetBall.targetForward, decimalPrecision));                         // 3
+        sensor.AddObservation(targetBall.targetForward);                         // 3
         // Rotation between target and tcp forward rotation.
-        sensor.AddObservation(roundV3((targetBall.targetForward - tcp.TCPforward), decimalPrecision));      // 3 
+        sensor.AddObservation((targetBall.targetForward - tcp.TCPforward));      // 3 
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
-        sensor.AddObservation(round(curAngleForward / 180.0f, decimalPrecision));                           // 1
+        sensor.AddObservation(curAngleForward / 180.0f);                           // 1
         // Voxel grid
         //sensor.AddObservation(voxelGrid.voxelCollisions());                                                 // 45
         //curAngle = Vector3.Angle(tcp.TCPpos, targetBall.targetPos);
@@ -161,7 +161,7 @@ public class KuusAgent : Agent
         //sensor.AddObservation(roundList(firstSensor.getSensorData(), decimalPrecision));                    // 90
         //sensor.AddObservation(roundList(secondSensor.getSensorData(), decimalPrecision));                   // 90
         //sensor.AddObservation(roundList(depthThing.getRayCasts(), decimalPrecision));
-        sensor.AddObservation(roundList(robotController.getAllTriggers(), decimalPrecision));
+        sensor.AddObservation(robotController.getAllTriggers());
     }
 
     public override void OnActionReceived(float[] vectorAction)
