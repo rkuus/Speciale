@@ -22,20 +22,20 @@ public class KuusAgent : Agent
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
     private float winDistance = 0.05f;
-    private float winAngle = 5.0f;
-    private float winAngleForward = 5.0f;
+    private float winAngle = 10.0f;
+    private float winAngleForward = 10.0f;
 
     private float decDistance = 0.001f;
     private float decAngle = 0.1f;
     private float decAngleForward = 0.1f;
 
     private float stopDistance = 0.05f;
-    private float stopAngle = 5.0f;
-    private float stopAngleForward = 5.0f;
+    private float stopAngle = 10.0f;
+    private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.20f;
+    private float collisionCost = 0.10f;
     private float collisionCostInc = 0.01f;
-    private float collisionCostStop = 0.2f;
+    private float collisionCostStop = 0.1f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -122,10 +122,10 @@ public class KuusAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         
-        tcp.updateParams();
-        targetBall.updataTargetParams();
+        //tcp.updateParams();
+        //targetBall.updataTargetParams();
         // UR configuration
-        curRotations = robotController.getRotations();
+        //curRotations = robotController.getRotations();
         sensor.AddObservation(curRotations);                                  // 12
         // UR joint velocities
         //sensor.AddObservation(roundList(robotController.getVelocities(), decimalPrecision));               // 6
@@ -133,25 +133,25 @@ public class KuusAgent : Agent
         sensor.AddObservation(tcp.TCPpos);                                      // 3
         sensor.AddObservation(targetBall.gripPlace);                            // 3
         // Corridinate difference between the tcp and target
-        currentDifference = tcp.TCPpos - targetBall.gripPlace;
+        //currentDifference = tcp.TCPpos - targetBall.gripPlace;
         sensor.AddObservation(currentDifference);                               // 3
         // NEW INPUTS
         sensor.AddObservation(lastDifference);
         sensor.AddObservation(lastDifference - currentDifference);
         // Distance to target
-        curDistance = Vector3.SqrMagnitude(currentDifference);
+        //curDistance = Vector3.SqrMagnitude(currentDifference);
         sensor.AddObservation(curDistance);                                       // 1
         // Rotation of TCP
         //sensor.AddObservation(tcp.transform.rotation.normalized);                                        // 4
         // Angle to target
-        curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
+        //curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
         sensor.AddObservation(curAngle / 180.0f);                                // 1
         sensor.AddObservation(tcp.TCPforward);
         // Rotation forward from target
         sensor.AddObservation(targetBall.targetForward);                         // 3
         // Rotation between target and tcp forward rotation.
         sensor.AddObservation((targetBall.targetForward - tcp.TCPforward));      // 3 
-        curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
+        //curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         sensor.AddObservation(curAngleForward / 180.0f);                           // 1
         // Voxel grid
         //sensor.AddObservation(voxelGrid.voxelCollisions());                                                 // 45
@@ -183,10 +183,7 @@ public class KuusAgent : Agent
     void FixedUpdate()
     {
         _time ++;
-    }
 
-    private void CalcReward()
-    {
         tcp.updateParams();
         targetBall.updataTargetParams();
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
@@ -194,15 +191,18 @@ public class KuusAgent : Agent
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 
-        float curReward = -0.00025f * _time; // Time cost, -0.0001f
-
         if (!robotController.collisionFlag && curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
         {
-            curReward = 1.0f;
-            SetReward(curReward);
+            SetReward(1.0f);
             completed = true;
             EndEpisode();
         }
+    }
+
+    private void CalcReward()
+    {
+
+        float curReward = -0.00025f * _time; // Time cost, -0.0001f
 
         if (robotController.collisionFlag) // Collision cost.
         {
@@ -212,33 +212,24 @@ public class KuusAgent : Agent
                 Debug.Log("Collision");
         }
 
-        //for (int i = 6; i < curRotations.Length; i++)
-        //{
-        //    if (Mathf.Abs(curRotations[i]) >= 0.75f)
-        //    {
-        //        curReward -= 0.005f * _time;
-        //        break;
-        //    }
-        //}
-        //Debug.Log(curReward);
-        //Debug.Log("Time: " + _time.ToString());
         _time = 0;
-        //Debug.Log("Distance: " + lastDistance.ToString() + ' ' + curDistance.ToString());
-        curReward += 1.0f * (lastDistance - curDistance); // reward for approaching
-        //Debug.Log("AngleForward: " + lastAngleForward.ToString() + ' ' + curAngleForward.ToString());
-        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for correct angle
-        //Debug.Log("Angle: " + lastAngle.ToString() + ' ' + curAngle.ToString());
-        curReward += 0.01f * (lastAngle - curAngle);
+
+        curReward += 2.0f * (lastDistance - curDistance); // reward for approaching
+
+        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for aligning with target
+
+        curReward += 0.01f * (lastAngle - curAngle); // reward for facing target
 
         for (int i = 6;i<curRotations.Length;i++)
         {
             if (Mathf.Abs(curRotations[i]) >= 1.0f)
             {
-                //curReward = -1f;
-                if (debugMode)
-                    Debug.Log("Joint at limit, end episode");
+                curReward -= collisionCost * _time;
+                break;
+                //if (debugMode)
+                //    Debug.Log("Joint at limit, end episode");
                 //SetReward(curReward);
-                EndEpisode();
+                //EndEpisode();
             }
         }
             
