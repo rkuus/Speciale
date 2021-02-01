@@ -27,8 +27,8 @@ public class urController : MonoBehaviour
 
     void Start()
     {
-        curRotations = new float[urJoints.Length];
-        curRotLim = new float[urJoints.Length];
+        curRotations = new float[urJoints.Length-1];
+        curRotLim = new float[urJoints.Length-1];
         //lastDifference = tcp.transform.position - target.transform.position;
     }
 
@@ -44,7 +44,7 @@ public class urController : MonoBehaviour
     public float[] getRotations()
     {
         
-        for (int jointIndex = 0; jointIndex < urJoints.Length;jointIndex++)
+        for (int jointIndex = 0; jointIndex < urJoints.Length-1;jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
             curRotations[jointIndex] = (joint.CurrentPrimaryAxisRotation()) / 180.0f;
@@ -61,23 +61,33 @@ public class urController : MonoBehaviour
         return curRotations.Concat(curRotLim).ToArray();
     }
 
-    public float[] getVelocities()
+    public float[] getRawRotation()
     {
-        float[] velocities = new float[urJoints.Length];
-        Vector3 lastJoint = new Vector3(0, 0, 0);
+        float[] rawRotations = new float[urJoints.Length];
         for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-            Vector3 curJoint = joint.getCurrentSpeed();
+            rawRotations[jointIndex] = (joint.CurrentPrimaryAxisRotation());
+        }
+        return rawRotations;
+    }
+    public float[] getVelocities()
+    {
+        float[] velocities = new float[urJoints.Length];
+        //Vector3 lastJoint = new Vector3(0, 0, 0);
+        for (int jointIndex = 0; jointIndex < urJoints.Length-1; jointIndex++)
+        {
+            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+            velocities[jointIndex] = joint.getJointVelocity();
 
-            if (joint.rotAxis[0])
-                velocities[jointIndex] = (curJoint.x- lastJoint.x);
-            if (joint.rotAxis[1])
-                velocities[jointIndex] = (curJoint.y - lastJoint.y);
-            if (joint.rotAxis[2])
-                velocities[jointIndex] = (curJoint.z - lastJoint.z);
+            //if (joint.rotAxis[0])
+            //    velocities[jointIndex] = (curJoint.x- lastJoint.x);
+            //if (joint.rotAxis[1])
+            //    velocities[jointIndex] = (curJoint.y - lastJoint.y);
+            //if (joint.rotAxis[2])
+            //    velocities[jointIndex] = (curJoint.z - lastJoint.z);
 
-            lastJoint = curJoint;
+            //lastJoint = curJoint;
         }
         return velocities;
     }
@@ -85,10 +95,10 @@ public class urController : MonoBehaviour
     public bool setRotations(float[] rotations)
     {
         //Debug.Log(rotations.Length + " " + urJoints.Length);
-        if (rotations.Length != urJoints.Length)
-            return false;
+        //if (rotations.Length != urJoints.Length)
+        //    return false;
         
-        for (int jointIndex = 0; jointIndex < urJoints.Length;jointIndex++)
+        for (int jointIndex = 0; jointIndex < rotations.Length;jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
             joint.jointRotation = rotations[jointIndex];
@@ -117,10 +127,10 @@ public class urController : MonoBehaviour
 
     public bool moveRobot(float[] input)
     {
-        if (input.Length != urJoints.Length)
+        if (input.Length != urJoints.Length-1)
             return false;
 
-        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
+        for (int jointIndex = 0; jointIndex < urJoints.Length-1; jointIndex++)
         {
             jointController joint = urJoints[jointIndex].GetComponent<jointController>();
             joint.jointRotation = Mathf.Clamp(input[jointIndex],-1.0f,1.0f);
@@ -131,14 +141,13 @@ public class urController : MonoBehaviour
 
     public void forceARotation(float[] rotations)
     {
-        if (urJoints.Length == startingRotations.Length)
+
+        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
         {
-            for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
-            {
-                jointController joint = urJoints[jointIndex].GetComponent<jointController>();
-                joint.ForceToRotation(rotations[jointIndex]);
-            }
+            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+            joint.ForceToRotation(rotations[jointIndex]);
         }
+
     }
 
     private bool collisionCheck()

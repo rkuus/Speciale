@@ -124,6 +124,11 @@ public class jointController : MonoBehaviour
         collisionCheck--;
     }
 
+    public float getJointVelocity()
+    {
+        return curJointRotation;
+    }
+
     public float[] getTriggers()
     {
         List<float> outputs = new List<float>();

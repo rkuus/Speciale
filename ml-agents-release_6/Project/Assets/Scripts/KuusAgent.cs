@@ -21,13 +21,13 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
-    private float winDistance = 0.05f;
-    private float winAngle = 10.0f;
-    private float winAngleForward = 10.0f;
+    private float winDistance = 0.15f;
+    private float winAngle = 25.0f;
+    private float winAngleForward = 25.0f;
 
-    private float decDistance = 0.001f;
-    private float decAngle = 0.1f;
-    private float decAngleForward = 0.1f;
+    private float decDistance = 0.0001f;
+    private float decAngle = 0.01f;
+    private float decAngleForward = 0.01f;
 
     private float stopDistance = 0.05f;
     private float stopAngle = 10.0f;
@@ -58,6 +58,7 @@ public class KuusAgent : Agent
     //private float bestDistance = 20.0f;
 
     private bool completed = false;
+    private bool jointLimit = false;
     public bool debugMode = false;
 
     private int _time = 0;
@@ -69,12 +70,25 @@ public class KuusAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        if (!completed)
+        if (robotController.collisionFlag)
         {
-            float[] defaultRotations = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+            float[] defaultRotations = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
             robotController.forceARotation(defaultRotations);
         }
-        else
+        else if (jointLimit)
+        {
+            float[] defaultRotations = robotController.getRawRotation();
+            for (int i = 0;i<defaultRotations.Length;i++)
+                if (Mathf.Abs(defaultRotations[i])>355f)
+                {
+                    if (defaultRotations[i] < 0)
+                        defaultRotations[i] += 360f;
+                    else
+                        defaultRotations[i] -= 360f;
+                }
+            robotController.forceARotation(defaultRotations);
+        }
+        if (completed)
         {
             if (winDistance > stopDistance)
                 winDistance -= decDistance;
@@ -89,6 +103,8 @@ public class KuusAgent : Agent
                 collisionCost += collisionCostInc;
         }
         completed = false;
+        jointLimit = false;
+        robotController.collisionFlag = false;
         //collisionCost += 0.01f;
 
         for (int i = 0; i < allObs.Length; i++)
@@ -121,14 +137,14 @@ public class KuusAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        
         //tcp.updateParams();
         //targetBall.updataTargetParams();
         // UR configuration
         //curRotations = robotController.getRotations();
-        sensor.AddObservation(curRotations);                                  // 12
+        sensor.AddObservation(curRotations);                                  // 10
+        Debug.Log(curRotations.Length);
         // UR joint velocities
-        //sensor.AddObservation(roundList(robotController.getVelocities(), decimalPrecision));               // 6
+        sensor.AddObservation(robotController.getVelocities());               // 5
         // End-effector position - target position
         sensor.AddObservation(tcp.TCPpos);                                      // 3
         sensor.AddObservation(targetBall.gripPlace);                            // 3
@@ -202,15 +218,7 @@ public class KuusAgent : Agent
     private void CalcReward()
     {
 
-        float curReward = -0.00025f * _time; // Time cost, -0.0001f
-
-        if (robotController.collisionFlag) // Collision cost.
-        {
-            robotController.collisionFlag = false;
-            curReward -= collisionCost * _time;
-            if (debugMode)
-                Debug.Log("Collision");
-        }
+        float curReward = -0.0005f * _time; // Time cost, -0.0001f
 
         _time = 0;
 
@@ -220,19 +228,27 @@ public class KuusAgent : Agent
 
         curReward += 0.01f * (lastAngle - curAngle); // reward for facing target
 
-        for (int i = 6;i<curRotations.Length;i++)
+        for (int i = 0;i<curRotations.Length;i++)
         {
             if (Mathf.Abs(curRotations[i]) >= 1.0f)
             {
-                curReward -= collisionCost * _time;
-                break;
-                //if (debugMode)
-                //    Debug.Log("Joint at limit, end episode");
-                //SetReward(curReward);
-                //EndEpisode();
+                jointLimit = true;
+                curReward -= 1f; // collisionCost * _time;
+                if (debugMode)
+                    Debug.Log("Joint at limit, end episode");
+                SetReward(curReward);
+                EndEpisode();
             }
         }
-            
+
+        if (robotController.collisionFlag) // Collision cost.
+        {
+            robotController.collisionFlag = false;
+            curReward -= collisionCost * _time;
+            if (debugMode)
+                Debug.Log("Collision");
+        }
+
         lastAngle = curAngle;
         lastAngleForward = curAngleForward;
         lastDistance = curDistance;
@@ -267,7 +283,6 @@ public class KuusAgent : Agent
         float mult = Mathf.Pow(10.0f, (float)digits);
         return Mathf.Round(value * mult) / mult;
     }
-
     private static Vector3 roundV3(Vector3 values, int digits)
     {
         float mult = Mathf.Pow(10.0f, (float)digits);
