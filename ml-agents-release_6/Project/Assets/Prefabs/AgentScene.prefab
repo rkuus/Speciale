@@ -170,7 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jointRotation: 0
   speed: 200
-  isTriggered: 0
+  isColliding: 0
   rotAxis: 000001
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
@@ -662,7 +662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jointRotation: 0
   speed: 300
-  isTriggered: 0
+  isColliding: 0
   rotAxis: 000100
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
@@ -1151,7 +1151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jointRotation: 0
   speed: 200
-  isTriggered: 0
+  isColliding: 0
   rotAxis: 000100
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
@@ -1620,7 +1620,7 @@ MonoBehaviour:
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 90d797a0667a518408e3292fc2c2ca1e, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent
@@ -1656,7 +1656,7 @@ MonoBehaviour:
   - {fileID: 3176981474096530124}
   - {fileID: 8539930538250345829}
   maxJointAccelerationScale: 1
-  maxJointSpeedScale: 0.5
+  maxJointSpeedScale: 0.25
   debugMode: 0
 --- !u!114 &5055683651914093761
 MonoBehaviour:
@@ -2101,7 +2101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jointRotation: 0
   speed: 300
-  isTriggered: 0
+  isColliding: 0
   rotAxis: 000001
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
@@ -2337,7 +2337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jointRotation: 0
   speed: 300
-  isTriggered: 0
+  isColliding: 0
   rotAxis: 000001
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}
@@ -3001,7 +3001,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jointRotation: 0
   speed: 300
-  isTriggered: 0
+  isColliding: 0
   rotAxis: 000001
   aBox: {fileID: 2008129486442533486, guid: e60ce39a61187f24c8f1be3b71f154f5, type: 3}
   ground: {fileID: 5055683651914093775}

@@ -1590,12 +1590,6 @@ PrefabInstance:
       propertyPath: m_ParentAnchorPosition.z
       value: 0.2909999
       objectReference: {fileID: 0}
-    - target: {fileID: 5055683651914093763, guid: 681bfd00bd4485d4a905e79e24624b26,
-        type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 90d797a0667a518408e3292fc2c2ca1e,
-        type: 3}
     - target: {fileID: 5055683651914093774, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_RootOrder
@@ -2924,6 +2918,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AgentScene
       objectReference: {fileID: 0}
+    - target: {fileID: 5055683651914093775, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5110988759555167569, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_Twist
@@ -2932,6 +2931,11 @@ PrefabInstance:
     - target: {fileID: 6109310727615883905, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_Twist
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7014245470030351443, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8741199212320642089, guid: 681bfd00bd4485d4a905e79e24624b26,

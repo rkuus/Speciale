@@ -10,7 +10,7 @@ public class jointController : MonoBehaviour
     public float speed = 100.0f;
     private float accScale = 8.0f;
     //public bool inCollision = false;
-    public bool isTriggered = false;
+    public bool isColliding = false;
     //public bool displayVel = false;
     public bool[] rotAxis = new bool[] { false, false, false };
     private int collisionCheck = 0;
@@ -65,9 +65,17 @@ public class jointController : MonoBehaviour
     public bool inCollison()
     {
         if (collisionCheck > 0)
+        {
+            isColliding = true;
             return true;
+        }
+            
         else
+        {
+            isColliding = false;
             return false;
+        }
+            
     }
     public void updateMaxAccerlation(float newAccer)
     {
@@ -116,6 +124,7 @@ public class jointController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //Debug.Log(this.name + " " + collision.collider.name);
         collisionCheck++;
     }
 
