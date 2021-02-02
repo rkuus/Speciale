@@ -218,7 +218,7 @@ public class KuusAgent : Agent
     private void CalcReward()
     {
 
-        float curReward = -0.0005f * _time; // Time cost, -0.0001f
+        float curReward = -0.001f * _time; // Time cost, -0.0001f
 
         _time = 0;
 
@@ -228,9 +228,9 @@ public class KuusAgent : Agent
 
         curReward += 0.01f * (lastAngle - curAngle); // reward for facing target
 
-        for (int i = 0;i<curRotations.Length;i++)
+        for (int i = 5;i<curRotations.Length;i++)
         {
-            if (Mathf.Abs(curRotations[i]) >= 1.0f)
+            if (Mathf.Abs(curRotations[i]) >= 0.99f)
             {
                 jointLimit = true;
                 curReward -= 1f; // collisionCost * _time;
