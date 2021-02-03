@@ -23,7 +23,7 @@ public class targetHandler : MonoBehaviour
     {
         targetPos = transform.position - ground.transform.position; // transform.localPosition;
         targetForward = transform.forward;
-        gripPlace = targetPos - 0.05f * targetForward;
+        gripPlace = targetPos - 0.10f * targetForward;
         innerDSquared = innerDiameter * innerDiameter;
     }
 
@@ -56,14 +56,14 @@ public class targetHandler : MonoBehaviour
         do
         {
             transform.rotation = Random.rotation;
-            gripPlace = (transform.localPosition) - 0.05f * transform.forward;
+            gripPlace = (transform.localPosition) - 0.10f * transform.forward;
         } while ((Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)) - 0.025f) < (Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0))));
 
 
 
         targetPos = transform.position - ground.transform.position; //transform.localPosition;
         targetForward = transform.forward;
-        gripPlace = targetPos - 0.05f * targetForward;
+        gripPlace = targetPos - 0.10f * targetForward;
 
 
         //Debug.Log("center:" + Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)));
@@ -74,6 +74,6 @@ public class targetHandler : MonoBehaviour
     {
         targetPos = transform.position - ground.transform.position; //transform.localPosition;
         targetForward = transform.forward;
-        gripPlace = targetPos - 0.05f * targetForward;
+        gripPlace = targetPos - 0.15f * targetForward;
     }
 }

@@ -12,7 +12,6 @@ public class jointController : MonoBehaviour
     //public bool inCollision = false;
     public bool isColliding = false;
     //public bool displayVel = false;
-    public bool[] rotAxis = new bool[] { false, false, false };
     private int collisionCheck = 0;
     //private int triggerCheck = 0;
     private ArticulationBody articulation;
@@ -21,12 +20,12 @@ public class jointController : MonoBehaviour
 
     private float maxAcceleration;
 
-    private float distance = 1.00f;
+    private float distance = 0.50f;
     public GameObject aBox;
     public GameObject ground;
 
     public bool showRays = false;
-    public bool[] rayCasting = { true, true, true, true, true, true, true, true,true,true };
+    public bool[] newRayCasting = { true, true, true, true, true, true, true, true,true,true ,  true, true, true, true, true, true, true, true,true,true ,  true, true, true, true, true, true, true, true,true,true , true, true, true ,true};
 
     private RaycastHit hit;
 
@@ -50,15 +49,6 @@ public class jointController : MonoBehaviour
             float rotationGoal = CurrentPrimaryAxisRotation() + rotationChange;
             RotateTo(rotationGoal);
         }
-
-        
-
-        //if (displayVel)
-        //{
-        //    Debug.Log(maxAcceleration);
-        //    Debug.Log(deltaJointRotation);
-        //    Debug.Log(articulation.angularVelocity);
-        //}
 
     }
 
@@ -142,184 +132,565 @@ public class jointController : MonoBehaviour
     {
         List<float> outputs = new List<float>();
 
-        Vector3 p1 = articulation.worldCenterOfMass + articulation.transform.up * -capsule.height * 0.5f;
-        Vector3 p2 = p1 + articulation.transform.up * capsule.height * 1.1f;
+        Vector3 p3 = articulation.worldCenterOfMass + articulation.transform.up * capsule.height * 0.05f;
 
-        Vector3 direction;
+        Vector3 p4 = p3 + articulation.transform.up * -capsule.height * 0.1f;
+        Vector3 p2 = p4 + articulation.transform.up * capsule.height * 0.3f;
 
-        if (rayCasting[0])
+        Vector3 p5 = p3 + articulation.transform.up * -capsule.height * 0.5f;
+        Vector3 p1 = p5 + articulation.transform.up * capsule.height * 1f;
+
+        Vector3 direction = Vector3.RotateTowards(articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
+
+        if (newRayCasting[0])
         {
-            direction = Vector3.RotateTowards(articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
-
-            if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+            if (Physics.CapsuleCast(p1, p3, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add( 1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
                 }
             }
         }
 
-        if (rayCasting[1])
+        if (newRayCasting[1])
         {
-            direction = Vector3.RotateTowards(-articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
-
-            if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+            if (Physics.CapsuleCast(p3, p5, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[2])
+        {
+            if (Physics.CapsuleCast(p2, p4, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p4, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p4, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(-articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
+
+        if (newRayCasting[3])
+        {
+            if (Physics.CapsuleCast(p1, p3, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
                 }
             }
         }
 
-        if (rayCasting[2])
+        if (newRayCasting[4])
         {
-            direction = Vector3.RotateTowards(-articulation.transform.forward, -articulation.transform.right, 0.78539816339f, 0.0f);
-
-            if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+            if (Physics.CapsuleCast(p3, p5, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[5])
+        {
+            if (Physics.CapsuleCast(p2, p4, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p4, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p4, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(-articulation.transform.forward, -articulation.transform.right, 0.78539816339f, 0.0f);
+
+        if (newRayCasting[6])
+        {
+            if (Physics.CapsuleCast(p1, p3, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
                 }
             }
         }
 
-        if (rayCasting[3])
+        if (newRayCasting[7])
         {
-            direction = Vector3.RotateTowards(articulation.transform.forward, -articulation.transform.right, 0.78539816339f, 0.0f);
-
-            if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+            if (Physics.CapsuleCast(p3, p5, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[8])
+        {
+            if (Physics.CapsuleCast(p2, p4, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p4, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p4, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(articulation.transform.forward, -articulation.transform.right, 0.78539816339f, 0.0f);
+
+        if (newRayCasting[9])
+        {
+            if (Physics.CapsuleCast(p1, p3, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
                 }
             }
         }
 
-        if (rayCasting[4])
+        if (newRayCasting[10])
         {
-            direction = articulation.transform.right;
-
-            if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+            if (Physics.CapsuleCast(p3, p5, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[11])
+        {
+            if (Physics.CapsuleCast(p2, p4, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p4, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p4, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = articulation.transform.right;
+
+        if (newRayCasting[12])
+        {
+            if (Physics.CapsuleCast(p1, p3, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
                 }
             }
         }
 
-        if (rayCasting[5])
+        if (newRayCasting[13])
         {
-            direction = -articulation.transform.right;
-
-            if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+            if (Physics.CapsuleCast(p3, p5, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[14])
+        {
+            if (Physics.CapsuleCast(p2, p4, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p4, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p4, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = -articulation.transform.right;
+
+        if (newRayCasting[15])
+        {
+            if (Physics.CapsuleCast(p1, p3, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
                 }
             }
         }
 
-        if (rayCasting[6])
+        if (newRayCasting[16])
         {
-            direction = articulation.transform.up;
-
-            if (Physics.SphereCast(p2, capsule.radius, direction, out hit, distance))
+            if (Physics.CapsuleCast(p3, p5, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
                 }
             }
         }
 
-        if (rayCasting[7])
+        if (newRayCasting[17])
         {
-            direction = -articulation.transform.up;
+            if (Physics.CapsuleCast(p2, p4, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p4, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p4, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = articulation.transform.forward;
+
+        if (newRayCasting[18])
+        {
+            if (Physics.CapsuleCast(p1, p3, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p1, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p1, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[19])
+        {
+            if (Physics.CapsuleCast(p3, p5, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[20])
+        {
+            if (Physics.CapsuleCast(p2, p4, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p4, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p4, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = -articulation.transform.forward;
+
+        if (newRayCasting[21])
+        {
+            if (Physics.CapsuleCast(p1, p3, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p1, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p1, direction * (distance), Color.green);
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[22])
+        {
+            if (Physics.CapsuleCast(p3, p5, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p3, direction * (distance), Color.green);
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[23])
+        {
+            if (Physics.CapsuleCast(p2, p4, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
+                    Debug.DrawRay(p4, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p2, direction * (distance), Color.green);
+                    Debug.DrawRay(p4, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[24])
+        {
+            direction = Vector3.RotateTowards(articulation.transform.forward, articulation.transform.up, 0.78539816339f, 0.0f);
 
             if (Physics.SphereCast(p1, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
@@ -327,7 +698,7 @@ public class jointController : MonoBehaviour
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
@@ -335,54 +706,204 @@ public class jointController : MonoBehaviour
             }
         }
 
-        if (rayCasting[8])
+        if (newRayCasting[25])
         {
-            direction = articulation.transform.forward;
+            direction = Vector3.RotateTowards(-articulation.transform.forward, articulation.transform.up, 0.78539816339f, 0.0f);
 
-            if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+            if (Physics.SphereCast(p1, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
                 }
             }
         }
 
-        if (rayCasting[9])
+        if (newRayCasting[26])
         {
-            direction = -articulation.transform.forward;
+            direction = Vector3.RotateTowards(articulation.transform.right, articulation.transform.up, 0.78539816339f, 0.0f);
 
-            if (Physics.CapsuleCast(p1, p2, capsule.radius, direction, out hit, distance))
+            if (Physics.SphereCast(p1, capsule.radius, direction, out hit, distance))
             {
-                outputs.Add(1 - (hit.distance / distance));
+                outputs.Add((2 * (hit.distance / distance)) - 1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (hit.distance), Color.red);
-                    Debug.DrawRay(p2, direction * (hit.distance), Color.red);
                 }
             }
             else
             {
-                outputs.Add(0);
+                outputs.Add(1);
                 if (showRays)
                 {
                     Debug.DrawRay(p1, direction * (distance), Color.green);
-                    Debug.DrawRay(p2, direction * (distance), Color.green);
                 }
             }
         }
+
+        if (newRayCasting[27])
+        {
+            direction = Vector3.RotateTowards(-articulation.transform.right, articulation.transform.up, 0.78539816339f, 0.0f);
+
+            if (Physics.SphereCast(p1, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p1, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p1, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[28])
+        {
+            direction = Vector3.RotateTowards(articulation.transform.forward, -articulation.transform.up, 0.78539816339f, 0.0f);
+
+            if (Physics.SphereCast(p5, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[29])
+        {
+            direction = Vector3.RotateTowards(-articulation.transform.forward, -articulation.transform.up, 0.78539816339f, 0.0f);
+
+            if (Physics.SphereCast(p5, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[30])
+        {
+            direction = Vector3.RotateTowards(articulation.transform.right, -articulation.transform.up, 0.78539816339f, 0.0f);
+
+            if (Physics.SphereCast(p5, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[31])
+        {
+            direction = Vector3.RotateTowards(-articulation.transform.right, -articulation.transform.up, 0.78539816339f, 0.0f);
+
+            if (Physics.SphereCast(p5, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[32])
+        {
+            direction = articulation.transform.up;
+
+            if (Physics.SphereCast(p1, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p1, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p1, direction * (distance), Color.green);
+                }
+            }
+        }
+
+        if (newRayCasting[33])
+        {
+            direction = -articulation.transform.up;
+
+            if (Physics.SphereCast(p5, capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(p5, direction * (distance), Color.green);
+                }
+            }
+        }
+
         return outputs.ToArray();
     }
-
 }

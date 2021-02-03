@@ -14,7 +14,7 @@ public class KuusAgent : Agent
     public sensor3D secondSensor;
     public DepthMap depthThing;
 
-    public obsScript[] allObs;
+    public poleScript[] allObs;
 
     private bool updateAccelerationAndSpeed = true;
     public float maxJointAccelerationScale = 1.0f; // Normal value is 8
@@ -33,9 +33,9 @@ public class KuusAgent : Agent
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.50f;
+    private float collisionCost = 0.20f;
     private float collisionCostInc = 0.01f;
-    private float collisionCostStop = 0.50f;
+    private float collisionCostStop = 0.20f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -212,8 +212,6 @@ public class KuusAgent : Agent
 
         float curReward = -0.0005f * _time; // Time cost, -0.0001f
 
-        _time = 0;
-
         curReward += 2.0f * (lastDistance - curDistance); // reward for approaching
 
         curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for aligning with target
@@ -240,6 +238,8 @@ public class KuusAgent : Agent
             if (debugMode)
                 Debug.Log("Collision");
         }
+
+        _time = 0;
 
         lastAngle = curAngle;
         lastAngleForward = curAngleForward;
