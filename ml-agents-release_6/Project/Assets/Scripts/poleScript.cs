@@ -17,7 +17,7 @@ public class poleScript : MonoBehaviour
     void Start()
     {
         innerDSquared = innerDiameter * innerDiameter;
-        checkRadius = (GetComponent<CapsuleCollider>().radius * transform.localScale.x) + 0.15f;
+        checkRadius = (GetComponent<CapsuleCollider>().radius * transform.localScale.x) + 0.25f;
     }
 
     // Update is called once per frame

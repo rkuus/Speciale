@@ -33,9 +33,9 @@ public class KuusAgent : Agent
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.20f;
+    private float collisionCost = 0.025f;
     private float collisionCostInc = 0.01f;
-    private float collisionCostStop = 0.20f;
+    private float collisionCostStop = 0.025f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -156,7 +156,7 @@ public class KuusAgent : Agent
         sensor.AddObservation(lastDifference - currentDifference);
         // Distance to target
         //curDistance = Vector3.SqrMagnitude(currentDifference);
-        sensor.AddObservation(curDistance);                                       // 1
+        sensor.AddObservation(curDistance);                                       // 1ps 
         // Rotation of TCP
         //sensor.AddObservation(tcp.transform.rotation.normalized);                                        // 4
         // Angle to target
@@ -178,6 +178,7 @@ public class KuusAgent : Agent
         //sensor.AddObservation(roundList(secondSensor.getSensorData(), decimalPrecision));                   // 90
         //sensor.AddObservation(roundList(depthThing.getRayCasts(), decimalPrecision));
         sensor.AddObservation(robotController.getAllTriggers());
+        sensor.AddObservation(robotController.individualCollisionCheck());
     }
 
     public override void OnActionReceived(float[] vectorAction)

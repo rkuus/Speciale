@@ -27,6 +27,7 @@ public class urController : MonoBehaviour
 
     void Start()
     {
+        Physics.IgnoreCollision(urJoints[1].GetComponent<BoxCollider>(), GetComponent<Collider>());
         curRotations = new float[urJoints.Length-1];
         curRotLim = new float[urJoints.Length-1];
         //lastDifference = tcp.transform.position - target.transform.position;
@@ -158,9 +159,23 @@ public class urController : MonoBehaviour
             if (joint.inCollison())
             {
                 return true;
-            }             
+            }
         }
         return false;
+    }
+
+    public float[] individualCollisionCheck()
+    {
+        float[] outputs = new float[urJoints.Length];
+        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
+        {
+            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+            if (joint.inCollison())
+                outputs[jointIndex] = 1f;
+            else
+                outputs[jointIndex] = 0f;
+        }
+        return outputs;
     }
     public float[] getAllTriggers()
     {

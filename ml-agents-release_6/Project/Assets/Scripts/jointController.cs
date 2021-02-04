@@ -114,7 +114,7 @@ public class jointController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log(this.name + " " + collision.collider.name);
+        Debug.Log(this.name + " " + collision.collider.name);
         collisionCheck++;
     }
 
@@ -134,11 +134,11 @@ public class jointController : MonoBehaviour
 
         Vector3 p3 = articulation.worldCenterOfMass + articulation.transform.up * capsule.height * 0.05f;
 
-        Vector3 p4 = p3 + articulation.transform.up * -capsule.height * 0.1f;
+        Vector3 p4 = p3 + articulation.transform.up * -capsule.height * 0.15f;
         Vector3 p2 = p4 + articulation.transform.up * capsule.height * 0.3f;
 
         Vector3 p5 = p3 + articulation.transform.up * -capsule.height * 0.5f;
-        Vector3 p1 = p5 + articulation.transform.up * capsule.height * 1f;
+        Vector3 p1 = p5 + articulation.transform.up * capsule.height * 0.95f;
 
         Vector3 direction = Vector3.RotateTowards(articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
 
