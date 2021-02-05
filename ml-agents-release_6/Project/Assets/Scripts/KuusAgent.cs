@@ -177,8 +177,11 @@ public class KuusAgent : Agent
         //sensor.AddObservation(roundList(firstSensor.getSensorData(), decimalPrecision));                    // 90
         //sensor.AddObservation(roundList(secondSensor.getSensorData(), decimalPrecision));                   // 90
         //sensor.AddObservation(roundList(depthThing.getRayCasts(), decimalPrecision));
-        sensor.AddObservation(robotController.getAllTriggers());
-        sensor.AddObservation(robotController.individualCollisionCheck());
+        //sensor.AddObservation(robotController.getAllTriggers());
+        //sensor.AddObservation(robotController.individualCollisionCheck());
+        Vector3[] proximities = robotController.getAllProximities();
+        for (int i = 0;i<proximities.Length;i++)
+            sensor.AddObservation(proximities[i]);
     }
 
     public override void OnActionReceived(float[] vectorAction)
