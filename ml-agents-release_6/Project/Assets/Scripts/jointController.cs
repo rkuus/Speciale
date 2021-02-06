@@ -124,7 +124,7 @@ public class jointController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(this.name + " " + collision.collider.name);
+        //Debug.Log(this.name + " " + collision.collider.name);
         collisionCheck++;
     }
 
@@ -949,7 +949,7 @@ public class jointController : MonoBehaviour
                 if (d < cd && d != 0)
                 {
                     cd = d;
-                    output = ((p - p2).normalized) / ((cd * 5f) + 1f);
+                    output = ((p - p2).normalized) * (1 - cd);
                     
                 }
             }
@@ -972,7 +972,7 @@ public class jointController : MonoBehaviour
                 if (d < cd && d != 0)
                 {
                     cd = d;
-                    output = ((p - p1).normalized) / ((cd * 5f) + 1f);
+                    output = ((p - p1).normalized) * (1 - cd);
 
                 }
 
@@ -996,7 +996,7 @@ public class jointController : MonoBehaviour
                 if (d < cd && d != 0)
                 {
                     cd = d;
-                    output = ((p - p3).normalized) / ((cd * 5f)+ 1f);
+                    output = ((p - p3).normalized) * (1 - cd);
 
                 }
             }
