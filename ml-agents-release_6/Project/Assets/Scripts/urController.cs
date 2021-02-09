@@ -177,21 +177,21 @@ public class urController : MonoBehaviour
         }
         return outputs;
     }
-    public Vector3[] getAllProximities()
-    {
-        List<Vector3> output = new List<Vector3>();
+    //public Vector3[] getAllProximities()
+    //{
+    //    List<Vector3> output = new List<Vector3>();
 
-        for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
-        {
-            jointController joint = urJoints[jointIndex].GetComponent<jointController>();
+    //    for (int jointIndex = 0; jointIndex < urJoints.Length; jointIndex++)
+    //    {
+    //        jointController joint = urJoints[jointIndex].GetComponent<jointController>();
 
-            Vector3[] jointOutputs = joint.proximityResponse();
-            for (int i = 0; i < jointOutputs.Length; i++)
-                output.Add(jointOutputs[i]);
-        }
+    //        Vector3[] jointOutputs = joint.proximityResponse();
+    //        for (int i = 0; i < jointOutputs.Length; i++)
+    //            output.Add(jointOutputs[i]);
+    //    }
 
-        return output.ToArray();
-    }
+    //    return output.ToArray();
+    //}
     public float[] getAllTriggers()
     {
         List<float> output = new List<float>();

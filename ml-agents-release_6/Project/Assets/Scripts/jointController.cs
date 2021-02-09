@@ -29,8 +29,6 @@ public class jointController : MonoBehaviour
 
     private RaycastHit hit;
 
-    private SphereCollider proximityZone;
-
     private List<Collider> proximityList = new List<Collider>();
 
     public Vector3[] proximityOut;
@@ -41,7 +39,6 @@ public class jointController : MonoBehaviour
     {
         articulation = GetComponent<ArticulationBody>();
         capsule = GetComponent<CapsuleCollider>();
-        proximityZone = GetComponent<SphereCollider>();
         maxAcceleration = accScale / ((300 * 0.01f) * Mathf.Rad2Deg);
     }
 
@@ -917,95 +914,95 @@ public class jointController : MonoBehaviour
         return outputs.ToArray();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer != 9 && !proximityList.Contains(other))
-            proximityList.Add(other);
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.layer != 9 && !proximityList.Contains(other))
+    //        proximityList.Add(other);
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.layer != 9 && proximityList.Contains(other))
-            proximityList.Remove(other);
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.layer != 9 && proximityList.Contains(other))
+    //        proximityList.Remove(other);
+    //}
 
-    public Vector3[] proximityResponse()
-    {
-        List<Vector3> outputs = new List<Vector3>();
+    //public Vector3[] proximityResponse()
+    //{
+    //    List<Vector3> outputs = new List<Vector3>();
 
-        Vector3 p;
-        Vector3 p2 = articulation.worldCenterOfMass;
+    //    Vector3 p;
+    //    Vector3 p2 = articulation.worldCenterOfMass;
 
-        if (proximityBool[0])
-        {
-            Vector3 output = new Vector3(0, 0, 0);
-            float d;
-            float cd = 10f;
+    //    if (proximityBool[0])
+    //    {
+    //        Vector3 output = new Vector3(0, 0, 0);
+    //        float d;
+    //        float cd = 10f;
 
-            foreach (Collider collider in proximityList)
-            {
-                p = collider.ClosestPointOnBounds(p2);
-                d = Vector3.Distance(p, p2);
-                if (d < cd && d != 0)
-                {
-                    cd = d;
-                    output = ((p - p2).normalized) * (1 - cd);
+    //        foreach (Collider collider in proximityList)
+    //        {
+    //            p = collider.ClosestPointOnBounds(p2);
+    //            d = Vector3.Distance(p, p2);
+    //            if (d < cd && d != 0)
+    //            {
+    //                cd = d;
+    //                output = ((p - p2).normalized) * (1 - cd);
                     
-                }
-            }
-            if (showRays)
-                Debug.DrawRay(p2, output.normalized * cd, Color.red);
-            outputs.Add(output);
-        }
+    //            }
+    //        }
+    //        if (showRays)
+    //            Debug.DrawRay(p2, output.normalized * cd, Color.red);
+    //        outputs.Add(output);
+    //    }
 
-        if (proximityBool[1])
-        {
-            Vector3 p1 = p2 + articulation.transform.up * capsule.height * 0.4f;
-            Vector3 output = new Vector3(0, 0, 0);
-            float d;
-            float cd = 10f;
+    //    if (proximityBool[1])
+    //    {
+    //        Vector3 p1 = p2 + articulation.transform.up * capsule.height * 0.4f;
+    //        Vector3 output = new Vector3(0, 0, 0);
+    //        float d;
+    //        float cd = 10f;
 
-            foreach (Collider collider in proximityList)
-            {
-                p = collider.ClosestPointOnBounds(p1);
-                d = Vector3.Distance(p, p1);
-                if (d < cd && d != 0)
-                {
-                    cd = d;
-                    output = ((p - p1).normalized) * (1 - cd);
+    //        foreach (Collider collider in proximityList)
+    //        {
+    //            p = collider.ClosestPointOnBounds(p1);
+    //            d = Vector3.Distance(p, p1);
+    //            if (d < cd && d != 0)
+    //            {
+    //                cd = d;
+    //                output = ((p - p1).normalized) * (1 - cd);
 
-                }
+    //            }
 
-            }
-            if (showRays)
-                Debug.DrawRay(p1, output.normalized * cd, Color.red);
-            outputs.Add(output);
-        }
+    //        }
+    //        if (showRays)
+    //            Debug.DrawRay(p1, output.normalized * cd, Color.red);
+    //        outputs.Add(output);
+    //    }
 
-        if (proximityBool[2])
-        {
-            Vector3 p3 = p2 - articulation.transform.up * capsule.height * 0.4f;
-            Vector3 output = new Vector3(0, 0, 0);
-            float d;
-            float cd = 10f;
+    //    if (proximityBool[2])
+    //    {
+    //        Vector3 p3 = p2 - articulation.transform.up * capsule.height * 0.4f;
+    //        Vector3 output = new Vector3(0, 0, 0);
+    //        float d;
+    //        float cd = 10f;
 
-            foreach (Collider collider in proximityList)
-            {
-                p = collider.ClosestPointOnBounds(p3);
-                d = Vector3.Distance(p, p3);
-                if (d < cd && d != 0)
-                {
-                    cd = d;
-                    output = ((p - p3).normalized) * (1 - cd);
+    //        foreach (Collider collider in proximityList)
+    //        {
+    //            p = collider.ClosestPointOnBounds(p3);
+    //            d = Vector3.Distance(p, p3);
+    //            if (d < cd && d != 0)
+    //            {
+    //                cd = d;
+    //                output = ((p - p3).normalized) * (1 - cd);
 
-                }
-            }
-            if (showRays)
-                Debug.DrawRay(p3, output.normalized*cd, Color.red);
-            outputs.Add(output);
-        }
+    //            }
+    //        }
+    //        if (showRays)
+    //            Debug.DrawRay(p3, output.normalized*cd, Color.red);
+    //        outputs.Add(output);
+    //    }
 
-        proximityOut = outputs.ToArray();
-        return outputs.ToArray();
-    }
+    //    proximityOut = outputs.ToArray();
+    //    return outputs.ToArray();
+    //}
 }
