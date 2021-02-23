@@ -14,7 +14,7 @@ public class KuusAgent : Agent
     public sensor3D secondSensor;
     public DepthMap depthThing;
 
-    public poleScript[] allObs;
+    public generalObstacles[] allObs;
 
     private bool updateAccelerationAndSpeed = true;
     public float maxJointAccelerationScale = 1.0f; // Normal value is 8
@@ -108,7 +108,7 @@ public class KuusAgent : Agent
         //collisionCost += 0.01f;
 
         for (int i = 0; i < allObs.Length; i++)
-            allObs[i].updateObsPos();
+            allObs[i].updatePos();
 
         if (updateAccelerationAndSpeed)
         {

@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class targetHandler : MonoBehaviour
 {
-    public float innerDiameter = 0.4f;
     public float outerDiameter = 1.2f;
-
-    private float innerDSquared = 0.0f;
-
-    public bool fixedY = false;
 
     public GameObject grip;
     public GameObject ground;
+    public GameObject scene;
+    public GameObject safetyZone;
 
     public Vector3 targetPos;
     public Vector3 targetForward;
@@ -23,18 +20,17 @@ public class targetHandler : MonoBehaviour
     {
         targetPos = transform.position - ground.transform.position; // transform.localPosition;
         targetForward = transform.forward;
-        gripPlace = targetPos - 0.10f * targetForward;
-        innerDSquared = innerDiameter * innerDiameter;
+        gripPlace = targetPos - 0.15f * targetForward;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    updateTargetPos();
-        //}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            updateTargetPos();
+        }
         //targetPos = transform.localPosition;
         //targetForward = transform.forward;
         //gripPlace = targetPos - 0.10f * targetForward;
@@ -43,36 +39,38 @@ public class targetHandler : MonoBehaviour
     public void updateTargetPos()
     {
         Vector3 newPos;
+        //safetyZone.SetActive(true);
+        //ground.SetActive(false);
+        LayerMask mask = ~LayerMask.GetMask("floor");
         do
         {
-            newPos = Random.onUnitSphere * (Random.value * (outerDiameter - innerDiameter) + innerDiameter);
+            newPos = Random.insideUnitSphere * outerDiameter;
             //newPos += new Vector3(0, 0.05f, 0);
-            if (fixedY)
-                newPos.y = 0.25f;
-        } while (newPos.y < 0.1f || Vector3.Magnitude(new Vector3(newPos.x, 0, newPos.z)) < innerDSquared || Physics.OverlapSphere(newPos + ground.transform.position, 0.40f, ~0, QueryTriggerInteraction.Ignore).Length > 0); ;
+        } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.30f, mask)); ;
 
-        transform.localPosition = newPos;
+        //ground.SetActive(true);
 
         do
         {
             transform.rotation = Random.rotation;
-            gripPlace = (transform.localPosition) - 0.10f * transform.forward;
-        } while ((Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)) - 0.025f) < (Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0))));
+            gripPlace = (newPos) - 0.15f * transform.forward;
+        } while ((Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)) - 0.05f) < (Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0))) || Physics.CheckSphere(gripPlace + scene.transform.position, 0.10f)); // 
 
+        transform.localPosition = newPos;
 
-
-        targetPos = transform.position - ground.transform.position; //transform.localPosition;
+        targetPos = transform.position - scene.transform.position; //transform.localPosition;
         targetForward = transform.forward;
-        gripPlace = targetPos - 0.10f * targetForward;
+        gripPlace = targetPos - 0.15f * targetForward;
 
-
+        //safetyZone.SetActive(false);
+        
         //Debug.Log("center:" + Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)));
         //Debug.Log("grip:" + Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0)));
     }
 
     public void updataTargetParams()
     {
-        targetPos = transform.position - ground.transform.position; //transform.localPosition;
+        targetPos = transform.position - scene.transform.position; //transform.localPosition;
         targetForward = transform.forward;
         gripPlace = targetPos - 0.15f * targetForward;
     }
