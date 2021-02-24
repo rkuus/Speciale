@@ -7,6 +7,7 @@ public class tcpHandler : MonoBehaviour
 {
     public Vector3 TCPpos;
     public Vector3 TCPforward;
+    public Vector3 eulerAngles;
     public GameObject ground;
     //public quaternion TCPRotation;
 
@@ -25,6 +26,7 @@ public class tcpHandler : MonoBehaviour
 
     public void updateParams()
     {
+        eulerAngles = transform.rotation.eulerAngles / 360f;
         TCPpos = articulation.worldCenterOfMass - ground.transform.position;
         TCPforward = transform.forward;
     }

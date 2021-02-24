@@ -14,13 +14,20 @@ public class targetHandler : MonoBehaviour
     public Vector3 targetPos;
     public Vector3 targetForward;
     public Vector3 gripPlace;
+    public Vector3 eulerAngles;
 
+    public bool validationScene = false;
+    public Vector3 workzoneLowerCorner;
+    public Vector3 workzoneUpperCorner;
+
+    private float gripPlaceOffSet;
     // Start is called before the first frame update
     void Start()
     {
         targetPos = transform.position - ground.transform.position; // transform.localPosition;
         targetForward = transform.forward;
-        gripPlace = targetPos - 0.15f * targetForward;
+        gripPlaceOffSet = transform.localScale.x * 0.75f;
+        gripPlace = targetPos - gripPlaceOffSet * targetForward;
     }
 
     // Update is called once per frame
@@ -39,37 +46,62 @@ public class targetHandler : MonoBehaviour
     public void updateTargetPos()
     {
         Vector3 newPos;
-        //safetyZone.SetActive(true);
-        //ground.SetActive(false);
         LayerMask mask = ~LayerMask.GetMask("floor");
+        if(validationScene)
+        {
+            
+            do
+            {
+                newPos = new Vector3(Random.Range(workzoneLowerCorner.x, workzoneUpperCorner.x), Random.Range(workzoneLowerCorner.y, workzoneUpperCorner.y), Random.Range(workzoneLowerCorner.z, workzoneUpperCorner.z));
+            } while (Vector3.Magnitude(newPos-transform.parent.position) > outerDiameter || Physics.CheckSphere(newPos, 0.20f, mask));
+
+            transform.position = newPos;
+
+            //eulerAngles = transform.rotation.eulerAngles / 360f;
+            targetPos = transform.position - scene.transform.position; //transform.localPosition;
+            targetForward = transform.forward;
+            gripPlace = targetPos - gripPlaceOffSet * targetForward;
+            return;
+        }
+
+        safetyZone.GetComponent<CapsuleCollider>().radius = 0.3f;
+        bool solutionMissing = true;
+
         do
         {
-            newPos = Random.insideUnitSphere * outerDiameter;
-            //newPos += new Vector3(0, 0.05f, 0);
-        } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.30f, mask)); ;
+            do
+            {
+                newPos = Random.insideUnitSphere * outerDiameter;
+                //newPos += new Vector3(0, 0.05f, 0);
+            } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask)); ;
 
-        //ground.SetActive(true);
-
-        do
-        {
-            transform.rotation = Random.rotation;
-            gripPlace = (newPos) - 0.15f * transform.forward;
-        } while ((Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)) - 0.05f) < (Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0))) || Physics.CheckSphere(gripPlace + scene.transform.position, 0.10f)); // 
+            for (int i = 0; i < 10; i++)
+            {
+                transform.rotation = Random.rotation;
+                gripPlace = (newPos) - gripPlaceOffSet * transform.forward;
+                if (Vector3.Magnitude(newPos - new Vector3(0, 0.5f, 0)) - (gripPlaceOffSet * 0.25f) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.5f, 0)) && !Physics.CheckSphere(gripPlace + scene.transform.position, 0.20f))
+                {
+                    solutionMissing = false;
+                    break;
+                }
+            }
+        } while (solutionMissing);
 
         transform.localPosition = newPos;
 
+        eulerAngles = transform.rotation.eulerAngles / 360f;
         targetPos = transform.position - scene.transform.position; //transform.localPosition;
         targetForward = transform.forward;
-        gripPlace = targetPos - 0.15f * targetForward;
+        gripPlace = targetPos - gripPlaceOffSet * targetForward;
 
-        //safetyZone.SetActive(false);
-        
+        safetyZone.GetComponent<CapsuleCollider>().radius = 0.5f;
         //Debug.Log("center:" + Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)));
         //Debug.Log("grip:" + Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0)));
     }
 
     public void updataTargetParams()
     {
+        eulerAngles = transform.rotation.eulerAngles / 360f;
         targetPos = transform.position - scene.transform.position; //transform.localPosition;
         targetForward = transform.forward;
         gripPlace = targetPos - 0.15f * targetForward;

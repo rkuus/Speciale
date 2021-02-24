@@ -27,13 +27,13 @@ public class generalObstacles : MonoBehaviour
         {
             updatePos();
         }
-        
+
     }
 
     public void updatePos()
     {
         Vector2 newPos;
-        LayerMask mask = ~LayerMask.GetMask("floor");
+        LayerMask mask = ~LayerMask.GetMask("floor","obstacles");
         //Vector3 newPos3D;
 
         if (isCube)

@@ -14,6 +14,8 @@ public class KuusAgent : Agent
     public sensor3D secondSensor;
     public DepthMap depthThing;
 
+    public Vector3 eulerAngleDif;
+
     public generalObstacles[] allObs;
 
     private bool updateAccelerationAndSpeed = true;
@@ -137,6 +139,7 @@ public class KuusAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        //eulerAngleDif = targetBall.eulerAngles - tcp.eulerAngles;
         //tcp.updateParams();
         //targetBall.updataTargetParams();
         // UR configuration
