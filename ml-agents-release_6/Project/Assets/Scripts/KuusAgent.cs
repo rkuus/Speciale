@@ -23,7 +23,7 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
-    private float winDistance = 0.05f;
+    private float winDistance = 0.10f;
     private float winAngle = 10.0f;
     private float winAngleForward = 10.0f;
 
@@ -149,17 +149,17 @@ public class KuusAgent : Agent
         // UR joint velocities
         sensor.AddObservation(robotController.getVelocities());               // 5
         // End-effector position - target position
-        sensor.AddObservation(tcp.TCPpos);                                      // 3
-        sensor.AddObservation(targetBall.gripPlace);                            // 3
+        sensor.AddObservation(tcp.TCPpos / 2f);                                      // 3
+        sensor.AddObservation(targetBall.gripPlace / 2f);                            // 3
         // Corridinate difference between the tcp and target
         //currentDifference = tcp.TCPpos - targetBall.gripPlace;
-        sensor.AddObservation(currentDifference);                               // 3
+        sensor.AddObservation(currentDifference / 2f );                               // 3
         // NEW INPUTS
-        sensor.AddObservation(lastDifference);
-        sensor.AddObservation(lastDifference - currentDifference);
+        sensor.AddObservation(lastDifference / 2f);
+        sensor.AddObservation((lastDifference - currentDifference) / 2f);
         // Distance to target
         //curDistance = Vector3.SqrMagnitude(currentDifference);
-        sensor.AddObservation(curDistance);                                       // 1ps 
+        sensor.AddObservation(curDistance / 2f);                                       // 1ps 
         // Rotation of TCP
         //sensor.AddObservation(tcp.transform.rotation.normalized);                                        // 4
         // Angle to target
@@ -202,7 +202,7 @@ public class KuusAgent : Agent
         targetBall.updataTargetParams();
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         curRotations = robotController.getRotations();
-        curDistance = Vector3.SqrMagnitude(currentDifference);
+        curDistance = Vector3.Magnitude(currentDifference);
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
 

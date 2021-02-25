@@ -21,12 +21,14 @@ public class targetHandler : MonoBehaviour
     public Vector3 workzoneUpperCorner;
 
     private float gripPlaceOffSet;
+    private Quaternion originalRotationValue;
     // Start is called before the first frame update
     void Start()
     {
+        originalRotationValue = transform.rotation;
         targetPos = transform.position - ground.transform.position; // transform.localPosition;
         targetForward = transform.forward;
-        gripPlaceOffSet = transform.localScale.x * 0.75f;
+        gripPlaceOffSet = transform.localScale.x * 0.50f;
         gripPlace = targetPos - gripPlaceOffSet * targetForward;
     }
 
@@ -34,10 +36,10 @@ public class targetHandler : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            updateTargetPos();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    updateTargetPos();
+        //}
         //targetPos = transform.localPosition;
         //targetForward = transform.forward;
         //gripPlace = targetPos - 0.10f * targetForward;
@@ -57,6 +59,24 @@ public class targetHandler : MonoBehaviour
 
             transform.position = newPos;
 
+            transform.rotation = Quaternion.Slerp(transform.rotation, originalRotationValue, 1f);
+            if (newPos.y > 0.80f)
+                transform.Rotate(new Vector3(1, 0, 0), -90f);
+            else if (newPos.y < 0.20f)
+                transform.Rotate(new Vector3(1, 0, 0), 90f);
+            else
+            {
+                do
+                {
+
+                    transform.rotation = Random.rotation;
+
+                    gripPlace = transform.localPosition - gripPlaceOffSet * transform.forward;
+
+                } while (Vector3.Magnitude(transform.localPosition - new Vector3(0, 0.7f, 0)) < Vector3.Magnitude(gripPlace - new Vector3(0, 0.7f, 0))); ;
+            }
+
+
             //eulerAngles = transform.rotation.eulerAngles / 360f;
             targetPos = transform.position - scene.transform.position; //transform.localPosition;
             targetForward = transform.forward;
@@ -64,6 +84,7 @@ public class targetHandler : MonoBehaviour
             return;
         }
 
+        float oriRadius = safetyZone.GetComponent<CapsuleCollider>().radius;
         safetyZone.GetComponent<CapsuleCollider>().radius = 0.3f;
         bool solutionMissing = true;
 
@@ -72,14 +93,14 @@ public class targetHandler : MonoBehaviour
             do
             {
                 newPos = Random.insideUnitSphere * outerDiameter;
-                //newPos += new Vector3(0, 0.05f, 0);
+                newPos.y += 0.2f;
             } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask)); ;
 
             for (int i = 0; i < 10; i++)
             {
                 transform.rotation = Random.rotation;
                 gripPlace = (newPos) - gripPlaceOffSet * transform.forward;
-                if (Vector3.Magnitude(newPos - new Vector3(0, 0.5f, 0)) - (gripPlaceOffSet * 0.25f) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.5f, 0)) && !Physics.CheckSphere(gripPlace + scene.transform.position, 0.20f))
+                if (Vector3.Magnitude(newPos - new Vector3(0, 0.7f, 0)) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.7f, 0)) && !Physics.CheckSphere(gripPlace + scene.transform.position, 0.20f))
                 {
                     solutionMissing = false;
                     break;
@@ -94,7 +115,7 @@ public class targetHandler : MonoBehaviour
         targetForward = transform.forward;
         gripPlace = targetPos - gripPlaceOffSet * targetForward;
 
-        safetyZone.GetComponent<CapsuleCollider>().radius = 0.5f;
+        safetyZone.GetComponent<CapsuleCollider>().radius = oriRadius;
         //Debug.Log("center:" + Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)));
         //Debug.Log("grip:" + Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0)));
     }

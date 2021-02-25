@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ai_project.unity
     guid: dc11a567544d0e84191b6681f30abe14
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Test_setup.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/ValidationScene.unity
+    guid: 0d3cbddb762450743804964febaff64c
   m_configObjects: {}
