@@ -94,13 +94,13 @@ public class targetHandler : MonoBehaviour
             {
                 newPos = Random.insideUnitSphere * outerDiameter;
                 newPos.y += 0.2f;
-            } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask)); ;
+            } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.30f, mask)); ;
 
             for (int i = 0; i < 10; i++)
             {
                 transform.rotation = Random.rotation;
                 gripPlace = (newPos) - gripPlaceOffSet * transform.forward;
-                if (Vector3.Magnitude(newPos - new Vector3(0, 0.7f, 0)) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.7f, 0)) && !Physics.CheckSphere(gripPlace + scene.transform.position, 0.20f))
+                if ((Vector3.Magnitude(newPos - new Vector3(0, 0.7f, 0))- gripPlaceOffSet*0.35f) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.7f, 0)) && !Physics.CheckSphere(gripPlace + scene.transform.position, 0.20f))
                 {
                     solutionMissing = false;
                     break;
