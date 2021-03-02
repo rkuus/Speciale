@@ -46,6 +46,8 @@ public class KuusAgent : Agent
     //private int decimalPrecision = 4;
 
     private float[] curRotations;
+    private float[] curVelocity;
+    private float[] curAction;
 
     //private float closestEncounter = 999.9f;
     //private float bestAngle = 180.0f;
@@ -58,6 +60,8 @@ public class KuusAgent : Agent
     //private float bestAngle = 180.0f;
     //private float bestAngleForward = 180.0f;
     //private float bestDistance = 20.0f;
+
+    private float episodeReward = 0.0f;
 
     private bool completed = false;
     private bool jointLimit = false;
@@ -135,6 +139,13 @@ public class KuusAgent : Agent
         //lastAngle = curAngle;
         lastAngle = curAngle;
         curRotations = robotController.getRotations();
+        curVelocity = robotController.getVelocities();
+        curAction = curVelocity;
+        if (debugMode)
+        {
+            Debug.Log("Episode reward: " + episodeReward);
+            episodeReward = 0f;
+        }    
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -147,7 +158,7 @@ public class KuusAgent : Agent
         sensor.AddObservation(curRotations);                                  // 10
         //Debug.Log(curRotations.Length);
         // UR joint velocities
-        sensor.AddObservation(robotController.getVelocities());               // 5
+        sensor.AddObservation(curVelocity);               // 5
         // End-effector position - target position
         sensor.AddObservation(tcp.TCPpos / 2f);                                      // 3
         sensor.AddObservation(targetBall.gripPlace / 2f);                            // 3
@@ -158,10 +169,7 @@ public class KuusAgent : Agent
         sensor.AddObservation(lastDifference / 2f);
         sensor.AddObservation((lastDifference - currentDifference) / 2f);
         // Distance to target
-        //curDistance = Vector3.SqrMagnitude(currentDifference);
         sensor.AddObservation(curDistance / 2f);                                       // 1ps 
-        // Rotation of TCP
-        //sensor.AddObservation(tcp.transform.rotation.normalized);                                        // 4
         // Angle to target
         //curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
         sensor.AddObservation(curAngle / 180.0f);                                // 1
@@ -172,25 +180,14 @@ public class KuusAgent : Agent
         sensor.AddObservation((targetBall.targetForward - tcp.TCPforward));      // 3 
         //curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         sensor.AddObservation(curAngleForward / 180.0f);                           // 1
-        // Voxel grid
-        //sensor.AddObservation(voxelGrid.voxelCollisions());                                                 // 45
-        //curAngle = Vector3.Angle(tcp.TCPpos, targetBall.targetPos);
-        //sensor.AddObservation(round(curAngle / 180.0f, decimalPrecision));                                  // 1
         // 3D sensors
-        //sensor.AddObservation(roundList(firstSensor.getSensorData(), decimalPrecision));                    // 90
-        //sensor.AddObservation(roundList(secondSensor.getSensorData(), decimalPrecision));                   // 90
-        //sensor.AddObservation(roundList(depthThing.getRayCasts(), decimalPrecision));
         sensor.AddObservation(robotController.getAllTriggers());
-        //sensor.AddObservation(robotController.individualCollisionCheck());
-        //Vector3[] proximities = robotController.getAllProximities();
-        //for (int i = 0;i<proximities.Length;i++)
-        //    sensor.AddObservation(proximities[i]);
     }
 
     public override void OnActionReceived(float[] vectorAction)
     {
         CalcReward();
-
+        curAction = vectorAction;
         robotController.setRotations(vectorAction);
     }
     // Update is called once per frame
@@ -202,6 +199,7 @@ public class KuusAgent : Agent
         targetBall.updataTargetParams();
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         curRotations = robotController.getRotations();
+        curVelocity = robotController.getVelocities();
         curDistance = Vector3.Magnitude(currentDifference);
         curAngleForward = Vector3.Angle(tcp.TCPforward, targetBall.targetForward);
         curAngle = Vector3.Angle(tcp.TCPforward, (targetBall.targetPos - tcp.TCPpos));
@@ -217,7 +215,7 @@ public class KuusAgent : Agent
     private void CalcReward()
     {
 
-        float curReward = -0.0005f * _time; // Time cost, -0.0001f
+        float curReward = -0.002f * _time; // Time cost, -0.0001f
 
         curReward += 3.0f * (lastDistance - curDistance); // reward for approaching
 
@@ -251,21 +249,25 @@ public class KuusAgent : Agent
         lastAngle = curAngle;
         lastAngleForward = curAngleForward;
         lastDistance = curDistance;
-        
-        //if (debugMode)
-        //    Debug.Log(curReward);
+
+        if (debugMode)
+            episodeReward += curReward;
 
         SetReward(curReward);
     }
 
-    private static float squaredList(float[] values)
+    private static float expReward(float x)
+    {
+        return 1 / (x + 0.5f);
+    }
+    private static float squaredListDifference(float[] values1, float[] values2)
     {
         float output = 0.0f;
-        for (int i = 0;i<values.Length;i++)
+        for (int i = 0;i< values1.Length;i++)
         {
-            output += values[i] * values[i];
+            output += (values1[i] - values2[i])  * (values1[i] - values2[i]);
         }
-        return output;
+        return Mathf.Sqrt(output);
     }
     private static float[] roundList(float[] values, int digits)
     {

@@ -1791,7 +1791,7 @@ MonoBehaviour:
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: 94516f393c5acc044960c84dd6917774, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: bb37c511e28ad2b44b1bf955dc72e9bd, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent
@@ -1829,7 +1829,7 @@ MonoBehaviour:
   - {fileID: 2242435328442594495}
   maxJointAccelerationScale: 1
   maxJointSpeedScale: 0.2
-  debugMode: 0
+  debugMode: 1
 --- !u!114 &6506477597035536834
 MonoBehaviour:
   m_ObjectHideFlags: 0
