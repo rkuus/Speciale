@@ -100,7 +100,7 @@ public class targetHandler : MonoBehaviour
             {
                 transform.rotation = Random.rotation;
                 gripPlace = (newPos) - gripPlaceOffSet * transform.forward;
-                if ((Vector3.Magnitude(newPos - new Vector3(0, 0.7f, 0))- gripPlaceOffSet*0.35f) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.7f, 0)) && !Physics.CheckSphere(gripPlace + scene.transform.position, 0.20f))
+                if ((Vector3.Magnitude(newPos - new Vector3(0, 0.7f, 0))- gripPlaceOffSet*0.35f) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.7f, 0)) && !Physics.CheckSphere(gripPlace + scene.transform.position, 0.40f))
                 {
                     solutionMissing = false;
                     break;
