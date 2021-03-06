@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using System.IO;
 
 public class KuusAgent : Agent
 {
@@ -65,7 +66,13 @@ public class KuusAgent : Agent
 
     private bool completed = false;
     private bool jointLimit = false;
+
     public bool debugMode = false;
+    private int debugJointLimit = 0;
+    private int debugCollisions = 0;
+    private float debugReward   = 0;
+    private int debugTimeSteps  = 0;
+
 
     private int _time = 0;
     // Start is called before the first frame update
@@ -141,11 +148,15 @@ public class KuusAgent : Agent
         curRotations = robotController.getRotations();
         curVelocity = robotController.getVelocities();
         curAction = curVelocity;
-        //if (debugMode)
-        //{
-        //    Debug.Log("Episode reward: " + episodeReward);
-        //    episodeReward = 0f;
-        //}    
+        if (debugMode)
+        {
+            writeToFile();
+            debugCollisions = 0;
+            debugJointLimit = 0;
+            debugReward = 0;
+            debugTimeSteps = 0;
+            Debug.Log("Episode complete");
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -207,6 +218,7 @@ public class KuusAgent : Agent
         if (!robotController.collisionFlag && curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
         {
             SetReward(1.0f);
+            debugReward += 1.0f;
             completed = true;
             EndEpisode();
         }
@@ -230,7 +242,13 @@ public class KuusAgent : Agent
                 jointLimit = true;
                 curReward -= 1f; // collisionCost * _time;
                 if (debugMode)
+                {
                     Debug.Log("Joint at limit, end episode");
+                    debugJointLimit = 1;
+                    debugTimeSteps += 1;
+                    debugReward += curReward;
+                }
+                    
                 SetReward(curReward);
                 EndEpisode();
             }
@@ -241,7 +259,11 @@ public class KuusAgent : Agent
             robotController.collisionFlag = false;
             curReward -= collisionCost * _time;
             if (debugMode)
+            {
                 Debug.Log("Collision");
+                debugCollisions += 1;
+            }
+                
         }
 
         _time = 0;
@@ -250,8 +272,12 @@ public class KuusAgent : Agent
         lastAngleForward = curAngleForward;
         lastDistance = curDistance;
 
-        //if (debugMode)
-        //    episodeReward += curReward;
+        if (debugMode)
+        {
+            debugTimeSteps += 1;
+            debugReward += curReward;
+        }
+            
 
         SetReward(curReward);
     }
@@ -288,6 +314,16 @@ public class KuusAgent : Agent
     {
         float mult = Mathf.Pow(10.0f, (float)digits);
         return new Vector3((Mathf.Round(values.x * mult) / mult), (Mathf.Round(values.y * mult) / mult), (Mathf.Round(values.z * mult) / mult));
+    }
+
+    private void writeToFile()
+    {
+        string path = "Assets/Resources/test.txt";
+
+        //Write some text to the test.txt file
+        StreamWriter writer = new StreamWriter(path, true);
+        writer.WriteLine(debugTimeSteps + ";" + debugReward.ToString("#.000") + ";" + debugCollisions + ";" + debugJointLimit + ";" + curDistance.ToString("#.000") + ";" + curAngle.ToString("#.000") + ";" + curAngleForward.ToString("#.000"));
+        writer.Close();
     }
 
 }
