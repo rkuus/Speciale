@@ -1765,7 +1765,7 @@ MonoBehaviour:
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: 94516f393c5acc044960c84dd6917774, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 62229a5c933c02b45ab811833d97726a, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent

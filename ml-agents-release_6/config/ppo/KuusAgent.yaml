@@ -16,8 +16,8 @@ behaviors:
       num_layers: 3
       vis_encode_type: simple
       memory:
-        sequence_length: 64
-        memory_size: 128
+        sequence_length: 128
+        memory_size: 256
     reward_signals:
       extrinsic:
         gamma: 0.995
