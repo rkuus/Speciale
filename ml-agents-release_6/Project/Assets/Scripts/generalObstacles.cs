@@ -23,10 +23,10 @@ public class generalObstacles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            updatePos();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    updatePos();
+        //}
     }
 
     public void updatePos()

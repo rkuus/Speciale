@@ -36,9 +36,9 @@ public class KuusAgent : Agent
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.050f;
+    private float collisionCost = 0.075f;
     private float collisionCostInc = 0.00001f;
-    private float collisionCostStop = 0.050f;
+    private float collisionCostStop = 0.075f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
