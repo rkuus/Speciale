@@ -44,7 +44,7 @@ public class generalObstacles : MonoBehaviour
                 newPos = Random.insideUnitCircle * outerDiameter;
                 transform.RotateAround(transform.position, Vector3.up, Random.Range(-180, 180));
                 
-            } while (Physics.CheckBox(new Vector3(newPos.x + ground.transform.position.x, transform.position.y + 0.01f, newPos.y + ground.transform.position.z), transform.localScale * 0.5f, transform.rotation, mask));
+            } while (Physics.CheckBox(new Vector3(newPos.x + ground.transform.position.x, transform.position.y + 0.01f, newPos.y + ground.transform.position.z), transform.localScale * 0.75f, transform.rotation, mask));
 
             transform.localPosition = new Vector3(newPos.x, transform.position.y, newPos.y);
 

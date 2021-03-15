@@ -36,10 +36,10 @@ public class targetHandler : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            updateTargetPos();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    updateTargetPos();
+        //}
         //targetPos = transform.localPosition;
         //targetForward = transform.forward;
         //gripPlace = targetPos - 0.10f * targetForward;
@@ -97,13 +97,13 @@ public class targetHandler : MonoBehaviour
                 newPos.y += 0.2f;
             } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask)); ;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 transform.rotation = Random.rotation;
                 gripPlace = (newPos) - gripPlaceOffSet * transform.forward;
 
                 if ((Vector3.Magnitude(newPos - new Vector3(0, 0.7f, 0))- gripPlaceOffSet*0.35f) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.7f, 0))
-                    && !Physics.CheckCapsule(gripPlace + scene.transform.position, new Vector3(0, 0.7f, 0) + scene.transform.position, 0.1f, mask2))
+                    && !Physics.CheckCapsule(gripPlace + scene.transform.position, new Vector3(0, 0.7f, 0) + scene.transform.position, 0.15f, mask2))
                 {
                     solutionMissing = false;
                     break;
