@@ -9,7 +9,6 @@ public class targetHandler : MonoBehaviour
     public GameObject grip;
     public GameObject ground;
     public GameObject scene;
-    public GameObject safetyZone;
 
     public Vector3 targetPos;
     public Vector3 targetForward;
@@ -86,8 +85,6 @@ public class targetHandler : MonoBehaviour
             return;
         }
 
-        float oriRadius = safetyZone.GetComponent<CapsuleCollider>().radius;
-        safetyZone.GetComponent<CapsuleCollider>().radius = 0.3f;
         bool solutionMissing = true;
 
         do
@@ -96,9 +93,9 @@ public class targetHandler : MonoBehaviour
             {
                 newPos = Random.insideUnitSphere * outerDiameter;
                 newPos.y += 0.2f;
-            } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask)); ;
+            } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.10f, mask)); ;
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 transform.rotation = Random.rotation;
                 gripPlace = newPos - (gripPlaceOffSet * transform.forward);
@@ -120,7 +117,6 @@ public class targetHandler : MonoBehaviour
         targetForward = transform.forward;
         gripPlace = targetPos - gripPlaceOffSet * targetForward;
 
-        safetyZone.GetComponent<CapsuleCollider>().radius = oriRadius;
         //Debug.Log("center:" + Vector3.Magnitude(newPos - new Vector3(0, 1.0f, 0)));
         //Debug.Log("grip:" + Vector3.Magnitude(gripPlace - new Vector3(0, 1.0f, 0)));
     }
