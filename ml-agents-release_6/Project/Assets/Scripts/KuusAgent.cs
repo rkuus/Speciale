@@ -24,21 +24,19 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
-    private float winDistance = 0.10f;
-    private float winAngle = 10.0f;
-    private float winAngleForward = 10.0f;
+    private float winDistance = 0.25f;
+    private float winAngle = 30.0f;
+    private float winAngleForward = 30.0f;
 
-    private float decDistance = 0.0001f;
-    private float decAngle = 0.01f;
-    private float decAngleForward = 0.01f;
+    private float decDistance = 0.00001f;
+    private float decAngle = 0.001f;
+    private float decAngleForward = 0.001f;
 
     private float stopDistance = 0.05f;
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.050f;
-    private float collisionCostInc = 0.00001f;
-    private float collisionCostStop = 0.050f;
+    private float collisionCost = 0.05f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -78,7 +76,12 @@ public class KuusAgent : Agent
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (debugMode)
+        {
+            winDistance = stopDistance;
+            winAngle = stopAngle;
+            winAngleForward = stopAngleForward;
+        }
     }
 
     public override void OnEpisodeBegin()
@@ -111,9 +114,6 @@ public class KuusAgent : Agent
 
             if (winAngleForward > stopAngleForward)
                 winAngleForward -= decAngleForward;
-
-            if (collisionCost < collisionCostStop)
-                collisionCost += collisionCostInc;
         }
         completed = false;
         jointLimit = false;

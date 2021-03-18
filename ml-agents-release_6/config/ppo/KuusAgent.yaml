@@ -4,9 +4,9 @@ behaviors:
     hyperparameters:
       batch_size: 1024
       buffer_size: 10240
-      learning_rate: 0.001
+      learning_rate: 0.00005
       beta: 0.01
-      epsilon: 0.2
+      epsilon: 0.1
       lambd: 0.95
       num_epoch: 3
       learning_rate_schedule: linear
@@ -23,7 +23,7 @@ behaviors:
         gamma: 0.995
         strength: 1.0
     keep_checkpoints: 5
-    max_steps: 100000000
+    max_steps: 102400000
     time_horizon: 1000
-    summary_freq: 51200
+    summary_freq: 102400
     threaded: true
