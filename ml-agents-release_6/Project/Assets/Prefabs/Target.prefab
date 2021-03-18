@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead9816682dff514aa99c811d23e27da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outerDiameter: 1.35
+  outerDiameter: 1.2
   grip: {fileID: 4436011001909401728}
   ground: {fileID: 0}
   scene: {fileID: 0}
