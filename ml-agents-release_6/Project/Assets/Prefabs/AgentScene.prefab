@@ -1765,7 +1765,7 @@ MonoBehaviour:
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: b69596c000b93c842ad5fbe6c252f1f1, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent
@@ -3242,6 +3242,11 @@ PrefabInstance:
       propertyPath: scene
       value: 
       objectReference: {fileID: 6506477597035536837}
+    - target: {fileID: 4436011001943775461, guid: 610751d6ce7f0674cb6df7cf1fca75cb,
+        type: 3}
+      propertyPath: outerDiameter
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 4436011001943775462, guid: 610751d6ce7f0674cb6df7cf1fca75cb,
         type: 3}
       propertyPath: m_LocalPosition.x

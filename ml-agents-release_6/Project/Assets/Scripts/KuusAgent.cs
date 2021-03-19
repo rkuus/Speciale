@@ -28,9 +28,9 @@ public class KuusAgent : Agent
     private float winAngle = 30.0f;
     private float winAngleForward = 30.0f;
 
-    private float decDistance = 0.00001f;
-    private float decAngle = 0.001f;
-    private float decAngleForward = 0.001f;
+    private float decDistance = 0.00005f;
+    private float decAngle = 0.002f;
+    private float decAngleForward = 0.002f;
 
     private float stopDistance = 0.05f;
     private float stopAngle = 10.0f;
