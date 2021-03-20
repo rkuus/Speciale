@@ -14,6 +14,7 @@ public class KuusAgent : Agent
     public sensor3D firstSensor;
     public sensor3D secondSensor;
     public DepthMap depthThing;
+    public GameObject safetyZone;
 
     public Vector3 eulerAngleDif;
 
@@ -28,9 +29,7 @@ public class KuusAgent : Agent
     private float winAngle = 30.0f;
     private float winAngleForward = 30.0f;
 
-    private float decDistance = 0.00005f;
-    private float decAngle = 0.002f;
-    private float decAngleForward = 0.002f;
+    private float decMulti = 0.9999f;
 
     private float stopDistance = 0.05f;
     private float stopAngle = 10.0f;
@@ -107,18 +106,19 @@ public class KuusAgent : Agent
         if (completed)
         {
             if (winDistance > stopDistance)
-                winDistance -= decDistance;
+                winDistance = round(winDistance * decMulti, 7);
 
             if (winAngle > stopAngle)
-                winAngle -= decAngle;
+                winAngle = round(winAngle * decMulti, 7);
 
             if (winAngleForward > stopAngleForward)
-                winAngleForward -= decAngleForward;
+                winAngleForward = round(winAngleForward * decMulti, 7);
         }
         completed = false;
         jointLimit = false;
         robotController.collisionFlag = false;
         //collisionCost += 0.01f;
+        safetyZone.transform.localPosition = new Vector3(0,0.5f,0);
 
         for (int i = 0; i < allObs.Length; i++)
             allObs[i].updatePos();
@@ -131,6 +131,9 @@ public class KuusAgent : Agent
         }
 
         targetBall.updateTargetPos();
+
+        safetyZone.transform.localPosition = new Vector3(0, 10f, 0);
+
         tcp.updateParams();
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
         lastDifference = currentDifference;

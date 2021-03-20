@@ -43,7 +43,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.35
-  m_Height: 2
+  m_Height: 3
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &8919282016138600778
@@ -1765,7 +1765,7 @@ MonoBehaviour:
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: b69596c000b93c842ad5fbe6c252f1f1, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 23ad504e7134e424bb6664ce76befe56, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent
@@ -1796,6 +1796,7 @@ MonoBehaviour:
   firstSensor: {fileID: 6506477596628013001}
   secondSensor: {fileID: 6506477597165238273}
   depthThing: {fileID: 6506477595800803808}
+  safetyZone: {fileID: 3400722282308639441}
   eulerAngleDif: {x: 0, y: 0, z: 0}
   allObs:
   - {fileID: 664011391206475543}
