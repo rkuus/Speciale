@@ -26,8 +26,8 @@ public class KuusAgent : Agent
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
     private float winDistance = 0.05f;
-    private float winAngle = 25.0f;
-    private float winAngleForward = 25.0f;
+    private float winAngle = 10.0f;
+    private float winAngleForward = 10.0f;
 
     private float decDistance = 0.00005f;
     private float decAngle = 0.002f;
