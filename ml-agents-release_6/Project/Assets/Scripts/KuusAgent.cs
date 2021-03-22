@@ -232,7 +232,7 @@ public class KuusAgent : Agent
 
         float curReward = -0.001f * _time; // Time cost, -0.0001f
 
-        curReward += (expReward(lastDistance) - expReward(curDistance)); // reward for approaching
+        curReward += 3.0f * (lastDistance - curDistance); // reward for approaching
 
         curReward += 0.0025f * (lastAngleForward - curAngleForward); // reward for aligning with target
 
