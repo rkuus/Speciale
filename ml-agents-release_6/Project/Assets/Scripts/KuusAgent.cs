@@ -25,7 +25,7 @@ public class KuusAgent : Agent
     private float maxJointAcceleration = 8.0f;
     public float maxJointSpeedScale = 1.0f; // Normal value is 1
 
-    private float winDistance = 0.05f;
+    private float winDistance = 0.10f;
     private float winAngle = 10.0f;
     private float winAngleForward = 10.0f;
 
@@ -33,7 +33,7 @@ public class KuusAgent : Agent
     private float decAngle = 0.002f;
     private float decAngleForward = 0.002f;
 
-    private float stopDistance = 0.05f;
+    private float stopDistance = 0.10f;
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
@@ -234,9 +234,9 @@ public class KuusAgent : Agent
 
         curReward += (expReward(lastDistance) - expReward(curDistance)); // reward for approaching
 
-        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for aligning with target
+        curReward += 0.025f * (lastAngleForward - curAngleForward); // reward for aligning with target
 
-        curReward += 0.01f * (lastAngle - curAngle); // reward for facing target
+        curReward += 0.025f * (lastAngle - curAngle); // reward for facing target
 
         for (int i = 5;i<curRotations.Length;i++)
         {
