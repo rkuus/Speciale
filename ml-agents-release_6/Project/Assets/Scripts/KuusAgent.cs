@@ -43,6 +43,10 @@ public class KuusAgent : Agent
     private float curAngle = 180.0f;
     private float curAngleForward = 180.0f;
 
+    private float bestDistance = 20.0f;
+    private float bestAngle = 180.0f;
+    private float bestAngleForward = 180.0f;
+
     //private int decimalPrecision = 4;
 
     private float[] curRotations;
@@ -151,6 +155,11 @@ public class KuusAgent : Agent
         curRotations = robotController.getRotations();
         curVelocity = robotController.getVelocities();
         curAction = curVelocity;
+
+        bestAngle = curAngle;
+        bestAngleForward = curAngleForward;
+        bestDistance = curDistance;
+
         if (debugMode)
         {
             writeToFile();
@@ -232,11 +241,24 @@ public class KuusAgent : Agent
 
         float curReward = -0.002f * _time; // Time cost, -0.0001f
 
-        curReward += 3.0f * (lastDistance - curDistance); // reward for approaching
-
-        curReward += 0.005f * (lastAngleForward - curAngleForward); // reward for aligning with target
-
-        curReward += 0.005f * (lastAngle - curAngle); // reward for facing target
+        if (curDistance < bestDistance) // reward for approaching
+        {
+            curReward += 3.0f * (bestDistance - curDistance);
+            bestDistance = curDistance;
+        }
+             
+        if (curAngleForward < bestAngleForward)
+        {
+            curReward += 0.005f * (bestAngleForward - curAngleForward); // reward for aligning with target
+            bestAngleForward = curAngleForward;
+        }
+        
+        if(curAngle < bestAngle)
+        {
+            curReward += 0.005f * (bestAngle - curAngle); // reward for facing target
+            bestAngle = curAngle;
+        }
+        
 
         for (int i = 5;i<curRotations.Length;i++)
         {
