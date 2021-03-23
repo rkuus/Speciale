@@ -243,19 +243,19 @@ public class KuusAgent : Agent
 
         if (curDistance < bestDistance) // reward for approaching
         {
-            curReward += 3.0f * (bestDistance - curDistance);
+            curReward += 6.0f * (bestDistance - curDistance);
             bestDistance = curDistance;
         }
              
         if (curAngleForward < bestAngleForward)
         {
-            curReward += 0.005f * (bestAngleForward - curAngleForward); // reward for aligning with target
+            curReward += 0.01f * (bestAngleForward - curAngleForward); // reward for aligning with target
             bestAngleForward = curAngleForward;
         }
         
         if(curAngle < bestAngle)
         {
-            curReward += 0.005f * (bestAngle - curAngle); // reward for facing target
+            curReward += 0.01f * (bestAngle - curAngle); // reward for facing target
             bestAngle = curAngle;
         }
         
