@@ -3251,7 +3251,7 @@ PrefabInstance:
     - target: {fileID: 4436011001943775461, guid: 610751d6ce7f0674cb6df7cf1fca75cb,
         type: 3}
       propertyPath: outerDiameter
-      value: 1.3
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 4436011001943775462, guid: 610751d6ce7f0674cb6df7cf1fca75cb,
         type: 3}
