@@ -230,20 +230,15 @@ public class KuusAgent : Agent
 
     private void CalcReward()
     {
-
         float curReward = -0.002f * _time; // Time cost, -0.0001f
 
 
         curReward += 4.0f * (lastDistance - curDistance);
-
-             
+  
         curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for aligning with target
-
-        
 
         curReward += 0.01f * (lastAngle - curAngle); // reward for facing target
 
-        
 
         for (int i = 5;i<curRotations.Length;i++)
         {
