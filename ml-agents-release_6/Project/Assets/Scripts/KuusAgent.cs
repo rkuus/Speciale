@@ -69,6 +69,7 @@ public class KuusAgent : Agent
     public bool debugMode = false;
     private int debugJointLimit = 0;
     private int debugCollisions = 0;
+    private int debugCompleted  = 0;
     private float debugReward   = 0;
     private int debugTimeSteps  = 0;
 
@@ -159,8 +160,10 @@ public class KuusAgent : Agent
             debugJointLimit = 0;
             debugReward = 0;
             debugTimeSteps = 0;
+            debugCompleted = 0;
             Debug.Log("Episode complete");
         }
+        
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -221,10 +224,13 @@ public class KuusAgent : Agent
 
         if (!robotController.collisionFlag && curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
         {
+            if (debugMode)
+                debugCompleted = 1;
             SetReward(1.0f);
             debugReward += 1.0f;
             completed = true;
             EndEpisode();
+            
         }
     }
 
@@ -327,7 +333,7 @@ public class KuusAgent : Agent
 
         //Write some text to the test.txt file
         StreamWriter writer = new StreamWriter(path, true);
-        writer.WriteLine(debugTimeSteps + ";" + debugReward.ToString("#.000") + ";" + debugCollisions + ";" + debugJointLimit + ";" + curDistance.ToString("#.000") + ";" + curAngle.ToString("#.000") + ";" + curAngleForward.ToString("#.000"));
+        writer.WriteLine(debugTimeSteps + ";" + debugReward.ToString("#.000") + ";" + debugCollisions + ";" + debugJointLimit + ";" + curDistance.ToString("#.000") + ";" + curAngle.ToString("#.000") + ";" + curAngleForward.ToString("#.000") + ";" + debugCompleted);
         writer.Close();
     }
 

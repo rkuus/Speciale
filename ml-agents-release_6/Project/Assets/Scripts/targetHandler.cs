@@ -102,7 +102,7 @@ public class targetHandler : MonoBehaviour
                 gripPlace = newPos - (gripPlaceOffSet * transform.forward);
                 checkGrip = newPos - (4.0f * gripPlaceOffSet * transform.forward);
 
-                if ((Vector3.Magnitude(newPos - new Vector3(0, 0.4f, 0))- gripPlaceOffSet*0.35f) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.4f, 0))
+                if ((Vector3.Magnitude(newPos - new Vector3(0, 0.4f, 0)) - (gripPlaceOffSet * 0.35f)) > Vector3.Magnitude(gripPlace - new Vector3(0, 0.4f, 0))
                     && !Physics.CheckCapsule(checkGrip + scene.transform.position, new Vector3(0, 0.25f, 0) + scene.transform.position, 0.175f, mask2))
                 {
                     solutionMissing = false;
