@@ -131,7 +131,7 @@ public class KuusAgent : Agent
             robotController.setMaxJointAccerlation(maxJointAcceleration * maxJointAccelerationScale);
         }
 
-        targetBall.updateTargetPos();
+        targetBall.updateTargetPos(tcp.TCPpos);
 
         safetyZone.transform.localPosition = new Vector3(0, 10f, 0);
 
