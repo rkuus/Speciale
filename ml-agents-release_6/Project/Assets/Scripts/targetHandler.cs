@@ -93,7 +93,7 @@ public class targetHandler : MonoBehaviour
                 newPos = Random.onUnitSphere * Mathf.Sqrt(Random.Range(0.0f, 1.0f)) * outerDiameter;
                 
                 newPos.y += 0.1f;
-            } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask) || Vector3.Distance(newPos,endEffector) < 1.0f); ;
+            } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask) ); // || Vector3.sqrMagnitude(newPos - endEffector) < 1.0f
 
             for (int i = 0; i < 10; i++)
             {
