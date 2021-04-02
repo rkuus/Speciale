@@ -1761,7 +1761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BrainParameters:
     VectorObservationSize: 132
-    NumStackedVectorObservations: 10
+    NumStackedVectorObservations: 1
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
@@ -1788,7 +1788,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 5120
+  MaxStep: 1024
   robotController: {fileID: 6506477596579089956}
   tcp: {fileID: 6506477597119231785}
   targetBall: {fileID: 6506477596396254283}
