@@ -226,7 +226,7 @@ public class KuusAgent : Agent
         {
             if (debugMode)
                 debugCompleted = 1;
-            SetReward(1.0f);
+            AddReward(1.0f);
             debugReward += 1.0f;
             completed = true;
             EndEpisode();
@@ -236,10 +236,10 @@ public class KuusAgent : Agent
 
     private void CalcReward()
     {
-        float curReward = -0.002f * _time; // Time cost, -0.0001f
+        float curReward = -0.002f * _time; // Time cost, -0.002f
 
 
-        curReward += 4.0f * (lastDistance - curDistance);
+        curReward += 4.0f * (lastDistance - curDistance); // 4.0
   
         curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for aligning with target
 
@@ -259,8 +259,8 @@ public class KuusAgent : Agent
                     debugTimeSteps += 1;
                     debugReward += curReward;
                 }
-                    
-                SetReward(curReward);
+
+                AddReward(curReward);
                 EndEpisode();
             }
         }
@@ -288,9 +288,9 @@ public class KuusAgent : Agent
             debugTimeSteps += 1;
             debugReward += curReward;
         }
-            
 
-        SetReward(curReward);
+
+        AddReward(curReward);
     }
 
     private static float expReward(float x)

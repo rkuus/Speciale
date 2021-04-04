@@ -211,6 +211,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AgentScene (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 6506477597035536837, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6506477597203323275, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_ParentAnchorPosition.z
@@ -813,6 +818,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AgentScene (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 6506477597035536837, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6506477597119231798, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_ParentAnchorPosition.z
@@ -1074,6 +1084,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AgentScene (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 6506477597035536837, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6506477597119231798, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_ParentAnchorPosition.z
@@ -1152,6 +1167,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AgentScene (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6506477597035536837, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 681bfd00bd4485d4a905e79e24624b26, type: 3}
@@ -1241,6 +1261,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AgentScene (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6506477597035536837, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6506477597119231798, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
@@ -1445,6 +1470,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AgentScene (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 6506477597035536837, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6506477597119231798, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
       propertyPath: m_ParentAnchorPosition.z
@@ -1543,6 +1573,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AgentScene (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6506477597035536837, guid: 681bfd00bd4485d4a905e79e24624b26,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6506477597119231798, guid: 681bfd00bd4485d4a905e79e24624b26,
         type: 3}
