@@ -29,6 +29,7 @@ TagManager:
   - symbol_O_Goal
   - purpleAgent
   - purpleGoal
+  - dummyCollider
   layers:
   - Default
   - TransparentFX
@@ -42,7 +43,7 @@ TagManager:
   - Robot
   - floor
   - obstacles
-  - 
+  - dummyCollider
   - 
   - 
   - 

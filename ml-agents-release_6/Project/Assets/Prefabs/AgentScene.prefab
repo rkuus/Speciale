@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8919282016138600778}
   m_Layer: 0
   m_Name: DummyCollider
-  m_TagString: Untagged
+  m_TagString: dummyCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1816,7 +1816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 2
+  DecisionPeriod: 10
   TakeActionsBetweenDecisions: 0
 --- !u!1 &6506477597119231784
 GameObject:

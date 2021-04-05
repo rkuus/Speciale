@@ -119,7 +119,11 @@ public class KuusAgent : Agent
         jointLimit = false;
         robotController.collisionFlag = false;
         //collisionCost += 0.01f;
-        safetyZone.transform.localPosition = new Vector3(0,0.5f,0);
+        foreach (GameObject dummy in GameObject.FindGameObjectsWithTag("dummyCollider"))
+        {
+            dummy.transform.localPosition = new Vector3(0, 0.5f, 0);
+        }
+        //safetyZone.transform.localPosition = new Vector3(0,0.5f,0);
 
         for (int i = 0; i < allObs.Length; i++)
             allObs[i].updatePos();
@@ -133,7 +137,11 @@ public class KuusAgent : Agent
 
         targetBall.updateTargetPos(tcp.TCPpos);
 
-        safetyZone.transform.localPosition = new Vector3(0, 10f, 0);
+        foreach(GameObject dummy in GameObject.FindGameObjectsWithTag("dummyCollider"))
+        {
+            dummy.transform.localPosition = new Vector3(0, 10f, 0);
+        }
+        //safetyZone.transform.localPosition = new Vector3(0, 10f, 0);
 
         tcp.updateParams();
         currentDifference = tcp.TCPpos - targetBall.gripPlace;
