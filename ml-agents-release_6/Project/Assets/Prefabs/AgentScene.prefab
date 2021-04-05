@@ -1765,7 +1765,7 @@ MonoBehaviour:
     VectorActionSize: 05000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: 6a84c8d0c82b5c94e81cd0198ef939c6, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 207f857d662311a41a6c3f8250da4e0c, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: KuusAgent
@@ -1816,7 +1816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 2
+  DecisionPeriod: 10
   TakeActionsBetweenDecisions: 0
 --- !u!1 &6506477597119231784
 GameObject:
