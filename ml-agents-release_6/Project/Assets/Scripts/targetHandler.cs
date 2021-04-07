@@ -99,12 +99,12 @@ public class targetHandler : MonoBehaviour
             {
                 transform.rotation = Random.rotation;
                 gripPlace = newPos - (gripPlaceOffSet * transform.forward);
-                checkGrip = newPos - (4.0f * gripPlaceOffSet * transform.forward);
+                checkGrip = newPos - (4f * gripPlaceOffSet * transform.forward);
 
                 float distanceCenter = Vector3.Distance(newPos, new Vector3(0, 0.4f, 0));
                 float distGrip = Vector3.Distance(gripPlace, new Vector3(0, 0.4f, 0)) + 0.35f * gripPlaceOffSet;
 
-                if (distGrip < distanceCenter && !Physics.CheckCapsule(checkGrip + scene.transform.position, new Vector3(0, 0.25f, 0) + scene.transform.position, 0.185f, mask2))
+                if (distGrip < distanceCenter && !Physics.CheckCapsule(checkGrip + scene.transform.position, new Vector3(0, 0.285f, 0) + scene.transform.position, 0.185f, mask2))
                 {
                     solutionMissing = false;
                     break;

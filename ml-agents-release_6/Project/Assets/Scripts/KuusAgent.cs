@@ -37,7 +37,7 @@ public class KuusAgent : Agent
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.05f;
+    //private float collisionCost = 0.05f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -238,7 +238,7 @@ public class KuusAgent : Agent
             debugReward += 1.0f;
             completed = true;
             EndEpisode();
-            
+
         }
     }
 
@@ -258,32 +258,52 @@ public class KuusAgent : Agent
         {
             if (Mathf.Abs(curRotations[i]) >= 1f)
             {
-                jointLimit = true;
-                curReward -= 1f; // collisionCost * _time;
+                //jointLimit = true;
+                curReward -= 1f;
                 if (debugMode)
                 {
                     Debug.Log("Joint at limit, end episode");
                     debugJointLimit = 1;
                     debugTimeSteps += 1;
-                    debugReward += curReward;
+                    //debugReward += curReward;
                 }
 
-                AddReward(curReward);
-                EndEpisode();
+                float[] defaultRotations = robotController.getRawRotation();
+
+                if (defaultRotations[i] < 0)
+                    defaultRotations[i] += 360f;
+                else
+                    defaultRotations[i] -= 360f;
+
+                robotController.forceARotation(defaultRotations);
+                //AddReward(curReward);
+                //EndEpisode();
             }
         }
 
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            curReward -= collisionCost * _time;
+            curReward -= 1f;//collisionCost * _time;
+
             if (debugMode)
             {
                 Debug.Log("Collision");
                 debugCollisions += 1;
             }
-                
+            //AddReward(curReward);
+            //EndEpisode();
         }
+        //else if(curDistance < winDistance && curAngleForward < winAngleForward && curAngle < winAngle)
+        //{
+        //    if (debugMode)
+        //        debugCompleted = 1;
+        //    AddReward(1.0f);
+        //    debugReward += 1.0f;
+        //    completed = true;
+        //    EndEpisode();
+
+        //}
 
         _time = 0;
 
