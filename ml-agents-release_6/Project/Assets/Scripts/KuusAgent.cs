@@ -270,10 +270,10 @@ public class KuusAgent : Agent
 
                 float[] defaultRotations = robotController.getRawRotation();
 
-                if (defaultRotations[i] < 0)
-                    defaultRotations[i] += 360f;
+                if (defaultRotations[i - 5] < 0)
+                    defaultRotations[i - 5] += 360f;
                 else
-                    defaultRotations[i] -= 360f;
+                    defaultRotations[i - 5] -= 360f;
 
                 robotController.forceARotation(defaultRotations);
                 //AddReward(curReward);
@@ -284,7 +284,7 @@ public class KuusAgent : Agent
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            curReward -= 1f;//collisionCost * _time;
+            curReward -= 1f; // collisionCost * _time;
 
             if (debugMode)
             {
