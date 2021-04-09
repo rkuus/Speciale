@@ -37,7 +37,7 @@ public class KuusAgent : Agent
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    //private float collisionCost = 0.05f;
+    private float collisionCost = 0.05f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -258,7 +258,7 @@ public class KuusAgent : Agent
         {
             if (Mathf.Abs(curRotations[i]) >= 1f)
             {
-                //jointLimit = true;
+                jointLimit = true;
                 curReward -= 1f;
                 if (debugMode)
                 {
@@ -268,27 +268,27 @@ public class KuusAgent : Agent
                     //debugReward += curReward;
                 }
 
-                float[] defaultRotations = robotController.getRawRotation();
+                //float[] defaultRotations = robotController.getRawRotation();
 
-                if (defaultRotations[i - 5] < 0)
-                    defaultRotations[i - 5] += 360f;
-                else
-                    defaultRotations[i - 5] -= 360f;
+                //if (defaultRotations[i - 5] < 0)
+                //    defaultRotations[i - 5] += 360f;
+                //else
+                //    defaultRotations[i - 5] -= 360f;
 
-                robotController.forceARotation(defaultRotations);
-                //AddReward(curReward);
-                //EndEpisode();
+                //robotController.forceARotation(defaultRotations);
+                AddReward(curReward);
+                EndEpisode();
             }
         }
 
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            curReward -= 1f; // collisionCost * _time;
+            curReward -= collisionCost * _time;
 
             if (debugMode)
             {
-                Debug.Log("Collision");
+                Debug.Log("Agent in collision");
                 debugCollisions += 1;
             }
             //AddReward(curReward);
