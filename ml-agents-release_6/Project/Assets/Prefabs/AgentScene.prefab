@@ -1804,7 +1804,7 @@ MonoBehaviour:
   - {fileID: 2242435328442594495}
   maxJointAccelerationScale: 1
   maxJointSpeedScale: 0.2
-  debugMode: 0
+  debugMode: 1
 --- !u!114 &6506477597035536834
 MonoBehaviour:
   m_ObjectHideFlags: 0

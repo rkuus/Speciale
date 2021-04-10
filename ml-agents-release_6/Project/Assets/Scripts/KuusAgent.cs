@@ -37,7 +37,7 @@ public class KuusAgent : Agent
     private float stopAngle = 10.0f;
     private float stopAngleForward = 10.0f;
 
-    private float collisionCost = 0.05f;
+    //private float collisionCost = 0.05f;
 
     private float curDistance = 20.0f;
     private float curAngle = 180.0f;
@@ -244,14 +244,14 @@ public class KuusAgent : Agent
 
     private void CalcReward()
     {
-        float curReward = -0.002f * _time; // Time cost, -0.002f
+        float curReward = 0f; // -0.002f * _time; // Time cost, -0.002f
 
 
-        curReward += 4.0f * (lastDistance - curDistance); // 4.0
+        curReward += 0.5f * (lastDistance - curDistance); // 4.0
   
-        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for aligning with target
+        curReward += 0.0025f * (lastAngleForward - curAngleForward); // reward for aligning with target 0.01f
 
-        curReward += 0.01f * (lastAngle - curAngle); // reward for facing target
+        curReward += 0.0025f * (lastAngle - curAngle); // reward for facing target
 
 
         for (int i = 5;i<curRotations.Length;i++)
@@ -284,7 +284,7 @@ public class KuusAgent : Agent
         if (robotController.collisionFlag) // Collision cost.
         {
             robotController.collisionFlag = false;
-            curReward -= collisionCost * _time;
+            curReward -= 0.25f; // collisionCost * _time;
 
             if (debugMode)
             {
@@ -357,7 +357,8 @@ public class KuusAgent : Agent
 
     private void writeToFile()
     {
-        string path = "Assets/Resources/test.txt";
+        //Debug.Log("dataPath : " + Application.dataPath);
+        string path = Application.dataPath + "/test.txt";
 
         //Write some text to the test.txt file
         StreamWriter writer = new StreamWriter(path, true);
