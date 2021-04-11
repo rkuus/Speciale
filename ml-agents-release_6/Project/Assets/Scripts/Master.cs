@@ -118,7 +118,7 @@ public class Master : MonoBehaviour
     }
     public Vector3 getPoint(int index)
     {
-        Vector3 point = pointInSphere[index].position + new Vector3(Random.Range(-1f * noiseOffset, noiseOffset), 0, Random.Range(-1f * noiseOffset, noiseOffset));
+        Vector3 point = pointInSphere[index].position + new Vector3(0, Random.Range(-1f * noiseOffset, noiseOffset), Random.Range(-1f * noiseOffset, noiseOffset));
         point = Quaternion.Euler(0, Random.Range(0f, 360f), 0) * point;
         return point;
     }
