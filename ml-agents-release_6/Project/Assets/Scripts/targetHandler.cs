@@ -19,6 +19,10 @@ public class targetHandler : MonoBehaviour
     public Vector3 workzoneLowerCorner;
     public Vector3 workzoneUpperCorner;
 
+    public Master pointGiver;
+
+    private int pointIndex = -1;
+
     private float gripPlaceOffSet;
     private Quaternion originalRotationValue;
     // Start is called before the first frame update
@@ -43,8 +47,11 @@ public class targetHandler : MonoBehaviour
         //gripPlace = targetPos - 0.10f * targetForward;
     }
 
-    public void updateTargetPos(Vector3 endEffector)
+    public void updateTargetPos(bool lastPoint)
     {
+        if (lastPoint)
+            pointGiver.winnerPoint(pointIndex);
+
         Vector3 newPos;
         Vector3 checkGrip;
         LayerMask mask = ~LayerMask.GetMask("floor");
@@ -90,10 +97,12 @@ public class targetHandler : MonoBehaviour
         {
             do
             {
-                newPos = Random.onUnitSphere * Mathf.Sqrt(Random.Range(0.0f, 1.0f)) * outerDiameter;
+                pointIndex = pointGiver.pickPoint();
+
+                newPos = pointGiver.getPoint(pointIndex);//Random.onUnitSphere * Mathf.Sqrt(Random.Range(0.0f, 1.0f)) * outerDiameter;
                 
-                newPos.y += 0.1f;
-            } while (newPos.y < 0 || Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask) ); //  (newPos - endEffector).sqrMagnitude < 1.0f ||
+                //newPos.y += 0.1f;
+            } while (Physics.CheckSphere(newPos + scene.transform.position, 0.20f, mask) ); //  (newPos - endEffector).sqrMagnitude < 1.0f || newPos.y < 0 ||
 
             for (int i = 0; i < 10; i++)
             {
@@ -111,6 +120,8 @@ public class targetHandler : MonoBehaviour
                 }
             }
         } while (solutionMissing);
+
+        pointGiver.pointPicked();
 
         transform.localPosition = newPos;
 

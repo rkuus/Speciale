@@ -31,7 +31,7 @@ public class aiProjectAgent : Agent
     {
         robotController.forceARotation(defaultRotations);
 
-        targetBall.updateTargetPos(new Vector3(0.0f, 1.484f, 0.291f));
+        targetBall.updateTargetPos(false);
 
         curDistance = 1.0f;
         lastDistance = curDistance;

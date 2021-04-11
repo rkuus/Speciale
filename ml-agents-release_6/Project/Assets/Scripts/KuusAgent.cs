@@ -115,9 +115,7 @@ public class KuusAgent : Agent
             if (winAngleForward > stopAngleForward)
                 winAngleForward -= decAngleForward;
         }
-        completed = false;
-        jointLimit = false;
-        robotController.collisionFlag = false;
+        
         //collisionCost += 0.01f;
         foreach (GameObject dummy in GameObject.FindGameObjectsWithTag("dummyCollider"))
         {
@@ -135,12 +133,13 @@ public class KuusAgent : Agent
             robotController.setMaxJointAccerlation(maxJointAcceleration * maxJointAccelerationScale);
         }
 
-        targetBall.updateTargetPos(tcp.TCPpos);
-
         foreach(GameObject dummy in GameObject.FindGameObjectsWithTag("dummyCollider"))
         {
             dummy.transform.localPosition = new Vector3(0, 10f, 0);
         }
+
+        targetBall.updateTargetPos(completed);
+
         //safetyZone.transform.localPosition = new Vector3(0, 10f, 0);
 
         tcp.updateParams();
@@ -171,7 +170,11 @@ public class KuusAgent : Agent
             debugCompleted = 0;
             Debug.Log("Episode complete");
         }
-        
+
+        completed = false;
+        jointLimit = false;
+        robotController.collisionFlag = false;
+
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -244,14 +247,13 @@ public class KuusAgent : Agent
 
     private void CalcReward()
     {
-        float curReward = 0f; // -0.002f * _time; // Time cost, -0.002f
+        float curReward = -0.002f * _time; // Time cost, -0.002f
 
-
-        curReward += 0.5f * (lastDistance - curDistance); // 4.0
+        curReward += 4.0f * (lastDistance - curDistance); // 4.0
   
-        curReward += 0.0025f * (lastAngleForward - curAngleForward); // reward for aligning with target 0.01f
+        curReward += 0.01f * (lastAngleForward - curAngleForward); // reward for aligning with target 0.01f
 
-        curReward += 0.0025f * (lastAngle - curAngle); // reward for facing target
+        curReward += 0.01f * (lastAngle - curAngle); // reward for facing target
 
 
         for (int i = 5;i<curRotations.Length;i++)
