@@ -8,6 +8,8 @@ public class Master : MonoBehaviour
     public float sphereResolution = 0.2f;
     public float noiseOffset = 0.1f;
     public float cylinderRadius = 0.4f;
+
+    public bool forceHardCases = true;
     // Start is called before the first frame update
     private float totalValue = 0;
     struct spherePoint
@@ -109,11 +111,11 @@ public class Master : MonoBehaviour
 
     public void winnerPoint(int oldIndex)
     {
-        //if (oldIndex != -1)
-        //{
-        //    totalValue -= pointInSphere[oldIndex].probability - (pointInSphere[oldIndex].probability / 2f);
-        //    pointInSphere[oldIndex].probability = pointInSphere[oldIndex].probability / 2f;
-        //}
+        if (forceHardCases && oldIndex != -1)
+        {
+            totalValue -= pointInSphere[oldIndex].probability - (pointInSphere[oldIndex].probability / 2f);
+            pointInSphere[oldIndex].probability = pointInSphere[oldIndex].probability / 2f;
+        }
 
     }
     public Vector3 getPoint(int index)
