@@ -4,7 +4,7 @@ behaviors:
     hyperparameters:
       batch_size: 1024
       buffer_size: 10240
-      learning_rate: 0.00005
+      learning_rate: 0.0001
       beta: 0.01
       epsilon: 0.1
       lambd: 0.95
@@ -13,17 +13,14 @@ behaviors:
     network_settings:
       normalize: false
       hidden_units: 512
-      num_layers: 3
+      num_layers: 2
       vis_encode_type: simple
-      memory:
-        sequence_length: 32
-        memory_size: 64
     reward_signals:
       extrinsic:
         gamma: 0.995
         strength: 1.0
     keep_checkpoints: 5
-    max_steps: 100000000
+    max_steps: 102400000
     time_horizon: 1000
     summary_freq: 51200
     threaded: true
