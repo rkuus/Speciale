@@ -1801,6 +1801,7 @@ MonoBehaviour:
   allObs:
   - {fileID: 664011391206475543}
   - {fileID: 2242435328442594495}
+  - {fileID: 5061594383182281079}
   maxJointAccelerationScale: 1
   maxJointSpeedScale: 0.2
   debugMode: 1
@@ -3182,12 +3183,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af200736d9dc5084f94df5842c908d80, type: 3}
---- !u!4 &664011391206475542 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3556269034872031238, guid: af200736d9dc5084f94df5842c908d80,
-    type: 3}
-  m_PrefabInstance: {fileID: 4066025954053984016}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &664011391206475543 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3556269034872031239, guid: af200736d9dc5084f94df5842c908d80,
@@ -3200,6 +3195,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a837bf7a6eabe945a951ad7f8dc25dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &664011391206475542 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3556269034872031238, guid: af200736d9dc5084f94df5842c908d80,
+    type: 3}
+  m_PrefabInstance: {fileID: 4066025954053984016}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7477178686964837550
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3402,7 +3403,7 @@ PrefabInstance:
     - target: {fileID: 3556269034872031245, guid: af200736d9dc5084f94df5842c908d80,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3556269034872031245, guid: af200736d9dc5084f94df5842c908d80,
         type: 3}
@@ -3417,3 +3418,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8603004066952769904}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5061594383182281079 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3556269034872031239, guid: af200736d9dc5084f94df5842c908d80,
+    type: 3}
+  m_PrefabInstance: {fileID: 8603004066952769904}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a837bf7a6eabe945a951ad7f8dc25dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
