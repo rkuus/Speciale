@@ -20,12 +20,17 @@ public class jointController : MonoBehaviour
 
     private float maxAcceleration;
 
-    private float distance = 0.75f;
+    private float distance = 0.5f;
     public GameObject aBox;
     public GameObject ground;
 
     public bool showRays = false;
     public bool[] newRayCasting = { true, true, true, true, true, true, true, true,true,true ,  true, true, true, true, true, true, true, true,true,true ,  true, true, true, true, true, true, true, true,true,true , true, true, true ,true};
+
+    public bool newTrigger = false;
+
+    public bool[] newTriggers = { true };
+    public float[] newOuts;
 
     private RaycastHit hit;
 
@@ -40,6 +45,7 @@ public class jointController : MonoBehaviour
         articulation = GetComponent<ArticulationBody>();
         capsule = GetComponent<CapsuleCollider>();
         maxAcceleration = accScale / ((300 * 0.01f) * Mathf.Rad2Deg);
+        startTrigger();
     }
 
     // Update is called once per frame
@@ -56,6 +62,8 @@ public class jointController : MonoBehaviour
         }
 
         //proximityOut = proximityResponse();
+        //if (newTrigger)
+        //    newOuts = anotherTrigger();
 
     }
 
@@ -135,7 +143,7 @@ public class jointController : MonoBehaviour
         return curJointRotation;
     }
 
-    public float[] getTriggers()
+    public float[] anotherTriggers()
     {
         List<float> outputs = new List<float>();
 
@@ -914,6 +922,611 @@ public class jointController : MonoBehaviour
         return outputs.ToArray();
     }
 
+    public float[] getTriggers()
+    {
+        List<float> outputs = new List<float>();
+        List<Vector3> checks = new List<Vector3>();
+
+        Vector3 top = articulation.worldCenterOfMass - articulation.transform.up * capsule.height * 0.45f;
+        Vector3 offset = articulation.transform.up * capsule.radius * 1.5f;
+
+        float nChecks = (capsule.height / capsule.radius) / 1.5f;
+        Vector3 direction;
+
+        for (int i = 0;i<nChecks;i++)
+        {
+            checks.Add(top + offset * i);
+        }
+
+        Vector3[] checkPoints = checks.ToArray();
+
+        // 18 + 8*checkPoints.length
+        //if (newTriggers.Length == 1)
+        //{
+
+        //}
+
+        direction = Vector3.RotateTowards(-articulation.transform.right, articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[0])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(direction, articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[1])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(articulation.transform.right, articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[2])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(direction, articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[3])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(articulation.transform.forward, articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[4])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(direction, articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[5])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(-articulation.transform.forward, articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[6])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(direction, articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[7])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = articulation.transform.up;
+        if (newTriggers[8])
+        {
+            if (Physics.SphereCast(checkPoints[checkPoints.Length - 1], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[checkPoints.Length - 1], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(-articulation.transform.right, -articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[9])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(direction, -articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[10])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(articulation.transform.right, -articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[11])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(direction, -articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[12])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(articulation.transform.forward, -articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[13])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(direction, -articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[14])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(-articulation.transform.forward, -articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[15])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = Vector3.RotateTowards(direction, -articulation.transform.up, 0.52359877559f, 0.0f);
+        if (newTriggers[16])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        direction = -articulation.transform.up;
+        if (newTriggers[17])
+        {
+            if (Physics.SphereCast(checkPoints[0], capsule.radius, direction, out hit, distance))
+            {
+                outputs.Add((2 * (hit.distance / distance)) - 1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (hit.distance), Color.red);
+                }
+            }
+            else
+            {
+                outputs.Add(1);
+                if (showRays)
+                {
+                    Debug.DrawRay(checkPoints[0], direction * (distance), Color.green);
+                }
+            }
+        }
+
+        for (int i = 0; i < checkPoints.Length; i++)
+        {
+
+            direction = Vector3.RotateTowards(articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
+            if (newTriggers[18 + i * 8])
+            {
+                if (Physics.SphereCast(checkPoints[i], capsule.radius, direction, out hit, distance))
+                {
+                    outputs.Add((2 * (hit.distance / distance)) - 1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (hit.distance), Color.red);
+                    }
+                }
+                else
+                {
+                    outputs.Add(1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (distance), Color.green);
+                    }
+                }
+            }
+
+            direction = articulation.transform.right;
+            if (newTriggers[19 + i * 8])
+            {
+                if (Physics.SphereCast(checkPoints[i], capsule.radius, direction, out hit, distance))
+                {
+                    outputs.Add((2 * (hit.distance / distance)) - 1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (hit.distance), Color.red);
+                    }
+                }
+                else
+                {
+                    outputs.Add(1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (distance), Color.green);
+                    }
+                }
+            }
+
+            direction = Vector3.RotateTowards(-articulation.transform.forward, articulation.transform.right, 0.78539816339f, 0.0f);
+            if (newTriggers[20 + i * 8])
+            {
+                if (Physics.SphereCast(checkPoints[i], capsule.radius, direction, out hit, distance))
+                {
+                    outputs.Add((2 * (hit.distance / distance)) - 1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (hit.distance), Color.red);
+                    }
+                }
+                else
+                {
+                    outputs.Add(1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (distance), Color.green);
+                    }
+                }
+            }
+
+            direction = -articulation.transform.right;
+            if (newTriggers[21 + i * 8])
+            {
+                if (Physics.SphereCast(checkPoints[i], capsule.radius, direction, out hit, distance))
+                {
+                    outputs.Add((2 * (hit.distance / distance)) - 1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (hit.distance), Color.red);
+                    }
+                }
+                else
+                {
+                    outputs.Add(1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (distance), Color.green);
+                    }
+                }
+            }
+
+            direction = Vector3.RotateTowards(-articulation.transform.forward, -articulation.transform.right, 0.78539816339f, 0.0f);
+            if (newTriggers[22 + i * 8])
+            {
+                if (Physics.SphereCast(checkPoints[i], capsule.radius, direction, out hit, distance))
+                {
+                    outputs.Add((2 * (hit.distance / distance)) - 1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (hit.distance), Color.red);
+                    }
+                }
+                else
+                {
+                    outputs.Add(1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (distance), Color.green);
+                    }
+                }
+            }
+
+            direction = articulation.transform.forward;
+            if (newTriggers[23 + i * 8])
+            {
+                if (Physics.SphereCast(checkPoints[i], capsule.radius, direction, out hit, distance))
+                {
+                    outputs.Add((2 * (hit.distance / distance)) - 1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (hit.distance), Color.red);
+                    }
+                }
+                else
+                {
+                    outputs.Add(1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (distance), Color.green);
+                    }
+                }
+            }
+
+            direction = Vector3.RotateTowards(articulation.transform.forward, -articulation.transform.right, 0.78539816339f, 0.0f);
+            if (newTriggers[24 + i * 8])
+            {
+                if (Physics.SphereCast(checkPoints[i], capsule.radius, direction, out hit, distance))
+                {
+                    outputs.Add((2 * (hit.distance / distance)) - 1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (hit.distance), Color.red);
+                    }
+                }
+                else
+                {
+                    outputs.Add(1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (distance), Color.green);
+                    }
+                }
+            }
+
+            direction = -articulation.transform.forward;
+            if (newTriggers[25 + i * 8])
+            {
+                if (Physics.SphereCast(checkPoints[i], capsule.radius, direction, out hit, distance))
+                {
+                    outputs.Add((2 * (hit.distance / distance)) - 1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (hit.distance), Color.red);
+                    }
+                }
+                else
+                {
+                    outputs.Add(1);
+                    if (showRays)
+                    {
+                        Debug.DrawRay(checkPoints[i], direction * (distance), Color.green);
+                    }
+                }
+            }
+        }
+
+        return outputs.ToArray();
+    }
+
+    void startTrigger()
+    {
+        List<bool> outputs = new List<bool>();
+        float nChecks = (capsule.height / capsule.radius) / 1.5f;
+        // 18 + 8*checkPoints.length
+        //if (newTriggers.Length == 1)
+        //{
+
+        //}
+        for (int i = 0; i < 18; i++)
+            outputs.Add(true);
+
+        for (int i = 0;i<nChecks;i++)
+        {
+            for (int j = 0;j<8;j++)
+                outputs.Add(true);
+        }
+
+        newTriggers = outputs.ToArray();
+        float[] checkCorrect = getTriggers();
+
+        for (int i = 0;i<checkCorrect.Length;i++)
+        {
+            if (checkCorrect[i] < -0.85f)
+                newTriggers[i] = false;
+        }
+    }
+
     //private void OnTriggerEnter(Collider other)
     //{
     //    if (other.gameObject.layer != 9 && !proximityList.Contains(other))
@@ -947,7 +1560,7 @@ public class jointController : MonoBehaviour
     //            {
     //                cd = d;
     //                output = ((p - p2).normalized) * (1 - cd);
-                    
+
     //            }
     //        }
     //        if (showRays)

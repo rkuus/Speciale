@@ -281,6 +281,11 @@ public class KuusAgent : Agent
                 AddReward(curReward);
                 EndEpisode();
             }
+            else if (Mathf.Abs(curRotations[i]) >= 0.51f)
+            {
+                curReward -= 0.005f;
+            }
+
         }
 
         if (robotController.collisionFlag) // Collision cost.
