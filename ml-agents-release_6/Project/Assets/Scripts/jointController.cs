@@ -20,7 +20,7 @@ public class jointController : MonoBehaviour
 
     private float maxAcceleration;
 
-    private float distance = 0.50f;
+    private float distance = 0.75f;
     public GameObject aBox;
     public GameObject ground;
 

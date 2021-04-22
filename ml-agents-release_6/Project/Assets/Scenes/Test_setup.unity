@@ -1363,10 +1363,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f57c5f17b05ad45a96283a4cb8b772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereRadius: 1.2
+  sphereRadius: 1.25
   sphereResolution: 0.025
   noiseOffset: 0.0125
-  cylinderRadius: 0.55
+  cylinderRadius: 0.45
   forceHardCases: 0
 --- !u!4 &1241995728
 Transform:
