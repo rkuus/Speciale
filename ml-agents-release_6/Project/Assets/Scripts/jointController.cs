@@ -45,7 +45,7 @@ public class jointController : MonoBehaviour
         articulation = GetComponent<ArticulationBody>();
         capsule = GetComponent<CapsuleCollider>();
         maxAcceleration = accScale / ((300 * 0.01f) * Mathf.Rad2Deg);
-        startTrigger();
+        //startTrigger();
     }
 
     // Update is called once per frame
@@ -143,7 +143,7 @@ public class jointController : MonoBehaviour
         return curJointRotation;
     }
 
-    public float[] anotherTriggers()
+    public float[] getTriggers()
     {
         List<float> outputs = new List<float>();
 
@@ -922,7 +922,7 @@ public class jointController : MonoBehaviour
         return outputs.ToArray();
     }
 
-    public float[] getTriggers()
+    public float[] anotherTriggers()
     {
         List<float> outputs = new List<float>();
         List<Vector3> checks = new List<Vector3>();
@@ -1518,7 +1518,7 @@ public class jointController : MonoBehaviour
         }
 
         newTriggers = outputs.ToArray();
-        float[] checkCorrect = getTriggers();
+        float[] checkCorrect = anotherTriggers();
 
         for (int i = 0;i<checkCorrect.Length;i++)
         {
