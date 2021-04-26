@@ -247,7 +247,7 @@ public class KuusAgent : Agent
 
     private void CalcReward()
     {
-        float curReward = 0.0f; // -0.002f * _time; // Time cost, -0.002f
+        float curReward = -0.000125f * _time; // Time cost, -0.002f
 
         curReward += 0.25f * (lastDistance - curDistance); // 4.0
   
